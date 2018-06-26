@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="m.todays.pilates.domain.lesson.LessonMapper">
+    <select id="getLesson" resultType="camelmap" statementType="PREPARED">
+        SELECT * FROM LSN_M
+		WHERE COMP_CD = #{compCd}
+		  AND STOR_CD = #{storCd}
+		  AND USE_YN = 'Y'
+    </select>
+</mapper>

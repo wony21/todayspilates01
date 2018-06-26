@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="m.todays.pilates.domain.reservation.member.MemberResrvMapper">
+    <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+        /* 회원 예약 조회 */
+        SELECT A.COMP_CD, A.STOR_CD, A.LSN_CD, A.LSN_NM, B.EMP_NO, B.MEMBER_NO, B.RSV_DT, B.DY, B.RSV_TM, A.LSN_TM, B.EMP_NM, B.LSN_USE_CNT, B.LSN_CNT, B.LSN_ED_DT
+		FROM LSN_M A 
+		  LEFT OUTER JOIN (
+		  SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, C.EMP_NO,
+		      D.MEMBER_NM, A.RSV_DT, SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1) DY, A.RSV_TM,
+		      C.EMP_NM, LSN_USE_CNT, LSN_CNT, LSN_ED_DT
+		  FROM (SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ, A.EMP_NO, A.LSN_CD, A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM, A.ATND_FG
+		        FROM ATND_T A,
+		        (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ
+		        FROM ATND_T
+		        WHERE COMP_CD = #{compCd}
+		          AND STOR_CD = #{storCd}
+		          AND MEMBER_NO = #{memberNo}
+		        GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
+		        WHERE A.COMP_CD = B.COMP_CD
+		        AND A.STOR_CD = B.STOR_CD
+		        AND A.MEMBER_NO = B.MEMBER_NO
+		        AND A.LSN_NO = B.LSN_NO
+		        AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M C, MEMBER_M D
+		  WHERE A.COMP_CD = B.COMP_CD
+		    AND A.STOR_CD = B.STOR_CD
+		    AND A.MEMBER_NO = B.MEMBER_NO
+		    AND A.LSN_NO = B.LSN_NO
+		    AND A.COMP_CD = C.COMP_CD
+		    AND A.STOR_CD = C.STOR_CD
+		    AND A.EMP_NO = C.EMP_NO
+		    AND A.COMP_CD = D.COMP_CD
+		    AND A.STOR_CD = D.STOR_CD
+		    AND A.MEMBER_NO = D.MEMBER_NO ) B
+		ON A.COMP_CD = B.COMP_CD
+		  AND A.STOR_CD = B.STOR_CD
+		  AND A.LSN_CD = B.LSN_CD
+		ORDER BY COMP_CD, STOR_CD, LSN_CD
+    </select>
+    <select id="getDetailUseLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	/* 사용내역보기 */
+    	SELECT 
+		  COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
+		  ATND_DT, SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG
+		FROM ATND_T
+		WHERE COMP_CD = #{compCd}
+		  AND STOR_CD = #{storCd}
+		  AND LSN_CD = #{lsnCd}
+		  AND MEMBER_NO = #{memberNo}
+		ORDER BY ATND_DT, ATND_TM
+    </select>
+    <select id="getLessonSummary" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	/* 총 운동횟수 */
+    	SELECT 
+    		${columns}
+		    ISNULL(SUM(B.LSN_USE_CNT), 0) LSN_USE_SUM
+		FROM LSN_M A
+		  LEFT OUTER JOIN 
+		  (SELECT COMP_CD, STOR_CD, LSN_CD, SUM(LSN_USE_CNT) AS LSN_USE_CNT
+		    FROM MEMBER_LSN_M A
+		    WHERE COMP_CD = #{compCd}
+		      AND STOR_CD = #{storCd}
+		      AND MEMBER_NO = #{memberNo}
+		    GROUP BY COMP_CD, STOR_CD, LSN_CD) B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.LSN_CD = B.LSN_CD
+		WHERE A.USE_YN = 'Y'
+    </select>
+    <select id="getWeeklyLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	/* 주간 레슨 정보 */
+    	SELECT RSV_DT, COUNT(*) RSV_CNT
+		FROM ATND_T A, LSN_M B
+		WHERE A.COMP_CD = B.COMP_CD
+		  AND A.STOR_CD = B.STOR_CD
+		  AND A.LSN_CD = B.LSN_CD
+		  AND B.USE_YN = 'Y'
+		  AND A.COMP_CD = #{compCd}
+		  AND A.STOR_CD = #{storCd}
+		  <if test="memberNo != null and memberNo != ''">
+		  AND A.MEMBER_NO = #{memberNo}
+		  </if>
+		  <if test="empNo != null and empNo != ''">
+		  AND A.EMP_NO = #{empNo}
+		  </if>
+		  AND A.RSV_DT BETWEEN #{sttDt} AND #{endDt}
+		GROUP BY RSV_DT 
+    </select>
+    <select id="getUserLession" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	/* 개인레슨 예약현황 조회 */
+    	SELECT C.NAME,  A.LSN_TY, 
+				 A.LSN_FG, A.LSN_USE_CNT, A.LSN_CNT,
+				 A.LSN_ST_DT, A.LSN_ED_DT,
+				  A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, A.MEMBER_NO, A.EMP_NO
+		FROM MEMBER_LSN_M A
+			INNER JOIN LSN_M B
+			ON A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND A.LSN_CD = B.LSN_CD
+			INNER JOIN (SELECT NAME, CODE 
+								FROM COMMON_CODE_M
+								WHERE GROUP_CD = '003'
+									AND USE_YN = 'Y') C
+			ON A.LSN_TY = C.CODE
+		WHERE A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+			AND A.MEMBER_NO = #{memberNo}
+    </select>
+    <select id="getWeeklyDetail" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	/* 개인레슨 출석부(예약목록) */
+    	SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.EMP_NO, A.LSN_NO, A.LSN_CD, A.LSN_TM, A.LSN_SEQ, E.LSN_NM,
+		    D.MEMBER_NM, A.RSV_DT, SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1) DY, A.RSV_TM,
+		    C.EMP_NM, LSN_USE_CNT, LSN_CNT, LSN_ED_DT, A.ATND_FG
+		FROM (SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ, A.EMP_NO, A.LSN_CD, A.LSN_TM, A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM, A.ATND_FG
+		      FROM ATND_T A,
+		      (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ
+		      FROM ATND_T
+		      WHERE COMP_CD = #{compCd}
+		        AND STOR_CD = #{storCd}
+		      <if test="memberNo != null and memberNo != ''">
+     	        AND MEMBER_NO = #{memberNo}
+		      </if>
+		      <if test="empNo != null and empNo != ''">
+	            AND EMP_NO = #{empNo}
+		      </if>
+		      <if test="lsnNo != null and lsnNo != ''">
+			  	AND LSN_NO = #{lsnNo}
+			  </if>
+			  <if test="lsnCd != null and lsnCd != ''">
+			  	AND LSN_CD = #{lsnCd}
+			  </if>
+		      GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
+		      WHERE A.COMP_CD = B.COMP_CD
+		      AND A.STOR_CD = B.STOR_CD
+		      AND A.MEMBER_NO = B.MEMBER_NO
+		      AND A.LSN_NO = B.LSN_NO
+		      AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M C, MEMBER_M D, LSN_M E
+		WHERE A.COMP_CD = B.COMP_CD
+		  AND A.STOR_CD = B.STOR_CD
+		  AND A.MEMBER_NO = B.MEMBER_NO
+		  AND A.LSN_NO = B.LSN_NO
+		  AND A.COMP_CD = C.COMP_CD
+		  AND A.STOR_CD = C.STOR_CD
+		  AND A.EMP_NO = C.EMP_NO
+		  AND A.COMP_CD = D.COMP_CD
+		  AND A.STOR_CD = D.STOR_CD
+		  AND A.MEMBER_NO = D.MEMBER_NO
+		  AND A.COMP_CD = E.COMP_CD
+	      AND A.STOR_CD = E.STOR_CD
+	      AND A.LSN_CD = E.LSN_CD
+	      AND E.USE_YN = 'Y'
+	      AND E.LSN_CD IN ('01','02','04','05') -- 개인,듀엣,키즈P,키즈D
+		  AND A.RSV_DT BETWEEN #{sttDt} AND #{endDt}
+		ORDER BY A.COMP_CD, A.STOR_CD, LSN_ED_DT, A.LSN_NO, A.LSN_CD, A.MEMBER_NO
+    </select>
+    <insert id="insertAttend" parameterType="hashmap">
+    	INSERT INTO ATND_T (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_DT, ATND_TM, ATND_FG, INS_DATE, INS_USER, UPT_DATE, UPT_USER)
+		VALUES (#{compCd},#{storCd},#{memberNo},#{lsnNo},(${lsnSeq}+1),#{empNo},#{lsnCd},${lsnTm},#{rsvDt},#{rsvTm},NULL,NULL,'0',GETDATE(),#{userCd},GETDATE(),#{userCd})
+    </insert>
+    <update id="updateAttend" parameterType="hashmap">
+    	UPDATE ATND_T
+		SET ATND_DT = RSV_DT,
+		  ATND_TM = RSV_TM,
+		  ATND_FG = #{atndFg},
+		  UPT_USER = #{userCd},
+		  UPT_DATE = GETDATE()
+		WHERE COMP_CD = #{compCd}
+		  AND STOR_CD = #{storCd}
+		  AND MEMBER_NO = #{memberNo}
+		  AND LSN_NO = #{lsnNo}
+		  AND LSN_CD = #{lsnCd}
+		  AND LSN_SEQ = ${lsnSeq}
+		  AND RSV_DT = #{rsvDt}
+		  AND RSV_TM = #{rsvTm}
+    </update>
+    <update id="updateLessonUseCount" parameterType="hashmap">
+    	UPDATE MEMBER_LSN_M
+    	SET LSN_USE_CNT = ${lsnUseCnt},
+    		UPT_DATE = GETDATE(),
+    		UPT_USER = #{userCd}
+    	WHERE COMP_CD = #{compCd}
+    		AND STOR_CD = #{storCd}
+    		AND MEMBER_NO = #{memberNo}
+    		AND LSN_CD = #{lsnCd}
+    		AND LSN_NO = #{lsnNo}
+    </update>
+    <delete id="deleteAttend" parameterType="hashmap">
+    	DELETE ATND_T
+    	WHERE COMP_CD = #{compCd}
+    		AND STOR_CD = #{storCd}
+    		AND MEMBER_NO = #{memberNo}
+    		AND LSN_NO = #{lsnNo}
+    		AND LSN_SEQ = ${lsnSeq}
+    </delete>
+</mapper>
