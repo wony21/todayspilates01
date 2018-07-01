@@ -29,4 +29,10 @@ public class StorController extends BaseController {
 		return storService.getStor();
 	}
 	
+	@RequestMapping(value = "/api/stor2", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getStor2() {
+		return storService.getStor();
+	}
+	
 }
