@@ -42,7 +42,7 @@ public class HomeController {
 			index = "member/member";
 			break;
 		case CommonData.UserLv.TEACHER:
-			index = "teacher/theacher";
+			index = "teacher/teacher";
 			break;
 		default:
 			index = "/";

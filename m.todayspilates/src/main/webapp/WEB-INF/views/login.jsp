@@ -18,7 +18,7 @@
 	 	<div class="row">
 	 		<div class="col" style="height:43px;">
 	 			<div style="margin-top: 1%;text-align: center;vertical-align: middle;">
-				<label style="text-align: center;vertical-align: middle;"><h2>오늘의 필라테스</h2></label> 
+				<label style="text-align: center;vertical-align: middle;"><h2>Todayspilates</h2></label> 
 				</div>
 	 		</div>
 	 		<div class="w-100"><hr /></div>
