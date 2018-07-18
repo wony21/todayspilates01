@@ -45,7 +45,7 @@ public class HomeController {
 			index = "teacher/teacher";
 			break;
 		default:
-			index = "/";
+			index = "/index";
 			break;
 		}
 		
