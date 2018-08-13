@@ -21,8 +21,8 @@ public class MemberController extends BaseController {
 	
 	@RequestMapping(value = "/api/member", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
-	public List getMember(@RequestParam String storCd,
-							@RequestParam String memberNm) {
+	public List getMember(@RequestParam String storCd, 
+						  @RequestParam(required = false) String memberNm) {
 		
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return memberService.getMember(compCd, storCd, memberNm);
