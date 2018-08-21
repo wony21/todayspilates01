@@ -236,6 +236,9 @@ public class ReservationController extends BaseController {
 	@RequestMapping(value = "/api/teacher/reservation/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addReservation(@RequestBody List<HashMap> requestParams) {
 		return memberResrvService.reservation(requestParams);
+		
+
+		
 	}
 	/**
 	 * 개인레슨출석부 : 예약삭제
