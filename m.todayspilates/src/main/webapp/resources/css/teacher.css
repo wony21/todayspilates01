@@ -1,0 +1,28 @@
+@charset "EUC-KR";
+
+/* 메인화면 배경화면 처리 */
+#layout {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	left: 0;
+	top: 0;
+	background: url('../images/02_bg.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#logo {
+	width: 180px;
+	height: auto;
+}
+
+#top {
+	vertical-align: middle;
+}
+
+#office {
+	display: inline-block;
+	vertical-align: bottom;
+}
