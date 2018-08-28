@@ -21,6 +21,7 @@
 	 <div class="container" style="background-color: white;">
 		<div id="top" class="row" style="background-color: white;">
 			<div class="col-2" style="vertical-align: bottom;">
+				<!-- 수정테스트 -->
 				<!-- 
 				<br />
 				<span id="office" class="badge badge-info">수내본점</span>
