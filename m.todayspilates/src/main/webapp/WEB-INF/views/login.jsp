@@ -2,24 +2,32 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-<title>로그인 샘플</title>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
-<link href="https://unpkg.com/ionicons@4.1.2/dist/css/ionicons.min.css" rel="stylesheet">
-<link href="css/pilates.css" rel="stylesheet">
-<style>
-</style>
-</head>
-
+    <title>오늘의 필라테스</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/boot4/signin.css" rel="stylesheet">
+    <!-- Custom icon library -->
+    <link href="https://unpkg.com/ionicons@4.1.2/dist/css/ionicons.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/pilates.css" rel="stylesheet">
+    <!-- Custom library -->
+    <script src="//code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+    <script src="js/boot4/js/bootstrap.min.js"></script>
+  </head>
 <body>
 	<div id="layout"></div>
-	<div id="container" class="container" style="margin-top: 5%;">
+	<div id="container" class="container">
 		<div class="row">
 			<div class="col">
 				<div id="login_layout" class="card w-100">
