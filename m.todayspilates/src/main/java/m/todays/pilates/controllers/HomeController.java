@@ -74,4 +74,19 @@ public class HomeController {
 //	public String requestPath(@PathVariable("path") String path) {
 //		return path;
 //	}
+	
+	@RequestMapping(value = "/member", method = RequestMethod.GET)
+	public String member(Locale locale, Model model) {
+		return "member/member";
+	}
+	
+	@RequestMapping(value = "/teacher", method = RequestMethod.GET)
+	public String teacher(Locale locale, Model model) {
+		return "teacher/teacher";
+	}
+	
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String admin(Locale locale, Model model) {
+		return "admin/admin";
+	}
 }

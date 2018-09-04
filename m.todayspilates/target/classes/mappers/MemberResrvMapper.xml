@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="m.todays.pilates.domain.reservation.member.MemberResrvMapper">
-    <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    <select id="getRervation_tmp" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
         /* 회원 예약 조회 */
         SELECT A.COMP_CD, A.STOR_CD, A.LSN_CD, A.LSN_NM, B.EMP_NO, B.MEMBER_NO, B.RSV_DT, B.DY, B.RSV_TM, A.LSN_TM, B.EMP_NM, B.LSN_USE_CNT, B.LSN_CNT, B.LSN_ED_DT
 		FROM LSN_M A 
@@ -36,6 +36,55 @@
 		  AND A.STOR_CD = B.STOR_CD
 		  AND A.LSN_CD = B.LSN_CD
 		ORDER BY COMP_CD, STOR_CD, LSN_CD
+    </select>
+    <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+        /* 회원 예약 조회 */
+        SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_CD, A.LSN_NO, A.EMP_NO, B.LSN_NM, E.RSV_DT, E.RSV_TM, E.LSN_TM, C.EMP_NM, 
+			  A.LSN_USE_CNT, D.LSN_NUM, A.LSN_CNT, A.LSN_ED_DT, E.ATND_FG
+		FROM MEMBER_LSN_M A
+		LEFT OUTER JOIN LSN_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.LSN_CD = B.LSN_CD
+		LEFT OUTER JOIN EMP_M C
+		ON A.COMP_CD = C.COMP_CD
+		AND A.STOR_CD = C.STOR_CD
+		AND A.EMP_NO = C.EMP_NO
+		LEFT OUTER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD, EMP_NO, ISNULL(SUM(LSN_NUM), 0) LSN_NUM
+						FROM ATND_T
+						WHERE COMP_CD = #{compCd}
+							AND STOR_CD = #{storCd}
+							AND MEMBER_NO = #{memberNo}
+						GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD, EMP_NO) D
+		ON A.COMP_CD = D.COMP_CD
+		AND A.STOR_CD = D.STOR_CD
+		AND A.MEMBER_NO = D.MEMBER_NO
+		AND A.LSN_NO = D.LSN_NO
+		AND A.LSN_CD = D.LSN_CD
+		AND A.EMP_NO = D.EMP_NO
+		INNER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, EMP_NO, LSN_CD, RSV_DT, RSV_TM, LSN_TM, ATND_FG
+						FROM ATND_T T
+						WHERE COMP_CD = #{compCd}
+							AND STOR_CD = #{storCd}
+							AND MEMBER_NO = #{memberNo}
+							AND ATND_FG IN ('0', '4')
+							AND LSN_SEQ = (SELECT MAX(LSN_SEQ) MAX_SEQ
+											FROM ATND_T
+											WHERE ATND_FG = T.ATND_FG
+												AND COMP_CD = T.COMP_CD
+												AND STOR_CD = T.STOR_CD
+												AND MEMBER_NO = T.MEMBER_NO
+												AND LSN_CD = T.LSN_CD
+												AND LSN_NO = T.LSN_NO)) E
+		ON A.COMP_CD = E.COMP_CD
+		AND A.STOR_CD = E.STOR_CD
+		AND A.MEMBER_NO = E.MEMBER_NO
+		AND A.LSN_NO = E.LSN_NO
+		AND A.LSN_CD = E.LSN_CD
+		AND A.EMP_NO = E.EMP_NO
+		WHERE A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+			AND A.MEMBER_NO = #{memberNo}
+		ORDER BY A.COMP_CD, A.STOR_CD, A.MEMBER_NO, E.RSV_DT, E.RSV_TM
     </select>
     <select id="getDetailUseLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
     	/* 사용내역보기 */
