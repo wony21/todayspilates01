@@ -241,7 +241,7 @@ public class ReservationController extends BaseController {
 		
 	}
 	/**
-	 * 개인레슨출석부 : 예약삭제1
+	 * 개인레슨출석부 : 예약삭제
 	 * @package 	: m.todays.pilates.controllers
 	 * @file 		: ReservationController.java
 	 * @method		: deleteReservation
