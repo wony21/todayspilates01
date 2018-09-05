@@ -1,262 +1,166 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
-
+<%@page import="m.todays.pilates.common.SessionUtils"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<%
+	String userLv = SessionUtils.getCurrentUser().getUserLv();
+	request.setAttribute("userLv", userLv);
+%>
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <title>Stylish Portfolio - Start Bootstrap Template</title>
+<title>Todays pilates</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Core CSS -->
+<link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/boot4/dashboard.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="css/boot4/vendor/font-awesome.min.css" rel="stylesheet"
+	type="text/css">
+<link
+	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+	rel="stylesheet" type="text/css">
+<link href="css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
 
-    <!-- Custom Fonts -->
-    <link href="css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
+</head>
 
-  </head>
+<body id="page-top" style="max-width: 100%; overflow-x: hidden;">
+	<!-- Navigation -->
+	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i>
+	</a>
+	<nav id="sidebar-wrapper">
+		<ul class="sidebar-nav">
+			<li class="sidebar-brand"><a class="js-scroll-trigger"
+				href="#page-top">선생님<!--( ${userLv} )--> : ${username} 님
+			</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#page-top">Home</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#about">About</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#services">Services</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#portfolio">Portfolio</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#contact">Contact</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="#logout" id="logout">Logout</a></li>
+		</ul>
+	</nav>
+	
+	<!-- Header -->
+	<div class="row">
+        
 
-  <body id="page-top" style="max-width: 100%; overflow-x: hidden;">
-    <!-- Navigation -->
-    <a class="menu-toggle rounded" href="#">
-      <i class="fa fa-bars"></i>
-    </a>
-    <nav id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-        <li class="sidebar-brand">
-          <a class="js-scroll-trigger" href="#page-top">회원<!--( ${userLv} )--> : ${username} 님</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#page-top">Home</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#about">About</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#services">Services</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#portfolio">Portfolio</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#contact">Contact</a>
-        </li>
-        <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="#logout">Logout</a>
-        </li>
-      </ul>
-    </nav>
+        <main role="main" class="col-md ml-sm-auto col-lg px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">&nbsp;</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                This week
+              </button>
+            </div>
+          </div>
 
-    <!-- Header -->
-    <header class="masthead d-flex">
-      <div class="container text-center my-auto">
-        <h1 class="mb-1">Todayspilates</h1>
-        <h3 class="mb-5">
-          <em>A Free Bootstrap Theme by Start Bootstrap</em>
-        </h3>
-        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
+          <h2>Reservation</h2>
+          <div class="table-responsive">
+          	<div id="reservation">
+          	<script type="text/html" id="reservation-template">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>#구분</th>
+                  <th>예약일시</th>
+                  <th>시간</th>
+                  <th>선생님</th>
+                  <th>회차</th>
+                  <th>종료일</th>
+                </tr>
+              </thead>
+              <tbody>
+				{{#list}}
+                <tr>
+                  <td>{{lsnNm}}</td>
+                  <td>{{rsvDt}}</td>
+                  <td>{{rsvTm}}</td>
+                  <td>{{empNm}}</td>
+                  <td>{{lsnCnt}}</td>
+                  <td>{{lsnEdDt}}</td>
+                </tr>
+				{{/list}}	
+				{{^list}}
+                <tr>
+                  <td>개인</td>
+                  <td>2018/09/01</td>
+                  <td>09:00</td>
+                  <td>홍길동</td>
+                  <td>1회차</td>
+                  <td>2018/12/31</td>
+                </tr>
+				{{/list}}
+              </tbody>
+            </table>
+			</script>
+			</div>
+          </div>
+        </main>
       </div>
-      <div class="overlay"></div>
-    </header>
 
-    <!-- About -->
-    <section class="content-section bg-light" id="about">
-      <div class="container text-center">
-        <div class="row">
-          <div class="col-lg-10 mx-auto">
-            <h2>Stylish Portfolio is the perfect theme for your next project!</h2>
-            <p class="lead mb-5">This theme features a flexible, UX friendly sidebar menu and stock photos from our friends at
-              <a href="https://unsplash.com/">Unsplash</a>!</p>
-            <a class="btn btn-dark btn-xl js-scroll-trigger" href="#services">What We Offer</a>
-          </div>
-        </div>
-      </div>
-    </section>
+	<!-- Footer -->
+	<footer class="footer text-center">
+		<div class="container">
+			<ul class="list-inline mb-5">
+				<li class="list-inline-item"><a
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-social-facebook"></i>
+				</a></li>
+				<li class="list-inline-item"><a
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-social-twitter"></i>
+				</a></li>
+				<li class="list-inline-item"><a
+					class="social-link rounded-circle text-white" href="#"> <i
+						class="icon-social-github"></i>
+				</a></li>
+			</ul>
+			<p class="text-muted small mb-0">Copyright &copy; Your Website
+				2017</p>
+		</div>
+	</footer>
 
-    <!-- Services -->
-    <section class="content-section bg-primary text-white text-center" id="services">
-      <div class="container">
-        <div class="content-section-heading">
-          <h3 class="text-secondary mb-0">Services</h3>
-          <h2 class="mb-5">What We Offer</h2>
-        </div>
-        <div class="row">
-          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-            <span class="service-icon rounded-circle mx-auto mb-3">
-              <i class="icon-screen-smartphone"></i>
-            </span>
-            <h4>
-              <strong>Responsive</strong>
-            </h4>
-            <p class="text-faded mb-0">Looks great on any screen size!</p>
-          </div>
-          <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-            <span class="service-icon rounded-circle mx-auto mb-3">
-              <i class="icon-pencil"></i>
-            </span>
-            <h4>
-              <strong>Redesigned</strong>
-            </h4>
-            <p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
-          </div>
-          <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
-            <span class="service-icon rounded-circle mx-auto mb-3">
-              <i class="icon-like"></i>
-            </span>
-            <h4>
-              <strong>Favorited</strong>
-            </h4>
-            <p class="text-faded mb-0">Millions of users
-              <i class="fa fa-heart"></i>
-              Start Bootstrap!</p>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <span class="service-icon rounded-circle mx-auto mb-3">
-              <i class="icon-mustache"></i>
-            </span>
-            <h4>
-              <strong>Question</strong>
-            </h4>
-            <p class="text-faded mb-0">I mustache you a question...</p>
-          </div>
-        </div>
-      </div>
-    </section>
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+		<i class="fa fa-angle-up"></i>
+	</a>
 
-    <!-- Callout -->
-    <section class="callout">
-      <div class="container text-center">
-        <h2 class="mx-auto mb-5">Welcome to
-          <em>your</em>
-          next website!</h2>
-        <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/template-overviews/stylish-portfolio/">Download Now!</a>
-      </div>
-    </section>
+	<!-- Bootstrap core JavaScript -->
+	<script src="js/boot4/jquery.min.js"></script>
+	<script src="js/boot4/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Portfolio -->
-    <section class="content-section" id="portfolio">
-      <div class="container">
-        <div class="content-section-heading text-center">
-          <h3 class="text-secondary mb-0">Portfolio</h3>
-          <h2 class="mb-5">Recent Projects</h2>
-        </div>
-        <div class="row no-gutters">
-          <div class="col-lg-6">
-            <a class="portfolio-item" href="#">
-              <span class="caption">
-                <span class="caption-content">
-                  <h2>Stationary</h2>
-                  <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
-                </span>
-              </span>
-              <img class="img-fluid" src="images/stylish-portfolio/portfolio-1.jpg" alt="">
-            </a>
-          </div>
-          <div class="col-lg-6">
-            <a class="portfolio-item" href="#">
-              <span class="caption">
-                <span class="caption-content">
-                  <h2>Ice Cream</h2>
-                  <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
-                </span>
-              </span>
-              <img class="img-fluid" src="images/stylish-portfolio/portfolio-2.jpg" alt="">
-            </a>
-          </div>
-          <div class="col-lg-6">
-            <a class="portfolio-item" href="#">
-              <span class="caption">
-                <span class="caption-content">
-                  <h2>Strawberries</h2>
-                  <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
-                </span>
-              </span>
-              <img class="img-fluid" src="images/stylish-portfolio/portfolio-3.jpg" alt="">
-            </a>
-          </div>
-          <div class="col-lg-6">
-            <a class="portfolio-item" href="#">
-              <span class="caption">
-                <span class="caption-content">
-                  <h2>Workspace</h2>
-                  <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
-                </span>
-              </span>
-              <img class="img-fluid" src="images/stylish-portfolio/portfolio-4.jpg" alt="">
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+	<!-- Plugin JavaScript -->
+	<script src="js/boot4/jquery.easing.min.js"></script>
 
-    <!-- Call to Action -->
-    <section class="content-section bg-primary text-white">
-      <div class="container text-center">
-        <h2 class="mb-4">The buttons below are impossible to resist...</h2>
-        <a href="#" class="btn btn-xl btn-light mr-4">Click Me!</a>
-        <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
-      </div>
-    </section>
+	<!-- Custom scripts for this template -->
+	<script src="js/boot4/stylish-portfolio.min.js"></script>
+	<script src="js/member.js"></script>
+	<script src="js/boot4/vendor/mustache.js"></script>
 
-    <!-- Map -->
-    <section id="contact" class="map">
-      <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
-      <br/>
-      <small>
-        <a href="//maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
-      </small>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer text-center">
-      <div class="container">
-        <ul class="list-inline mb-5">
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-facebook"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-twitter"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white" href="#">
-              <i class="icon-social-github"></i>
-            </a>
-          </li>
-        </ul>
-        <p class="text-muted small mb-0">Copyright &copy; Your Website 2017</p>
-      </div>
-    </footer>
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="js/boot4/jquery.min.js"></script>
-    <script src="js/boot4/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="js/boot4/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="js/boot4/stylish-portfolio.min.js"></script>
-
-  </body>
+</body>
 
 </html>
