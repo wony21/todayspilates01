@@ -40,7 +40,7 @@
 	<nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
-				href="#page-top">선생님<!--( ${userLv} )--> : ${username} 님
+				href="#page-top">회원<!--( ${userLv} )--> : ${username} 님
 			</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#page-top">Home</a></li>
