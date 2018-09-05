@@ -70,10 +70,16 @@ public class HomeController {
 		return "loginFail";
 	}
 	
-//	@RequestMapping(value = "/{path}", method = RequestMethod.GET)
-//	public String requestPath(@PathVariable("path") String path) {
-//		return path;
+//	@RequestMapping(value = "/{path1}/{path2}", method = RequestMethod.GET)
+//	public String requestPath(@PathVariable("path1") String path1, 
+//							@PathVariable("path2") String path2) {
+//		return String.format("%s/%s", path1, path2);
 //	}
+	
+	@RequestMapping(value = "/member/{path}", method = RequestMethod.GET)
+	public String requestPath(@PathVariable("path") String path) {
+		return String.format("member/%s", path);
+	}
 	
 	@RequestMapping(value = "/member", method = RequestMethod.GET)
 	public String member(Locale locale, Model model) {
