@@ -21,7 +21,6 @@
 	-->
  
 	 <http auto-config="true">
-	 	<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/api/stor" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/api/existUserInStor" access="IS_AUTHENTICATED_ANONYMOUSLY" />

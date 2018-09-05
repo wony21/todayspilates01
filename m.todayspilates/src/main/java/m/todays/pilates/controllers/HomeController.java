@@ -48,7 +48,6 @@ public class HomeController {
 			index = "/";
 			break;
 		}
-		
 		model.addAttribute("username", userName);
 		return index;
 	}
@@ -76,11 +75,6 @@ public class HomeController {
 //		return String.format("%s/%s", path1, path2);
 //	}
 	
-	@RequestMapping(value = "/member/{path}", method = RequestMethod.GET)
-	public String requestPath(@PathVariable("path") String path) {
-		return String.format("member/%s", path);
-	}
-	
 	@RequestMapping(value = "/member", method = RequestMethod.GET)
 	public String member(Locale locale, Model model) {
 		return "member/member";
@@ -94,5 +88,18 @@ public class HomeController {
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String admin(Locale locale, Model model) {
 		return "admin/admin";
+	}
+	
+	@RequestMapping(value = "/member/{path}", method = RequestMethod.GET)
+	public String memberRoute(@PathVariable("path") String path) {
+		return String.format("member/%s", path);
+	}
+	@RequestMapping(value = "/teacher/{path}", method = RequestMethod.GET)
+	public String teacherRoute(@PathVariable("path") String path) {
+		return String.format("teacher/%s", path);
+	}
+	@RequestMapping(value = "/admin/{path}", method = RequestMethod.GET)
+	public String adminRoute(@PathVariable("path") String path) {
+		return String.format("admin/%s", path);
 	}
 }

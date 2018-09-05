@@ -19,7 +19,6 @@
 
 <title>Todays pilates</title>
 
-<<<<<<< HEAD
 <!-- Bootstrap Core CSS -->
 <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/boot4/dashboard.css" rel="stylesheet">
@@ -30,27 +29,9 @@
 	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
 	rel="stylesheet" type="text/css">
 <link href="css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
-=======
-    <!-- Bootstrap Core CSS -->
-    <link href="../css/boot4/css/bootstrap.min.css" rel="stylesheet">
->>>>>>> branch 'master' of https://Jeongkwon@github.com/wony21/todayspilates01.git
 
-<<<<<<< HEAD
 <!-- Custom CSS -->
 <link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
-=======
-    <!-- Custom Fonts -->
-    <link href="../css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="../css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
->>>>>>> branch 'master' of https://Jeongkwon@github.com/wony21/todayspilates01.git
-
-<<<<<<< HEAD
-</head>
-=======
-    <!-- Custom CSS -->
-    <link href="../css/boot4/stylish-portfolio.css" rel="stylesheet">
->>>>>>> branch 'master' of https://Jeongkwon@github.com/wony21/todayspilates01.git
 
 <body id="page-top" style="max-width: 100%; overflow-x: hidden;">
 	<!-- Navigation -->
@@ -72,7 +53,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#contact">Contact</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#logout" id="logout">Logout</a></li>
+				href="/logout" id="logout">Logout</a></li>
 		</ul>
 	</nav>
 	
