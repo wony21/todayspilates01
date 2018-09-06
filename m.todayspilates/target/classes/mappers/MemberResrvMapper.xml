@@ -90,13 +90,22 @@
     	/* 사용내역보기 */
     	SELECT 
 		  COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
-		  ATND_DT, SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG
+		  ATND_DT, SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG,
+			CASE 
+				WHEN ATND_FG = '0' THEN '예약'
+				WHEN ATND_FG = '1' THEN '출석'
+				WHEN ATND_FG = '2' THEN '결석'
+				WHEN ATND_FG = '3' THEN '취소'
+				WHEN ATND_FG = '4' THEN '조정'
+				ELSE ''
+			END ATND_NM,
+			CANC_RMK
 		FROM ATND_T
 		WHERE COMP_CD = #{compCd}
 		  AND STOR_CD = #{storCd}
 		  AND LSN_CD = #{lsnCd}
 		  AND MEMBER_NO = #{memberNo}
-		ORDER BY ATND_DT, ATND_TM
+		ORDER BY LSN_SEQ
     </select>
     <select id="getLessonSummary" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
     	/* 총 운동횟수 */
