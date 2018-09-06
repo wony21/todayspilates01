@@ -98,7 +98,7 @@
                   <td>{{rsvDt}}</td>
                   <td>{{rsvTm}}</td>
                   <td>{{empNm}}</td>
-                  <td>{{lsnCnt}}</td>
+                  <td>{{lsnNum}}/{{lsnCnt}}</td>
                   <td>{{lsnEdDt}}</td>
                 </tr>
 				{{/list}}	
