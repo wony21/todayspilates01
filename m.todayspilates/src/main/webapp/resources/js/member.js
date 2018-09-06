@@ -10,6 +10,8 @@ $(document).ready(function() {
 			console.log('query reservation fetch success...');
 			var html = Mustache.render(template, {list: res});
 			$('#reservation').append(html);
+			
+			//console.log('memberNo:' + {memberNo})
 		}
 	})
 });
@@ -43,7 +45,7 @@ $('#reservation').bind('click', function() {
     var port = document.location.port;
 
     // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var page = protocol + '//' + hostname + ':' + port + '/reservation.jsp';
+    var page = protocol + '//' + hostname + ':' + port + '/member/reservation.jsp';
 	$(location).attr('href', page);
 	return false;
 
