@@ -4,7 +4,11 @@
 <%@ page session="false" %>
 <%
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
+	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
+	String storCd = SessionUtils.getCurrentUser().getStorCd();
 	request.setAttribute("userLv", userLv);
+	request.setAttribute("memberNo", memberNo);
+	request.setAttribute("storCd", storCd);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +51,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#about">About</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#services">Services</a></li>
+				href="#" id="reservation">Reservation</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#portfolio">Portfolio</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -78,7 +82,7 @@
 
           <h4>예약현황</h4>
           <div class="table-responsive">
-          	<div id="reservation">
+          	<div id="reservation-container">
           	<script type="text/html" id="reservation-template">
             <table class="table table-striped table-sm">
               <thead>
@@ -93,12 +97,12 @@
               </thead>
               <tbody>
 				{{#list}}
-                <tr>
+                <tr data-id="{{lsnCd}}|{{memberNo}}|{{storCd}}">
                   <td>{{lsnNm}}</td>
                   <td>{{rsvDt}}</td>
                   <td>{{rsvTm}}</td>
                   <td>{{empNm}}</td>
-                  <td>{{lsnCnt}}</td>
+                  <td>{{lsnTm}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
                 </tr>
 				{{/list}}	
@@ -118,6 +122,7 @@
 			</div>
           </div>
         </main>
+        <input type='hidden' id='memberNo'/ value=${memberNo}>
       </div>
 
 	<!-- Footer -->
@@ -157,8 +162,15 @@
 	<!-- Custom scripts for this template -->
 	<script src="js/boot4/stylish-portfolio.min.js"></script>
 	<script src="js/member.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/boot4/vendor/mustache.js"></script>
-
+	<script src="js/boot4/vendor/ax5core.min.js"></script>
+	<script src="js/boot4/vendor/ax5formatter.js"></script>
+	<script>
+		let memberNo = '<%=memberNo%>';
+		let storCd = '<%=storCd%>';
+		console.log('memberNo:' + memberNo);
+	</script>
 </body>
 
 </html>
