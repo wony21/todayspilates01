@@ -6,9 +6,11 @@
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
 	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
 	String storCd = SessionUtils.getCurrentUser().getStorCd();
+	String username2 = SessionUtils.getCurrentUser().getUsername2();
 	request.setAttribute("userLv", userLv);
 	request.setAttribute("memberNo", memberNo);
 	request.setAttribute("storCd", storCd);
+	request.setAttribute("username2", username2);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,10 +46,10 @@
 	<nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
-				href="#page-top">회원<!--( ${userLv} )--> : ${username} 님
+				href="#page-top">회원<!--( ${userLv} )--> : <span class="username">${username}</span> 님
 			</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#page-top">Home</a></li>
+				href="/member">Home</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#about">About</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -64,29 +66,17 @@
 	<!-- Header -->
 	<div class="row">
         
-
+		
         <main role="main" class="col-md ml-sm-auto col-lg px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">&nbsp;</h1>
-            <!-- <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
-              </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                This week
-              </button>
-            </div> -->
-          </div>
-
-          <h4>예약현황</h4>
+        <p>
+          <h4><span class="username"></span>님 예약현황</h4>
           <div class="table-responsive">
           	<div id="reservation-container">
           	<script type="text/html" id="reservation-template">
+			<div style="text-align: right"><span>&nbsp;</span></div>
             <table class="table table-striped table-sm">
               <thead>
-                <tr>
+                <tr style="text-align:center">
                   <th>#구분</th>
                   <th>예약일시</th>
                   <th>시간</th>
@@ -97,7 +87,7 @@
               </thead>
               <tbody>
 				{{#list}}
-                <tr data-id="{{lsnCd}}|{{memberNo}}|{{storCd}}">
+                <tr data-id="{{lsnCd}}" style="text-align: center">
                   <td>{{lsnNm}}</td>
                   <td>{{rsvDt}}</td>
                   <td>{{rsvTm}}</td>
@@ -121,12 +111,57 @@
 			</script>
 			</div>
           </div>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+	            <div class="btn-toolbar mb-2 mb-md-0">
+	            </div>
+          </div>
+          <div class="table-responsive">
+          	<div id="summary-container">
+          	<script type="text/html" id="summary-template">
+			<h4>총 운동횟수는 <span id="lsnUseSum"></span>회 입니다 </h4>
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr style="text-align: center">
+                  <th>개인</th>
+                  <th>듀엣</th>
+                  <th>그룹</th>
+                  <th>키즈P</th>
+                  <th>키즈D</th>
+                  <th>합계</th>
+                </tr>
+              </thead>
+              <tbody>
+				{{#list}}
+                <tr data-id="{{lsnCd}}" style="text-align: center;">
+                  <td>{{lsn01UseCnt}}</td>
+                  <td>{{lsn02UseCnt}}</td>
+                  <td>{{lsn03UseCnt}}</td>
+                  <td>{{lsn04UseCnt}}</td>
+                  <td>{{lsn05UseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                  <td>{{lsnUseSum}}</td>
+                </tr>
+				{{/list}}	
+				{{^list}}
+                <tr>
+                  <td>개인</td>
+                  <td>2018/09/01</td>
+                  <td>09:00</td>
+                  <td>홍길동</td>
+                  <td>1회차</td>
+                  <td>2018/12/31</td>
+                </tr>
+				{{/list}}
+              </tbody>
+            </table>
+			</script>
+			</div>
+          </div>
         </main>
         <input type='hidden' id='memberNo'/ value=${memberNo}>
       </div>
 
 	<!-- Footer -->
-	<footer class="footer text-center">
+	<footer class="footer text-center" style="padding: 0 0 0 0">
 		<div class="container">
 			<ul class="list-inline mb-5">
 				<li class="list-inline-item"><a
@@ -142,8 +177,8 @@
 						class="icon-social-github"></i>
 				</a></li>
 			</ul>
-			<p class="text-muted small mb-0">Copyright &copy; Your Website
-				2017</p>
+			<!-- <div class="text-muted small mb-0">Copyright &copy; Todayspilates
+				2018</div> -->
 		</div>
 	</footer>
 
@@ -169,7 +204,15 @@
 	<script>
 		let memberNo = '<%=memberNo%>';
 		let storCd = '<%=storCd%>';
-		console.log('memberNo:' + memberNo);
+		let username2 = '<%=username2%>';
+		let user = {};
+		user.memberNo = memberNo;
+		user.storCd = storCd;
+		user.lsnCd = '';
+		user.username = username2;
+		
+		
+		window.localStorage.setItem('todays', JSON.stringify(user));
 	</script>
 </body>
 

@@ -1,26 +1,49 @@
 var common = {};
 $(document).ready(function() {
-	var template = $('#reservation-template').html();
+	var reservation = $('#reservation-template').html();
+	var summary = $('#summary-template').html();
+	var user = JSON.parse(window.localStorage.getItem('todays'));
 	$.ajax({
 		type: 'GET',
 		url: '/api/member/reservation',
 		data: {storCd: storCd, memberNo: memberNo},
 		success: function(res) {
 			res.forEach(function(n) {
+				n.rsvDt = ax5.util.date(n.rsvDt, {return: 'yyyy/MM/dd'});
 				n.lsnEdDt = ax5.util.date(n.lsnEdDt, {return: 'yyyy/MM/dd'});
 			})
-			console.log('query reservation fetch success...');
-			var html = Mustache.render(template, {list: res});
+			var html = Mustache.render(reservation, {list: res});
 			$('#reservation-container').append(html);
-			console.log('name: ' + "<%=username%>");
+			$('.username').text(user.username);
 		}
-	})
+	});
+	
+	$.ajax({
+		type: 'GET',
+		url: '/api/member/lesson/summary',
+		data: {storCd: '001', memberNo: '00001'},
+		success: function(res) {
+			var html = Mustache.render(summary, {list: res});
+			$('#summary-container').append(html);
+			$('#lsnUseSum').text(res[0].lsnUseSum);
+			//console.log('memberNo:' + {memberNo})
+		}
+	});
 });
 
 $("#reservation-container").on('click', 'tr', function(e) {
-	id = $(this).data('id');
-	console.log('id:' + id);
+	let lsnCd = $(this).data('id');
+	let lsnNm = $(this).find('td').eq(0).text();
+	let empNm = $(this).find('td').eq(3).text();
+	let user = JSON.parse(window.localStorage.getItem('todays'));
+	user.lsnCd = lsnCd;
+	user.lsnNm = lsnNm;
+	user.empNm = empNm;
+	window.localStorage.setItem('todays', JSON.stringify(user));
+	
 	//goPage('member/reservation-detail');
+	goPage('/member/reservation_detail');
+	//$(location).attr('href', 'http://localhost:5050/member/reservation_detail');
 });
 	
 $('#logout').bind('click', function() {
@@ -67,6 +90,6 @@ function goPage(page, params) {
     var url = protocol + '//' + hostname + ':' + port + '/' + page;
     //window.location = "news_edit.html?article_id=" + articleId;
 	$(location).attr('href', url);
-	return false;
+	//return false;
 }
 
