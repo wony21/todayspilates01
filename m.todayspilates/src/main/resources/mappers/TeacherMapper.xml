@@ -11,6 +11,6 @@
         <if test="empNm != null and empNm != ''">
         	AND EMP_NM LIKE '%' + #{empNm} + '%'
         </if>
-        ORDER BY EMP_M
+        ORDER BY EMP_NO
     </select>
 </mapper>

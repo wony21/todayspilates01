@@ -22,7 +22,7 @@ public class TeacherController extends BaseController {
 	@RequestMapping(value = "/api/teacher", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getTeacher(@RequestParam String storCd,
-							@RequestParam String empNm) {
+							@RequestParam(required = false) String empNm) {
 		
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return teacherService.getTeacher(compCd, storCd, empNm);
