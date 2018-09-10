@@ -100,8 +100,8 @@ public class ReservationController extends BaseController {
 	 * @comment		: 
 	 * @auth		: 선생님, 관리자
 	 * @param storCd 매장정보
-	 * @param memberNo 회원번호
-	 * @param empNo 선생님코드
+	 * @param memberNm 회원이름
+	 * @param empNo 선생님코드(select에서..)
 	 * @param sttDt 조회시작일(YYYYMMDD)
 	 * @param endDt 조회종료일(YYYYMMDD)
 	 * @return
@@ -110,12 +110,12 @@ public class ReservationController extends BaseController {
 	@ResponseBody
 	public List getWeeklyLesson(
 			@RequestParam String storCd,
-			@RequestParam(defaultValue="") String memberNo,
-			@RequestParam(defaultValue="") String empNo,
+			@RequestParam(defaultValue="", required=false) String memberNm,
+			@RequestParam(defaultValue="", required=false) String empNo,
 			@RequestParam String sttDt,
 			@RequestParam String endDt) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getWeeklyLesson(compCd, storCd, memberNo, empNo, sttDt, endDt);
+		return memberResrvService.getWeeklyLesson(compCd, storCd, memberNm, empNo, sttDt, endDt);
 	}
 	
 	/**
