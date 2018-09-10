@@ -39,7 +39,7 @@
 <!-- Custom CSS -->
 <link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
 
-<body id="page-top" style="max-width: 100%; overflow-x: hidden;">
+<body id="page-top">
 	<!-- Navigation -->
 	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i>
 	</a>
@@ -161,7 +161,7 @@
       </div>
 
 	<!-- Footer -->
-	<footer class="footer text-center" style="padding: 0 0 0 0">
+	<footer class="footer text-center" style="padding: 0 100 0 0">
 		<div class="container">
 			<ul class="list-inline mb-5">
 				<li class="list-inline-item"><a

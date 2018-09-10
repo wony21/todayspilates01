@@ -109,7 +109,7 @@
       </div>
 
 	<!-- Footer -->
-	<footer class="footer text-center" style="padding: 0 0 0 0;">
+	<footer class="footer text-center" style="padding: 0 100 0 0;">
 		<div class="container">
 			<ul class="list-inline mb-5">
 				<li class="list-inline-item"><a
