@@ -74,7 +74,9 @@
 						FROM ATND_T
 						WHERE COMP_CD = #{compCd}
 							AND STOR_CD = #{storCd}
-							AND MEMBER_NO = #{memberNo}
+							<if test="memberNo != null and memberNo != ''">
+								AND MEMBER_NO = #{memberNo}
+							</if>
 							AND ATND_FG IN ('0','1','2','4')
 						GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) T2
 			ON T.COMP_CD = T2.COMP_CD
@@ -88,7 +90,19 @@
 			AND A.LSN_NO = H.LSN_NO
 		WHERE A.COMP_CD = #{compCd}
 			AND A.STOR_CD = #{storCd}
-			AND A.MEMBER_NO = #{memberNo}
+			<if test="memberNo != null and memberNo != ''">
+				AND A.MEMBER_NO = #{memberNo}
+			</if>
+			<if test="memberNm != null and memberNm != ''">
+				AND A.MEMBER_NO IN (SELECT MEMBER_NO 
+									FROM MEMBER_M
+									WHERE COMP_CD = #{compCd}
+										AND STOR_CD = #{storCd}
+										AND MEMBER_NM LIKE '%' + #{memberNm} + '%')	
+			</if>
+			<if test="memberNo != null and memberNo != ''">
+				AND A.EMP_NO = #{empNo}
+			</if>
 			AND A.CLS_FG = '1'
 			AND F.LSN_FG = '1'
 		ORDER BY A.COMP_CD
