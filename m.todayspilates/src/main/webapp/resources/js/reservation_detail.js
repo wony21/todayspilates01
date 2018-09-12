@@ -5,6 +5,7 @@ $(document).ready(function(e) {
 	let user = JSON.parse(window.localStorage.getItem('todays'));
 	let empNm = user.empNm;
 	let lsnNm = user.lsnNm;
+	$('.username').text(user.username);
 	
 	$.ajax({
 		type: 'GET',
@@ -17,11 +18,11 @@ $(document).ready(function(e) {
 				n.atndTm = n.atndTm.replace(regEx, "");
 				n.idx = idx + 1;
 			})
-			console.log('query reservation fetch success...');
+			
 			var html = Mustache.render(detail_template, {list: res});
 			$('#reservation-container').append(html);
 			$('#caption').text('( ' + empNm + '선생님 : ' + lsnNm + '레슨' + ' )');
-			$('.username').text(user.username);
+			
 			//console.log('memberNo:' + {memberNo})
 		}
 	})

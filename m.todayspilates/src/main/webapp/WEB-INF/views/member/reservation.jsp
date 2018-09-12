@@ -4,7 +4,13 @@
 <%@ page session="false" %>
 <%
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
+	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
+	String storCd = SessionUtils.getCurrentUser().getStorCd();
+	String username2 = SessionUtils.getCurrentUser().getUsername2();
 	request.setAttribute("userLv", userLv);
+	request.setAttribute("memberNo", memberNo);
+	request.setAttribute("storCd", storCd);
+	request.setAttribute("username2", username2);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,207 +18,134 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1"-->
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
 <meta name="description" content="">
 <meta name="author" content="">
 
 <title>Todays pilates</title>
 
-<!-- Bootstrap Core CSS -->
 <link href="/css/boot4/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
-<!-- Custom Fonts -->
-<link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet"
-	type="text/css">
-<link
-	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-	rel="stylesheet" type="text/css">
+<link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
-
-<!-- Custom CSS -->
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 
-</head>
-
-<body id="page-top" style="max-width: 100%; overflow-x: hidden;">
+<body id="page-top">
 	<!-- Navigation -->
-	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i>
-	</a>
+	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i></a>
 	<nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
-				href="#page-top">선생님<!--( ${userLv} )--> : ${username} 님
+				href="#page-top">회원<!--( ${userLv} )--> : <span class="username">${username}</span> 님
 			</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#page-top">Home</a></li>
+				href="/member">Home</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#about">About</a></li>
+				href="/member/reservation">예약현황</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#services">Services</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#portfolio">Portfolio</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#contact">Contact</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#logout" id="logout">Logout</a></li>
+				href="/logout" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
-
 	<!-- Header -->
 	<div class="row">
-        
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
-              </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                This week
-              </button>
-            </div>
-          </div>
-
-          <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1150" height="485" style="display: block; width: 1150px; height: 485px;"></canvas>
-
-          <h2>Section title</h2>
+        <main role="main" class="col-md ml-sm-auto col-lg px-4">
+        <p>
+          <h4><span class="username"></span>님 예약현황</h4>
           <div class="table-responsive">
+          	<div id="reservation-container">
+          	<script type="text/html" id="reservation-template">
+			<div style="text-align: right"><span>&nbsp;</span></div>
             <table class="table table-striped table-sm">
               <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                <tr style="text-align:center">
+                  <th>#구분</th>
+                  <th>예약일시</th>
+                  <th>시간</th>
+                  <th>선생님</th>
+                  <th>회차</th>
+                  <th>종료일</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
+				{{#list}}
+                <tr data-id="{{lsnCd}}" style="text-align: center">
+                  <td>{{lsnNm}}</td>
+                  <td>{{rsvDt}}</td>
+                  <td>{{rsvTm}}</td>
+                  <td>{{empNm}}</td>
+                  <td>{{lsnUseCnt}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                  <td>{{lsnEdDt}}</td>
                 </tr>
+				{{/list}}	
+				{{^list}}
                 <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
+                  <td>개인</td>
+                  <td>2018/09/01</td>
+                  <td>09:00</td>
+                  <td>홍길동</td>
+                  <td>1회차</td>
+                  <td>2018/12/31</td>
                 </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
+				{{/list}}
               </tbody>
             </table>
+			</script>
+			</div>
+          </div>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+	            <div class="btn-toolbar mb-2 mb-md-0">
+	            </div>
+          </div>
+          <div class="table-responsive">
+          	<div id="summary-container">
+          	<script type="text/html" id="summary-template">
+			<h4>총 운동횟수는 <span id="lsnUseSum"></span>회 입니다 </h4>
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr style="text-align: center">
+                  <th>개인</th>
+                  <th>듀엣</th>
+                  <th>그룹</th>
+                  <th>키즈P</th>
+                  <th>키즈D</th>
+                  <th>합계</th>
+                </tr>
+              </thead>
+              <tbody>
+				{{#list}}
+                <tr data-id="{{lsnCd}}" style="text-align: center;">
+                  <td>{{lsn01UseCnt}}</td>
+                  <td>{{lsn02UseCnt}}</td>
+                  <td>{{lsn03UseCnt}}</td>
+                  <td>{{lsn04UseCnt}}</td>
+                  <td>{{lsn05UseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                  <td>{{lsnUseSum}}</td>
+                </tr>
+				{{/list}}	
+				{{^list}}
+                <tr>
+                  <td>개인</td>
+                  <td>2018/09/01</td>
+                  <td>09:00</td>
+                  <td>홍길동</td>
+                  <td>1회차</td>
+                  <td>2018/12/31</td>
+                </tr>
+				{{/list}}
+              </tbody>
+            </table>
+			</script>
+			</div>
           </div>
         </main>
       </div>
 
 	<!-- Footer -->
-	<footer class="footer text-center">
+	<footer class="footer text-center" style="padding: 0 100 0 0;">
 		<div class="container">
 			<ul class="list-inline mb-5">
 				<li class="list-inline-item"><a
@@ -228,8 +161,8 @@
 						class="icon-social-github"></i>
 				</a></li>
 			</ul>
-			<p class="text-muted small mb-0">Copyright &copy; Your Website
-				2017</p>
+			<!-- <div class="text-muted small mb-0">Copyright &copy; Todayspilates
+				2018</div> -->
 		</div>
 	</footer>
 
@@ -239,16 +172,17 @@
 	</a>
 
 	<!-- Bootstrap core JavaScript -->
-	<script src="js/boot4/jquery.min.js"></script>
-	<script src="js/boot4/js/bootstrap.bundle.min.js"></script>
-
+	<script src="/js/boot4/jquery.min.js"></script>
+	<script src="/js/boot4/js/bootstrap.bundle.min.js"></script>
 	<!-- Plugin JavaScript -->
-	<script src="js/boot4/jquery.easing.min.js"></script>
-
+	<script src="/js/boot4/jquery.easing.min.js"></script>
+	<script src="/js/boot4/stylish-portfolio.min.js"></script>
 	<!-- Custom scripts for this template -->
-	<script src="js/boot4/stylish-portfolio.min.js"></script>
-	<script src="js/member.js"></script>
-
+	<script src="/js/reservation.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/boot4/vendor/mustache.js"></script>
+	<script src="/js/boot4/vendor/ax5core.min.js"></script>
+	<script src="/js/boot4/vendor/ax5formatter.js"></script>
 </body>
 
 </html>

@@ -45,15 +45,9 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/member">Home</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#about">About</a></li>
+				href="/member/reservation">예약현황</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/member">Reservation</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#portfolio">Portfolio</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#contact">Contact</a></li>
-			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/logout" id="logout">Logout</a></li>
+				href="/logout" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 	
