@@ -33,9 +33,10 @@ $(document).ready(function() {
 	
 	//개인레슨 예약조회
 	let search = getData();
+	console.log(search);
 	$.ajax({
 		type: 'GET',
-		url: '/api/teacher',
+		url: '/api/teacher/reservation/weekly',
 		data: search,
 		success: function(res) {
 			res.forEach(function(n) {

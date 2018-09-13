@@ -84,6 +84,9 @@
 			AND T.MEMBER_NO = T2.MEMBER_NO
 			AND T.LSN_NO = T2.LSN_NO
 			AND T.LSN_NUM = T2.LSN_NUM
+			<if test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
+				AND T.RSV_DT BETWEEN #{sttDt} AND #{endDt}
+			</if>
 			) H ON A.COMP_CD = H.COMP_CD
 			AND A.STOR_CD = H.STOR_CD
 			AND A.MEMBER_NO = H.MEMBER_NO
@@ -100,8 +103,11 @@
 										AND STOR_CD = #{storCd}
 										AND MEMBER_NM LIKE '%' + #{memberNm} + '%')	
 			</if>
-			<if test="memberNo != null and memberNo != ''">
+			<if test="empNo != null and empNo != ''">
 				AND A.EMP_NO = #{empNo}
+			</if>
+			<if test="rsvDt != null and rsvDt != ''">
+				AND H.RSV_DT = #{rsvDt}
 			</if>
 			AND A.CLS_FG = '1'
 			AND F.LSN_FG = '1'

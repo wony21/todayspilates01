@@ -63,7 +63,7 @@ public class MemberResrvService extends BaseService {
 		return mapper.getDetailUseLesson(parameter);
 	}
 
-	public List getWeeklyLesson(String compCd, String storCd, String memberNm, String empNo, String sttDt,
+	public List getWeeklyLesson(String compCd, String storCd, String memberNm, String empNo, String rsvDt, String sttDt,
 			String endDt) {
 		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
@@ -71,9 +71,11 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNm, memberNm);
 		parameter.put(ParamNames.empNo, empNo);
+		parameter.put(ParamNames.rsvDt, rsvDt);
 		parameter.put(ParamNames.sttDt, sttDt);
 		parameter.put(ParamNames.endDt, endDt);
-		return mapper.getWeeklyLesson(parameter);
+		//return mapper.getWeeklyLesson(parameter);
+		return mapper.getRervation(parameter);
 	}
 
 	public List getWeeklyDetail(String compCd, String storCd, String memberNm, String empNo, String sttDt,

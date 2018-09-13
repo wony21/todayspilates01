@@ -112,10 +112,11 @@ public class ReservationController extends BaseController {
 			@RequestParam String storCd,
 			@RequestParam(defaultValue="", required=false) String memberNm,
 			@RequestParam(defaultValue="", required=false) String empNo,
+			@RequestParam(defaultValue="", required=false) String rsvDt,
 			@RequestParam String sttDt,
 			@RequestParam String endDt) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getWeeklyLesson(compCd, storCd, memberNm, empNo, sttDt, endDt);
+		return memberResrvService.getWeeklyLesson(compCd, storCd, memberNm, empNo, rsvDt, sttDt, endDt);
 	}
 	
 	/**
