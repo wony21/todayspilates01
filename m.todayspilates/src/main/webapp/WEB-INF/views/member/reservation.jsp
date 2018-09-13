@@ -178,7 +178,7 @@
 	<script src="/js/boot4/jquery.easing.min.js"></script>
 	<script src="/js/boot4/stylish-portfolio.min.js"></script>
 	<!-- Custom scripts for this template -->
-	<script src="/js/reservation.js"></script>
+	<script src="/js/member/reservation.js"></script>
 	<script src="/js/common.js"></script>
 	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>

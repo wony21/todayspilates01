@@ -12,10 +12,9 @@ $(document).ready(function(e) {
 		url: '/api/member/reservation/detail', ///api/member/reservation/detail?storCd=001&memberNo=00001&lsnCd=01
 		data: {storCd: user.storCd, memberNo: user.memberNo, lsnCd: user.lsnCd},
 		success: function(res) {
-			var regEx = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+			var regEx = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/;
 			res.forEach(function(n, idx) {
-				n.atndDt = ax5.util.date(n.atndDt, {return: 'yyyy/MM/dd'});
-				n.atndTm = n.atndTm.replace(regEx, "");
+				n.atndDt = ax5.util.date((n.atndDt == null) ? '' : n.atndDt, {return: 'yyyy/MM/dd'});
 				n.idx = idx + 1;
 			})
 			

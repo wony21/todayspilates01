@@ -4,11 +4,11 @@
 <%@ page session="false" %>
 <%
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
-	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
+	String empNo = SessionUtils.getCurrentUser().getEmpNo();
 	String storCd = SessionUtils.getCurrentUser().getStorCd();
 	String username2 = SessionUtils.getCurrentUser().getUsername2();
 	request.setAttribute("userLv", userLv);
-	request.setAttribute("memberNo", memberNo);
+	request.setAttribute("empNo", empNo);
 	request.setAttribute("storCd", storCd);
 	request.setAttribute("username2", username2);
 %>
@@ -26,7 +26,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="css/boot4/dashboard.css" rel="stylesheet">
     <!-- Custom Fonts -->
     <link href="css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
@@ -47,6 +47,8 @@
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
 				href="#page-top">선생님<!--( ${userLv} )--> : <span class="username">${username}</span> 님
 			</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="/teacher">Home</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_lesson">개인레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -260,7 +262,19 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/boot4/stylish-portfolio.min.js"></script>
-
+	<script>
+		let empNo = '<%=empNo%>';
+		let storCd = '<%=storCd%>';
+		let username2 = '<%=username2%>';
+		let user = {};
+		user.empNo = empNo;
+		user.storCd = storCd;
+		user.lsnCd = '';
+		user.username = username2;
+		
+		
+		window.localStorage.setItem('todays', JSON.stringify(user));
+	</script>
   </body>
 
 </html>

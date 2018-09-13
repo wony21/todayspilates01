@@ -15,19 +15,50 @@ $(document).ready(function() {
 	$('#date-container').append(html);
 	$('.username').text(user.username);
 	
+	//강사목록 조회 
 	$.ajax({
 		type: 'GET',
-		url: '/api/member/reservation',
-		data: {storCd: storCd, memberNo: memberNo},
+		url: '/api/teacher',
+		data: {storCd: user.storCd},
+		success: function(res) {
+			let option = '<option value="">선생님 선택</option>';
+			res.forEach(function(n) {
+				 option += ' <option value="' + n.empNo + '">' + n.empNm +
+                 '</option> ';
+			})
+			$('#teacher').html(option);
+			$('#teacher').val(user.empNo);	//로그인한 선생님으로 선택 
+		}
+	});
+	
+	//개인레슨 예약조회
+	let search = getData();
+	$.ajax({
+		type: 'GET',
+		url: '/api/teacher',
+		data: search,
 		success: function(res) {
 			res.forEach(function(n) {
-				n.rsvDt = ax5.util.date(n.rsvDt, {return: 'yyyy/MM/dd'});
-				n.lsnEdDt = ax5.util.date(n.lsnEdDt, {return: 'yyyy/MM/dd'});
+				n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
+				n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
 			})
 			var html = Mustache.render(reservation, {list: res});
 			$('#reservation-container').append(html);
 		}
 	});
+	
+	function getData() {
+		return {
+			storCd: user.storCd,
+			memberNm: $('#filter').val(),
+			empNo: user.empNo,
+			sttDt: '20180909',
+			endDt: '20180915'
+		}
+	}
+	
+	function getWeeks() {
+	}
 });
 
 $("#date-container").on('click', 'td', function(e) {

@@ -4,11 +4,11 @@
 <%@ page session="false" %>
 <%
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
-	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
+	String empNo = SessionUtils.getCurrentUser().getEmpNo();
 	String storCd = SessionUtils.getCurrentUser().getStorCd();
 	String username2 = SessionUtils.getCurrentUser().getUsername2();
 	request.setAttribute("userLv", userLv);
-	request.setAttribute("memberNo", memberNo);
+	request.setAttribute("empNo", empNo);
 	request.setAttribute("storCd", storCd);
 	request.setAttribute("username2", username2);
 %>
@@ -30,11 +30,8 @@
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link
-	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
-	rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
-
 <!-- Custom CSS -->
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 
@@ -47,6 +44,8 @@
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
 				href="#page-top">선생님<!--( ${userLv} )--> : <span class="username">${username}</span> 님
 			</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="/teacher">Home</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_lesson">개인레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -76,19 +75,19 @@
             <h1 class="h2">&nbsp;</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="input-group" style="">
-              	<input type="text" class="form-control" placeholder="회원명" style="width: 80px;">
+              	<input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;">
               	<div class="input-group-append">
                 	<button type="submit" class="btn btn-primary">검색</button>
               	</div>
               </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" style="margin-left: 5px;">
-                <span data-feather="calendar"></span>
-                선생님 전체보기
-              </button>
-			  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" style="margin-left: 5px;">
-                <span data-feather="calendar"></span>
-                2018년 9월 3주
-              </button>	
+              <select class="custom-select d-block btn btn-sm btn-outline-secondary" id="teacher" style="width: 100px; margin-left: 5px;">
+                  <option value="">Choose...</option>
+                  <option>United States</option>
+                </select>
+			  <select class="custom-select d-block btn btn-sm btn-outline-secondary" id="week" style="width: 100px; margin-left: 5px;">
+                  <option value="">Choose...</option>
+                  <option>United States</option>
+                </select>
             </div>
           </div>
             <table class="table table-striped table-sm">
@@ -142,11 +141,10 @@
                   <td>{{empNm}}</td>
                   <td>{{lsnTm}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
-				  <td><select class="attend-process">
-					<option value="1" selected>출석</option>
-						<option value="2">결석</option>
-						<option value="3">취소</option>
-					</select></td>
+				  <td><select class="custom-select d-block btn btn-sm btn-outline-secondary" id="teacher" style="width: 100px; margin-left: 5px;">
+                  <option value="1">Choose...</option>
+                  <option>United States</option>
+                </select></td>
                 </tr>
 				{{/list}}	
 				{{^list}}
@@ -208,24 +206,11 @@
 
 	<!-- Custom scripts for this template -->
 	<script src="/js/boot4/stylish-portfolio.min.js"></script>
-	<script src="/js/private_lesson.js"></script>
+	<script src="/js/teacher/private_lesson.js"></script>
 	<script src="/js/common.js"></script>
 	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
-	<script>
-		let memberNo = '<%=memberNo%>';
-		let storCd = '<%=storCd%>';
-		let username2 = '<%=username2%>';
-		let user = {};
-		user.memberNo = memberNo;
-		user.storCd = storCd;
-		user.lsnCd = '';
-		user.username = username2;
-		
-		
-		window.localStorage.setItem('todays', JSON.stringify(user));
-	</script>
 </body>
 
 </html>

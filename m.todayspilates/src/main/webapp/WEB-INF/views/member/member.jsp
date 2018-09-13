@@ -247,7 +247,7 @@
     <script src="js/boot4/jquery.easing.min.js"></script>
     <!-- Custom scripts for this template -->
     <script src="js/boot4/stylish-portfolio.min.js"></script>
-    <script src="js/member.js"></script>
+    <script src="js/member/member.js"></script>
     <script>
 		let memberNo = '<%=memberNo%>';
 		let storCd = '<%=storCd%>';

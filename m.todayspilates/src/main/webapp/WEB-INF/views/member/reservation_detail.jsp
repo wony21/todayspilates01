@@ -138,7 +138,7 @@
 
 	<!-- Custom scripts for this template -->
 	<script src="/js/boot4/stylish-portfolio.min.js"></script>
-	<script src="/js/reservation_detail.js"></script>
+	<script src="/js/member/reservation_detail.js"></script>
 	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
