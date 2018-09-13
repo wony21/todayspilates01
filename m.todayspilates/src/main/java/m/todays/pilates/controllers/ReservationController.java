@@ -158,12 +158,12 @@ public class ReservationController extends BaseController {
 	@ResponseBody
 	public List getWeeklyDetail(
 			@RequestParam String storCd,
-			@RequestParam(defaultValue="") String memberNo,
+			@RequestParam(defaultValue="") String memberNm,
 			@RequestParam(defaultValue="") String empNo,
 			@RequestParam String sttDt,
 			@RequestParam String endDt) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNo, empNo, sttDt, endDt);
+		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNm, empNo, sttDt, endDt);
 	}
 	/**
 	 * 개인레슨출석부 - 출석/결석, 예약삭제 처리
