@@ -40,6 +40,7 @@
     <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
         /* 회원 예약 조회 */
         SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD
+        	,M.MEMBER_NM
 			,F.LSN_NM, F.LSN_TM
 			,A.LSN_TY, A.LSN_FG
 			,G.NAME AS LSN_FG_NM
@@ -91,6 +92,10 @@
 			AND A.STOR_CD = H.STOR_CD
 			AND A.MEMBER_NO = H.MEMBER_NO
 			AND A.LSN_NO = H.LSN_NO
+		INNER JOIN MEMBER_M M
+		ON A.COMP_CD = M.COMP_CD
+		AND A.STOR_CD = M.STOR_CD
+		AND A.MEMBER_NO = M.MEMBER_NO
 		WHERE A.COMP_CD = #{compCd}
 			AND A.STOR_CD = #{storCd}
 			<if test="memberNo != null and memberNo != ''">
