@@ -211,24 +211,16 @@ public class ReservationController extends BaseController {
 	 * @auth		: 선생님, 관리자
 	 * @param requestParams [
 				   {
-				        "lsnNm": "개인",
-				        "empNm": "노미리",
-				        "lsnTm": 1,
-				        "empNo": "00005",
-				        "lsnSeq": 4,
-				        "lsnUseCnt": 0,
-				        "compCd": "0001",
-				        "lsnNo": "002",
-				        "lsnCd": "01",
-				        "lsnCnt": 20,
-				        "storCd": "001",
-				        "memberNo": "00008",
-				        "rsvTm": "2000",
-				        "memberNm": "김주영",
-				        "dy": "금",
-				        "atndFg": "2",
-				        "rsvDt": "20180615",
-				        "lsnEdDt": ""
+				        "compCd":
+				        "storCd":
+				        "memberNo":
+				        "lsnCd":
+				        "lsnNo":
+				        ------------------------ 여기까지가 key
+				        "empNo":선생님코드(화면에서 선택된 값)
+				        "lsnTm":시간(화면에서 설정한 값 1.0, 1.5 등)
+				        "rsvDt":예약일(yyyyMMdd)
+				        "rsvTm":예약시간(HHmm)
 				    }
 				]
 	 * @return

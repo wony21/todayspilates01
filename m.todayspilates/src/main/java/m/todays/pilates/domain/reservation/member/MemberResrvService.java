@@ -113,7 +113,6 @@ public class MemberResrvService extends BaseService {
 			String memberNo = (String) map.getOrDefault(ParamNames.memberNo, "");
 			String lsnCd = (String) map.getOrDefault(ParamNames.lsnCd, "");
 			String lsnNo = (String) map.getOrDefault(ParamNames.lsnNo, "");
-			String lsnSeq = map.getOrDefault(ParamNames.lsnSeq, "").toString();
 			String lsnTm = map.getOrDefault(ParamNames.lsnTm, "").toString();
 			String rsvDt = (String) map.getOrDefault(ParamNames.rsvDt, "");
 			String rsvTm = (String) map.getOrDefault(ParamNames.rsvTm, "");
@@ -135,9 +134,7 @@ public class MemberResrvService extends BaseService {
 				return ApiResponse.error("KEY : [empNo] 가 존재하지 않습니다.");
 			} else if (StringUtils.isEmpty(lsnTm)) {
 				return ApiResponse.error("KEY : [lsnTm] 가 존재하지 않습니다.");
-			} else if (StringUtils.isEmpty(lsnSeq)) {
-				return ApiResponse.error("KEY : [lsnSeq] 가 존재하지 않습니다.");
-			}
+			} 
 
 			MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
 			Map<String, Object> parameter = new HashMap<String, Object>();
@@ -148,11 +145,11 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.lsnCd, lsnCd);
 			parameter.put(ParamNames.lsnNo, lsnNo);
 			parameter.put(ParamNames.lsnTm, lsnTm);
-			parameter.put(ParamNames.lsnSeq, lsnSeq);
 			parameter.put(ParamNames.rsvDt, rsvDt);
 			parameter.put(ParamNames.rsvTm, rsvTm);
 			parameter.put(ParamNames.empNo, empNo);
 			mapper.insertAttend(parameter);
+			mapper.updateLessonUseCount(parameter);
 		}
 
 		return ApiResponse.success("예약을 완료하였습니다.");

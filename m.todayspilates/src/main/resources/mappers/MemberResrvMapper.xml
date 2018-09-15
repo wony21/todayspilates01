@@ -245,8 +245,38 @@
 		ORDER BY A.COMP_CD, A.STOR_CD, LSN_ED_DT, A.LSN_NO, A.LSN_CD, A.MEMBER_NO
     </select>
     <insert id="insertAttend" parameterType="hashmap">
-    	INSERT INTO ATND_T (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_DT, ATND_TM, ATND_FG, INS_DATE, INS_USER, UPT_DATE, UPT_USER)
-		VALUES (#{compCd},#{storCd},#{memberNo},#{lsnNo},(${lsnSeq}+1),#{empNo},#{lsnCd},${lsnTm},#{rsvDt},#{rsvTm},NULL,NULL,'0',GETDATE(),#{userCd},GETDATE(),#{userCd})
+    	INSERT INTO ATND_T (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER, UPT_USER)
+		VALUES(#{compCd},#{storCd},#{memberNo},#{lsnNo}, 
+				(SELECT ISNULL(MAX(LSN_SEQ), 1) LSN_SEQ
+				FROM ATND_T M
+				WHERE COMP_CD = #{compCd}
+					AND STOR_CD = #{storCd}
+					AND MEMBER_NO = #{memberNo}
+					AND LSN_NO = #{lsnNo}
+					AND LSN_CD  = #{lsnCd}),
+				(SELECT ISNULL(MAX(LSN_NUM), 0) LSN_NUM
+				FROM ATND_T M
+				WHERE COMP_CD = #{compCd}
+					AND STOR_CD = #{storCd}
+					AND MEMBER_NO = #{memberNo}
+					AND LSN_NO = #{lsnNo}
+					AND LSN_CD  = #{lsnCd}
+					AND LSN_SEQ = (SELECT MAX(LSN_SEQ)
+									FROM ATND_T 
+									WHERE COMP_CD = M.COMP_CD
+									AND STOR_CD = M.STOR_CD
+									AND MEMBER_NO = M.MEMBER_NO
+									AND LSN_NO = M.LSN_NO
+									AND LSN_CD = M.LSN_CD),
+				#{empNo}, 
+				#{lsnCd},
+				#{lsnTm},
+				#{rsvDt},
+				#{rsvTm},
+				0,
+				0,
+				#{userCd},
+				#{userCd})
     </insert>
     <update id="updateAttend" parameterType="hashmap">
     	UPDATE ATND_T
@@ -266,7 +296,20 @@
     </update>
     <update id="updateLessonUseCount" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M
-    	SET LSN_USE_CNT = ${lsnUseCnt},
+    	SET LSN_USE_CNT = (SELECT ISNULL(MAX(LSN_NUM), 0) LSN_NUM
+							FROM ATND_T M
+							WHERE COMP_CD = #{compCd}
+								AND STOR_CD = #{storCd}
+								AND MEMBER_NO = #{memberNo}
+								AND LSN_NO = #{lsnNo}
+								AND LSN_CD  = #{lsnCd}
+								AND LSN_SEQ = (SELECT MAX(LSN_SEQ)
+												FROM ATND_T 
+												WHERE COMP_CD = M.COMP_CD
+												AND STOR_CD = M.STOR_CD
+												AND MEMBER_NO = M.MEMBER_NO
+												AND LSN_NO = M.LSN_NO
+												AND LSN_CD = M.LSN_CD),
     		UPT_DATE = GETDATE(),
     		UPT_USER = #{userCd}
     	WHERE COMP_CD = #{compCd}
