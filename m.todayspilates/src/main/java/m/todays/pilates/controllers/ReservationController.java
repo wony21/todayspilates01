@@ -167,7 +167,7 @@ public class ReservationController extends BaseController {
 		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNm, empNo, sttDt, endDt);
 	}
 	/**
-	 * 개인레슨출석부 - 출석/결석, 예약삭제 처리
+	 * 개인레슨출석부 - 출석
 	 * @package 	: m.todays.pilates.controllers
 	 * @file 		: ReservationController.java
 	 * @method		: editLessonAttand
@@ -198,9 +198,29 @@ public class ReservationController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/api/teacher/reservation/edit", method = RequestMethod.PUT, produces = APPLICATION_JSON)
-	public ApiResponse editLessonAttand(@RequestBody List<HashMap> requestParams) {
+	@RequestMapping(value = "/api/teacher/lesson/attend", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse lessonAttend(@RequestBody List<HashMap> requestParams) {
 		return memberResrvService.attend(requestParams);
+	}
+	/**
+	 * 개인레슨출석부 - 결석
+	 * @param requestParams
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/lesson/absent", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse lessonAbsend(@RequestBody List<HashMap> requestParams) {
+		return memberResrvService.absent(requestParams);
+	}
+	/**
+	 * 개인레슨출석부 - 취소
+	 * @param requestParams
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/lesson/cancel", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse lessonCancel(@RequestBody List<HashMap> requestParams) {
+		return memberResrvService.cancel(requestParams);
 	}
 	/**
 	 * 개인레슨출석부 - 예약처리
@@ -233,41 +253,4 @@ public class ReservationController extends BaseController {
 
 		
 	}
-	/**
-	 * 개인레슨출석부 : 예약삭제
-	 * @package 	: m.todays.pilates.controllers
-	 * @file 		: ReservationController.java
-	 * @method		: deleteReservation
-	 * @comment		: /api/reservation/delete
-	 * @auth		: 선생님, 관리자
-	 * @param requestParams [
-				   {
-				        "lsnNm": "개인",
-				        "empNm": "노미리",
-				        "lsnTm": 1,
-				        "empNo": "00005",
-				        "lsnSeq": 4,
-				        "lsnUseCnt": 0,
-				        "compCd": "0001",
-				        "lsnNo": "002",
-				        "lsnCd": "01",
-				        "lsnCnt": 20,
-				        "storCd": "001",
-				        "memberNo": "00008",
-				        "rsvTm": "2000",
-				        "memberNm": "김주영",
-				        "dy": "금",
-				        "atndFg": "2",
-				        "rsvDt": "20180615",
-				        "lsnEdDt": ""
-				    }
-				]
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/api/teacher/reservation/delete", method = RequestMethod.DELETE, produces = APPLICATION_JSON)
-	public ApiResponse deleteReservation(@RequestBody List<HashMap> requestParams) {
-		return memberResrvService.deleteReservation(requestParams);
-	}
-	
 }

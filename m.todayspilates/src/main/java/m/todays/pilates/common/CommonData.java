@@ -19,5 +19,17 @@ public class CommonData {
 		public final static String ATTENDANCE = "1";
 		public final static String ABSENT = "2";
 	}
-
+	// 예약, 출석, 결석, 취소, 조정
+	public class ATND_FG {
+		// 예약 : 0
+		public final static String RESERVATION = "0";
+		// 출석 : 1
+		public final static String ATTEND = "1";
+		// 결석 : 2
+		public final static String ABSENT = "2";
+		// 취소 : 3
+		public final static String CANCEL = "3";
+		// 조정 : 4
+		public final static String MODIFY = "4";
+	}
 }

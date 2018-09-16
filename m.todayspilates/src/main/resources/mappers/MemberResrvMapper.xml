@@ -39,7 +39,7 @@
     </select>
     <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
         /* 회원 예약 조회 */
-        SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD
+        SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, H.LSN_SEQ
         	,M.MEMBER_NM
 			,F.LSN_NM, F.LSN_TM
 			,A.LSN_TY, A.LSN_FG
@@ -69,7 +69,7 @@
 			WHERE GROUP_CD = '003'
 			) G ON A.LSN_FG = G.CODE
 		LEFT OUTER JOIN (
-			SELECT T.COMP_CD, T.STOR_CD, T.MEMBER_NO, T.LSN_NO, T.LSN_NUM, T.RSV_DT, T.RSV_TM
+			SELECT T.COMP_CD, T.STOR_CD, T.MEMBER_NO, T.LSN_NO, T.LSN_NUM, T.LSN_SEQ, T.RSV_DT, T.RSV_TM
 			FROM ATND_T T
 			INNER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_NUM) AS LSN_NUM
 						FROM ATND_T
@@ -266,13 +266,7 @@
 					AND MEMBER_NO = #{memberNo}
 					AND LSN_NO = #{lsnNo}
 					AND LSN_CD  = #{lsnCd}
-					AND LSN_SEQ = (SELECT MAX(LSN_SEQ)
-									FROM ATND_T 
-									WHERE COMP_CD = M.COMP_CD
-									AND STOR_CD = M.STOR_CD
-									AND MEMBER_NO = M.MEMBER_NO
-									AND LSN_NO = M.LSN_NO
-									AND LSN_CD = M.LSN_CD),
+					AND LSN_FG IN ('0' ,'1', '2')),
 				#{empNo}, 
 				#{lsnCd},
 				#{lsnTm},
@@ -285,8 +279,8 @@
     </insert>
     <update id="updateAttend" parameterType="hashmap">
     	UPDATE ATND_T
-		SET ATND_DT = RSV_DT,
-		  ATND_TM = RSV_TM,
+		SET ATND_DT = CONVERT(CHAR, GETDATE(), 112),
+		  ATND_TM = SUBSTRING(REPLACE(CONVERT(CHAR, GETDATE(), 24), ':', ''), 1, 4),
 		  ATND_FG = #{atndFg},
 		  UPT_USER = #{userCd},
 		  UPT_DATE = GETDATE()
@@ -296,8 +290,6 @@
 		  AND LSN_NO = #{lsnNo}
 		  AND LSN_CD = #{lsnCd}
 		  AND LSN_SEQ = ${lsnSeq}
-		  AND RSV_DT = #{rsvDt}
-		  AND RSV_TM = #{rsvTm}
     </update>
     <update id="updateLessonUseCount" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M
