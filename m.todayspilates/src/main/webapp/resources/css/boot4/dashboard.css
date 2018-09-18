@@ -1,34 +1,22 @@
 html,body {
   font-size: .875rem;
-  max-width: 100%;
-  overflow-x: hidden;
 }
 
 body {
-overflow: hidden;
-width: 100%;
--webkit-box-sizing: border-box;
--moz-box-sizing: border-box;
-box-sizing: border-box;
+	overflow: auto;
 }
-
 .feather {
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
 }
-
-/*
- * Sidebar
- */
-
 .sidebar {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  z-index: 100; 
+  padding: 48px 0 0; 
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
@@ -38,7 +26,7 @@ box-sizing: border-box;
   height: calc(100vh - 48px);
   padding-top: .5rem;
   overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  overflow-y: auto; 
 }
 
 @supports ((position: -webkit-sticky) or (position: sticky)) {
@@ -111,6 +99,28 @@ box-sizing: border-box;
 
 .table tr {
 	text-align: center;
+}
+.table tr td {
+	vertical-align: middle;
+}
+.table .select {
+	float: center;
+}
+
+#datepicker .selected {
+  color: #fff;
+  background-color: rgba(255, 0, 0, .5);
+  border-color: rgba(255, 0, 0, 1);
+}
+
+#datepicker .today {
+  color: rgba(29, 128, 159, 1);
+  font-weight: 700;
+}
+
+#datepicker .today2 {
+  background-color: rgba(255, 255, 0, .5);
+  border-color: rgba(222, 226, 230, 1);
 }
 
 /*

@@ -18,12 +18,9 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1"-->
-<meta content="yes" name="apple-mobile-web-app-capable" />
-<meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
-<meta name="description" content="">
-<meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
 <title>Todays pilates</title>
 
@@ -33,6 +30,7 @@
 <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
+<link href="/css/boot4/dashboard.css" rel="stylesheet">
 
 <body id="page-top">
 	<!-- Navigation -->
@@ -51,9 +49,10 @@
 		</ul>
 	</nav>
 	<!-- Header -->
-	<div class="row">
-        <main role="main" class="col-md ml-sm-auto col-lg px-4">
-        <p>
+	<header class="d-flex">
+      <div class="container">
+	<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
+	<p>
           <h4><span class="username"></span>님 예약현황</h4>
           <div class="table-responsive">
           	<div id="reservation-container">
@@ -141,8 +140,9 @@
 			</script>
 			</div>
           </div>
-        </main>
       </div>
+      </div>
+      </header>
 
 	<!-- Footer -->
 	<footer class="footer text-center" style="padding: 0 100 0 0;">

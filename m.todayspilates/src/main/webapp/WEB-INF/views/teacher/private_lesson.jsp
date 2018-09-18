@@ -17,23 +17,24 @@
 
 <head>
 
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
 <title>Todays pilates</title>
 
 <!-- Bootstrap Core CSS -->
 <link href="/css/boot4/css/bootstrap.min.css" rel="stylesheet">
-<link href="/css/boot4/dashboard.css" rel="stylesheet">
+
 <!-- Custom Fonts -->
 <link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
 <!-- Custom CSS -->
+
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
+<link href="/css/boot4/dashboard.css" rel="stylesheet">
 
 <body id="page-top">
 	<!-- Navigation -->
@@ -49,6 +50,8 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_lesson">개인레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="/teacher/private_reservation">개인레슨 예약하기</a></li>
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#" id="reservation">그룹레슨 등록현황관리</a></li>
@@ -62,71 +65,57 @@
 	</nav>
 	
 	<!-- Header -->
-	<div class="row">
-        
-		
-        <main role="main" class="col-md ml-sm-auto col-lg px-4">
-        <p>
-          <h4>개인레슨 출석부</h4>
+	<header class="d-flex">
+      <div class="container">
+		<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;"><p>
+          <h4> 개인레슨 출석부</h4>
           <div class="table-responsive">
           	<div id="date-container">
-          	<script type="text/html" id="date-template">
-			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h1 class="h2">&nbsp;</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="input-group" style="">
-              	<input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;">
-              	<div class="input-group-append">
-                	<button type="submit" class="btn btn-primary">검색</button>
-              	</div>
-              </div>
-              <select class="custom-select d-block btn btn-sm btn-outline-secondary" id="teacher" style="width: 100px; margin-left: 5px;">
-                  <option value="">Choose...</option>
-                  <option>United States</option>
-                </select>
-			  <select class="custom-select d-block btn btn-sm btn-outline-secondary" id="week" style="width: 100px; margin-left: 5px;">
-                  <option value="">Choose...</option>
-                  <option>United States</option>
-                </select>
-            </div>
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
+		            <div class="btn-toolbar mb-2 mb-md-0">
+		            	<div class="input-group">
+						<select class="custom-select" id="week" style="width: 100px; margin-left: 5px;">
+		                  <option value="">Choose...</option>
+		                  <option>United States</option>
+		                </select>
+		                </div>
+		                <div class="input-group">
+		                <select class="custom-select" id="teacher" style="width: 100px; margin-left: 5px;">
+		                  <option value="">Choose...</option>
+		                  <option>United States</option>
+		                </select>
+		                </div>
+		              <div class="input-group">
+		              	<input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
+		              	<div class="input-group-append">
+		                	<button id="search-attend" class="btn btn-primary">검색</button>
+		              	</div>
+		              </div>
+		              
+					  <!--<div class="btn-group mr-2" style="float: right; margin-left: 5px;">
+		                <button class="btn btn-outline-secondary">예약하기</button>
+		              </div> -->
+		            </div>
+	          	</div>
+	            <table class="table table-striped table-sm" id="datepicker">
+	              <thead><!-- 동적생성 --></thead>
+	              <tbody><!-- 동적생성 --></tbody>
+	            </table>
+			</div><!-- end date-container -->
           </div>
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr style="text-align:center; height: 40px;">
-                  <th>일</th>
-                  <th>월</th>
-                  <th>화</th>
-                  <th>수</th>
-                  <th>목</th>
-                  <th>금</th>
-                  <th>토</th>
-                </tr>
-              </thead>
-              <tbody>
-				
-                <tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">
-				{{#list}}
-                  <td>{{key}}</td>
-				{{/list}}
-                </tr>
-              </tbody>
-            </table>
-			</script>
-			</div>
-          </div>
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-	            <div class="btn-toolbar mb-2 mb-md-0">
-	            </div>
-          </div>
-          <div class="table-responsive">
+          <div class="container">
+          	<div class="row" style="padding-top: 20px;"></div>
+			<!--<a href="#"><button type="button" class="btn" style="width: 150px;">개인레슨 예약하기</button></a>-->
+		  </div>
+          <div class="table-responsive" style="top-margin: 10px;">
           	<div id="reservation-container">
           	<script type="text/html" id="reservation-template">
-			<div style="text-align: right"><span>&nbsp;</span></div>
             <table class="table table-striped table-sm">
               <thead>
-                <tr style="text-align:center">
+                <tr style="text-align: center">
                   <th>예약일시</th>
                   <th>시간</th>
+				  <th>회원</th>
                   <th>선생님</th>
                   <th>회차</th>
                   <th>종료일</th>
@@ -135,28 +124,33 @@
               </thead>
               <tbody>
 				{{#list}}
-                <tr data-id="{{lsnCd}}" style="text-align: center">
+                <tr data-id="{{lsnCd}}" style="text-align: center;">
                   <td>{{rsvDt}}</td>
                   <td>{{rsvTm}}</td>
+				  <td>{{memberNm}}</td>
                   <td>{{empNm}}</td>
                   <td>{{lsnTm}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
-				  <td><select class="custom-select d-block btn btn-sm btn-outline-secondary" id="teacher" style="width: 100px; margin-left: 5px;">
-                  <option value="1">Choose...</option>
-                  <option>United States</option>
+				  <td class="select"><select class="custom-select attend-process" style="width: 70px;">
+                  <option value="0">선택</option>
+                  <option value="2">출석</option>
+                  <option value="1">결석</option>
+                  <option value="3">취소</option>
                 </select></td>
                 </tr>
 				{{/list}}	
 				{{^list}}
-                <tr>
+                <tr data-id="" style="text-align: center;">
                   <td>2018/09/01</td>
-                  <td>09:00</td>
+                  <td>1.5</td>
                   <td>홍길동</td>
-                  <td>1회차</td>
+				  <td>강익수</td>
+                  <td>1/4</td>
                   <td>2018/12/31</td>
 					<td><select class="attend-process">
-						<option value="1" selected>출석</option>
-						<option value="2">결석</option>
+						<option value="0" selected>선택</option>
+						<option value="2">출석</option>
+						<option value="1">결석</option>
 						<option value="3">취소</option>
 					</select></td>
                 </tr>
@@ -166,10 +160,9 @@
 			</script>
 			</div>
           </div>
-        </main>
-        <input type='hidden' id='memberNo'/ value=${memberNo}>
       </div>
-
+	</div>
+	</header>
 	<!-- Footer -->
 	<footer class="footer text-center" style="padding: 0 100 0 0">
 		<div class="container">
@@ -205,12 +198,11 @@
 	<script src="/js/boot4/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for this template -->
-	<script src="/js/boot4/stylish-portfolio.min.js"></script>
-	<script src="/js/teacher/private_lesson.js"></script>
-	<script src="/js/common.js"></script>
 	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
+	<script src="/js/boot4/stylish-portfolio.js"></script>
+	<script src="/js/teacher/private_lesson.js"></script>
 </body>
 
 </html>

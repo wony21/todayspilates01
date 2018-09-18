@@ -18,7 +18,7 @@
   <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -26,15 +26,15 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/boot4/dashboard.css" rel="stylesheet">
+	
     <!-- Custom Fonts -->
     <link href="css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
-
+	<link href="css/boot4/dashboard.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
-
+    
   </head>
 
   <body id="page-top">
@@ -52,20 +52,43 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_lesson">개인레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
+				href="/teacher/private_reservation">개인레슨 예약하기</a></li>	
+			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#" id="reservation">그룹레슨 등록현황관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">회원등록/수업등록</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#">내수업실적</a></li>
+				href="/teacher/my_lsesson_report">내수업실적</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/logout" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 
     <!-- Header -->
-    <header class="masthead d-flex">
+    <!-- Header -->
+    <header class="callout">
+      <div class="container text-center mb-2">
+        <h2 class="mx-auto mb-5">STOTT Todayspilates
+        <em></em>
+        </h2>
+      </div>
+      <div class="container text-center mb-1">
+			<a href="/teacher/private_lesson"><button type="button" class="btn btn-primary" style="width: 150px;">개인레슨 출석부</button></a>
+			<a href="/teacher/private_reservation"><button type="button" class="btn btn-primary" style="width: 150px;">개인레슨 예약하기</button></a>
+      </div>
+      <div class="container text-center mb-1">
+			<a href="/teacher/group_lesson"><button type="button" class="btn btn-primary" style="width: 150px;">그룹레슨 출석부</button></a>
+			<a href="#"><button type="button" class="btn btn-primary" style="width: 150px;">그룹레슨 등록현황</button></a>
+      </div>
+      <div class="container text-center mb-1">
+			<a href="#"><button type="button" class="btn btn-primary" style="width: 150px;">회원등록/수업등록</button></a>
+			<a href="/teacher/my_lesson_report"><button type="button" class="btn btn-primary" style="width: 150px;">내 수업실적</button></a>
+      </div>
+    </header>
+    
+    <!--  <header class="masthead d-flex">
       <div class="container text-center my-auto">
         <h1 class="mb-1">Todayspilates</h1>
         <h3 class="mb-5">
@@ -75,8 +98,9 @@
       </div>
       <div class="overlay"></div>
     </header>
-
+	-->
     <!-- About -->
+    <!-- 
     <section class="content-section bg-light" id="about">
       <div class="container text-center">
         <div class="row">
@@ -88,10 +112,10 @@
           </div>
         </div>
       </div>
-    </section>
+    </section>-->
 
     <!-- Services -->
-    <section class="content-section bg-primary text-white text-center" id="services">
+    <!--<section class="content-section bg-primary text-white text-center" id="services">
       <div class="container">
         <div class="content-section-heading">
           <h3 class="text-secondary mb-0">Services</h3>
@@ -139,9 +163,9 @@
         </div>
       </div>
     </section>
-
+-->
     <!-- Callout -->
-    <section class="callout">
+   <!--  <section class="callout">
       <div class="container text-center">
         <h2 class="mx-auto mb-5">Welcome to
           <em>your</em>
@@ -149,9 +173,9 @@
         <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/template-overviews/stylish-portfolio/">Download Now!</a>
       </div>
     </section>
-
+--> 
     <!-- Portfolio -->
-    <section class="content-section" id="portfolio">
+    <!-- <section class="content-section" id="portfolio">
       <div class="container">
         <div class="content-section-heading text-center">
           <h3 class="text-secondary mb-0">Portfolio</h3>
@@ -205,8 +229,9 @@
         </div>
       </div>
     </section>
-
+ -->
     <!-- Call to Action -->
+    <!-- 
     <section class="content-section bg-primary text-white">
       <div class="container text-center">
         <h2 class="mb-4">The buttons below are impossible to resist...</h2>
@@ -214,17 +239,7 @@
         <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
       </div>
     </section>
-
-    <!-- Map -->
-    <section id="contact" class="map">
-      <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
-      <br/>
-      <small>
-        <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
-      </small>
-    </section>
-
-    <!-- Footer -->
+ -->
     <footer class="footer text-center">
       <div class="container">
         <ul class="list-inline mb-5">
@@ -278,3 +293,4 @@
   </body>
 
 </html>
+
