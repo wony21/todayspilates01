@@ -1,4 +1,28 @@
 var common = {};
+
+function parse(str) {
+    if(!/^(\d){8}$/.test(str)) return "invalid date";
+    var y = str.substr(0,4),
+        m = str.substr(4,2),
+        d = str.substr(6,2);
+    return new Date(y,m,d);
+}
+
+/**
+ * @param {day} day (date type)
+ * @return day of week name
+ */
+function getDayOfWeek(day) {
+	if ( day == null ) {
+		return '';
+	}
+	var dat1 = parse(day);
+	console.log(dat1);
+	var week = ['일', '월', '화', '수', '목', '금', '토'];
+	var dayOfWeek = week[dat1.getDay()];
+	return '(' + dayOfWeek + ')';
+}
+
 $(document).ready(function() {
 	var reservation = $('#reservation-template').html();
 	var summary = $('#summary-template').html();
@@ -11,9 +35,12 @@ $(document).ready(function() {
 		data: {storCd: user.storCd, memberNo: user.memberNo},
 		success: function(res) {
 			res.forEach(function(n) {
-				n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
-				n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+				n.dayOfWeek = getDayOfWeek(n.rsvDt);
+				n.rsvDt = (n.rsvDt == null) ? '(예약없음)' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);		//mm.dd
+				n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
+				n.lsnEdDt = (n.lsnEdDt == null) ? '' : ax5.util.date(n.lsnEdDt, {return: 'yyyy-MM-dd'});	// yyyy-mm-dd
 			})
+			console.log(res);
 			var html = Mustache.render(reservation, {list: res});
 			$('#reservation-container').append(html);
 		}

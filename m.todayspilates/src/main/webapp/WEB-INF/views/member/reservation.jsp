@@ -63,7 +63,7 @@
                 <tr style="text-align:center">
                   <th>#구분</th>
                   <th>예약일시</th>
-                  <th>시간</th>
+                  <!--<th>시간</th>-->
                   <th>선생님</th>
                   <th>회차</th>
                   <th>종료일</th>
@@ -73,8 +73,8 @@
 				{{#list}}
                 <tr data-id="{{lsnCd}}" style="text-align: center">
                   <td>{{lsnNm}}</td>
-                  <td>{{rsvDt}}</td>
-                  <td>{{rsvTm}}</td>
+                  <td style="height:45px;">{{rsvDt}}{{dayOfWeek}}<br>{{rsvTm}}</td>
+                  <!--<td>{{rsvTm}}</td>-->
                   <td>{{empNm}}</td>
                   <td>{{lsnUseCnt}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
@@ -84,7 +84,7 @@
                 <tr>
                   <td>개인</td>
                   <td>2018/09/01</td>
-                  <td>09:00</td>
+                  <!--<td>09:00</td>-->
                   <td>홍길동</td>
                   <td>1회차</td>
                   <td>2018/12/31</td>
