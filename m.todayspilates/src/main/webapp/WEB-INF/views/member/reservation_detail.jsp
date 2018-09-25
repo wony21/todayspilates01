@@ -12,10 +12,9 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
 <title>Todays pilates</title>
 
@@ -29,9 +28,9 @@
 	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
 	rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
-
 <!-- Custom CSS -->
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
+<link href="/css/boot4/dashboard.css" rel="stylesheet">
 
 <body id="page-top" style="max-width: 100%; overflow-x: hidden;">
 	<!-- Navigation -->
@@ -52,11 +51,10 @@
 	</nav>
 	
 	<!-- Header -->
-	<div class="row">
-        
-
-        <main role="main" class="col-md ml-sm-auto col-lg px-4">
-        <p>
+	<header class="d-flex">
+      <div class="container">
+	<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
+	<p>
           <h4>사용내역보기 </h4>
           <div class="table-responsive">
           	<div id="reservation-container">
@@ -101,7 +99,8 @@
           </div>
         </main>
       </div>
-
+		</div>
+		</header>
 	<!-- Footer -->
 	<footer class="footer text-center" style="padding: 0 100 0 0;">
 		<div class="container">
@@ -139,11 +138,10 @@
 	<!-- Custom scripts for this template -->
 	<script src="/js/boot4/stylish-portfolio.min.js"></script>
 	<script src="/js/member/reservation_detail.js"></script>
-	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
 	<script src="/js/boot4/vendor/date.format.js"></script>
-
+	<script src="/js/boot4/vendor/mustache.js"></script>
 </body>
 
 </html>

@@ -31,7 +31,7 @@ $(document).ready(
 							selected = "";
 						}
 						studio.append("<option value='" + n.storCd + "' "
-								+ selected + ">[" + n.storCd + "] " + n.storNm
+								+ selected + ">" + n.storNm
 								+ "</option>");
 					});
 				},
