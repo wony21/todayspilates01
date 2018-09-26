@@ -80,16 +80,22 @@
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-primary">검색</button>
                                 </div>
+                                <!-- 
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+		  							예약	
+								</button>
+								 -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="reservation-container" style="height: 190px;">
+                <div id="reservation-container">
                     <script type="text/html" id="reservation-template">
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
                                 <th>예약일시</th>
+								<th>시간</th>
                                 <th>회원</th>
                                 <th>선생님</th>
                                 <th>회차</th>
@@ -98,11 +104,12 @@
                             </thead>
                             <tbody>
                             {{#list}}
-                            <tr data-id="{{lsnCd}}" style="text-align: center;">
-                                <td>{{rsvDt}}</td>
+                            <tr data-id="{{lsnData}}" style="text-align: center;" data-toggle="modal" data-target="#exampleModalCenter">
+                                <td style="height:40px;">{{rsvDt}}{{dy}}<br>{{rsvTm}}</td>
+								<td>{{lsnTm}}</td>
                                 <td>{{memberNm}}</td>
                                 <td>{{empNm}}</td>
-                                <td>{{lsnTm}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                                 <td>{{lsnEdDt}}</td>
                             </tr>
                             {{/list}}
@@ -121,10 +128,28 @@
                     </script>
                 </div>
             </div>
-            <div class="table-responsive" style="margin-top: 30px;">
-            	<div class="container float-md-right"><button type="button" class="btn btn-md btn-default pull-right">개인레슨 예약등록</button></div>
-                <div id="new-reservation-container">
-                    <script type="text/html" id="new-reservation-template">
+            
+            
+            <!-- Modal -->
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalCenterTitle">예약등록</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		      <!-- 예약잡기 팝업body start -->
+			        <div class="table-responsive" style="margin-top: 30px;">
+	            	<!-- 
+	            	<div class="container float-md-right">
+	            		<button type="button" class="btn btn-md btn-default pull-right">개인레슨 예약등록</button>
+					</div>
+					 -->
+	                <div id="new-reservation-container">
+	                    <script type="text/html" id="new-reservation-template">
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
@@ -168,36 +193,55 @@
                             </tbody>
                         </table>
                     </script>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
-	        	<div class="btn-toolbar mb-2 mb-md-0">
-	            	<div class="input-group">
-						<select class="custom-select" id="rsvDt" style="width: 100px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
 	                </div>
-	                <div class="input-group">
-		                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
-	                </div>
-					<div class="input-group">
-						<select class="custom-select" id="lsnTm" style="width: 80px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
-					</div>
-					<div class="input-group">
-						<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
-					</div>
 	            </div>
-	        </div>
+	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
+		        	<div class="btn-toolbar mb-2 mb-md-0">
+		            	<div class="input-group">
+							<select class="custom-select" id="rsvDt" style="width: 100px; margin-left: 5px;">
+			                  <option value="">Choose...</option>
+			                  <option>United States</option>
+			                </select>
+		                </div>
+		                <div class="input-group">
+			                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;">
+			                  <option value="">Choose...</option>
+			                  <option>United States</option>
+			                </select>
+		                </div>
+						<div class="input-group">
+							<select class="custom-select" id="lsnTm" style="width: 80px; margin-left: 5px;">
+			                  <option value="">Choose...</option>
+			                  <option>United States</option>
+			                </select>
+						</div>
+						<div class="input-group">
+							<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;">
+			                  <option value="">Choose...</option>
+			                  <option>United States</option>
+			                </select>
+						</div>
+		            </div>
+		        </div>
+		      </div>
+		      <!-- 예약잡기 팝업body end -->
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary">Save changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+            
+            
+            
+
+            
+
+
+		
+		
+        
         </div>
     </div>
 </header>

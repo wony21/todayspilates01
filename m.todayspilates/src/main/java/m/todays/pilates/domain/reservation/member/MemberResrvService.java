@@ -1,5 +1,6 @@
 package m.todays.pilates.domain.reservation.member;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,10 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNo, memberNo);
+		List<String> atndFgs = new ArrayList();
+		atndFgs.add(CommonData.ATND_FG.RESERVATION);
+		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
+		parameter.put(ParamNames.atndFg, atndFg);
 		return mapper.getRervation(parameter);
 	}
 
@@ -80,7 +85,15 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.rsvDt, rsvDt);
 		parameter.put(ParamNames.sttDt, sttDt);
 		parameter.put(ParamNames.endDt, endDt);
+		parameter.put(ParamNames.opt1, "1");// 예약일이 없는 것은 보이지 않게 처리(선생님인 경우)
+		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.PRIVATE);	// 개인레슨만 본다.
 		//return mapper.getWeeklyLesson(parameter);
+		List<String> atndFgs = new ArrayList();
+		atndFgs.add(CommonData.ATND_FG.RESERVATION);
+		atndFgs.add(CommonData.ATND_FG.ATTEND);
+		atndFgs.add(CommonData.ATND_FG.ABSENT);
+		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
+		parameter.put(ParamNames.atndFg, atndFg);
 		return mapper.getRervation(parameter);
 	}
 
@@ -94,7 +107,11 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.empNo, empNo);
 		parameter.put(ParamNames.sttDt, sttDt);
 		parameter.put(ParamNames.endDt, endDt);
-		return mapper.getWeeklyDetail(parameter);
+		List<String> atndFgs = new ArrayList();
+		atndFgs.add(CommonData.ATND_FG.RESERVATION);
+		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
+		parameter.put(ParamNames.atndFg, atndFg);
+		return mapper.getRervation(parameter);
 	}
 	
 	public List getUserLesson(String compCd, String storCd, String memberNo, String empNo) {

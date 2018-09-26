@@ -32,4 +32,9 @@ public class CommonData {
 		// 조정 : 4
 		public final static String MODIFY = "4";
 	}
+	
+	public class LSN_FG {
+		public final static String PRIVATE = "1";
+		public final static String GROUP = "2"; 
+	}
 }

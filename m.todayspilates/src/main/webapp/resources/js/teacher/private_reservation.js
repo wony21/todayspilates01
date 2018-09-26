@@ -46,13 +46,19 @@ $(document).ready(function() {
 		console.log(search);
 		$.ajax({
 			type: 'GET',
-			url: '/api/teacher/reservation/weekly',
+			url: '/api/teacher/reservation/list',
 			data: search,
 			success: function(res) {
 				res.forEach(function(n) {
-					n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
-					n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
-				})
+					//n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
+					//n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+					n.rsvDt = (n.rsvDt == null) ? '(예약없음)' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);	// yy-mm-dd
+					n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
+					n.lsnEdDt = (n.lsnEdDt == null) ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+					n.lsnTm = Number(n.lsnTm).toFixed(1);
+					n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
+					n.lsnData = JSON.stringify(n);
+				});
 				var html = Mustache.render(reservation, {list: res});
 				$('#reservation-container').html(html);
 			}
@@ -64,8 +70,8 @@ $(document).ready(function() {
 			storCd: user.storCd,
 			memberNm: $('#filter').val(),
 			empNo: $('#teacher').val(),
-			sttDt: '20180909',
-			endDt: '20180915'
+			sttDt: ax5.util.date(new Date(), {return: 'yyyyMMdd'}),
+			endDt: '99991231'
 		}
 	}
 	
@@ -104,6 +110,21 @@ $('#logout').bind('click', function() {
 		}
 	})
 
+});
+
+$("#reservation-container").on('click', 'tbody tr', function(e) {
+	let lnsData = $(this).data('id');
+	console.log(lnsData);
+	
+	
+	
+//	user.lsnCd = lsnCd;
+//	user.lsnNm = lsnNm;
+//	user.empNm = empNm;
+//	window.localStorage.setItem('todays', JSON.stringify(user));
+	
+	//goPage('member/reservation-detail');
+	//goPage('/member/reservation_detail');
 });
 
 $('#reservation').bind('click', function() {

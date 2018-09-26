@@ -76,11 +76,12 @@
                   <td style="height:45px;">{{rsvDt}}{{dayOfWeek}}<br>{{rsvTm}}</td>
                   <!--<td>{{rsvTm}}</td>-->
                   <td>{{empNm}}</td>
-                  <td>{{lsnUseCnt}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                  <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
                 </tr>
 				{{/list}}	
 				{{^list}}
+<!--
                 <tr>
                   <td>개인</td>
                   <td>2018/09/01</td>
@@ -89,6 +90,7 @@
                   <td>1회차</td>
                   <td>2018/12/31</td>
                 </tr>
+-->
 				{{/list}}
               </tbody>
             </table>
@@ -126,6 +128,7 @@
                 </tr>
 				{{/list}}	
 				{{^list}}
+<!--
                 <tr>
                   <td>개인</td>
                   <td>2018/09/01</td>
@@ -134,6 +137,7 @@
                   <td>1회차</td>
                   <td>2018/12/31</td>
                 </tr>
+-->
 				{{/list}}
               </tbody>
             </table>

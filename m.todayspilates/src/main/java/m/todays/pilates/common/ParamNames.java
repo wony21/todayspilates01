@@ -8,6 +8,7 @@ public class ParamNames {
 	public final static String userPs = "userPs";
 	public final static String lsnCd = "lsnCd";
 	public final static String lsnNo = "lsnNo";
+	public final static String lsnFg = "lsnFg";
 	public final static String lsnSeq = "lsnSeq";
 	public final static String memberNo = "memberNo";
 	public final static String empNo = "empNo";
@@ -23,5 +24,6 @@ public class ParamNames {
 	public final static String lsnCnt = "lsnCnt";
 	public final static String lsnUseCnt = "lsnUseCnt";
 	public final static String columns = "columns";
+	public final static String opt1 = "opt1";
 	
 }

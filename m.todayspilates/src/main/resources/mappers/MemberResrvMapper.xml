@@ -163,14 +163,14 @@
 			SELECT T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM
 				,T.LSN_SEQ ,T.ATND_FG ,T.RSV_DT ,T.RSV_TM
 			FROM ATND_T T
-			<choose>
-				<when test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
-					WHERE ATND_FG IN ('0','1','2')
-				</when>
-				<otherwise>
-					WHERE ATND_FG = '0'
-				</otherwise>
-			</choose>
+			<where>
+				<if test="atndFg != null and atndFg != ''">
+					ATND_FG IN	
+					<foreach collection="atndFg" open="(" close=")" index="i" item="atnd" separator=",">
+						#{atnd}	
+					</foreach>
+				</if>
+			</where>
 			) H ON A.COMP_CD = H.COMP_CD
 			AND A.STOR_CD = H.STOR_CD
 			AND A.MEMBER_NO = H.MEMBER_NO
@@ -204,8 +204,10 @@
 				AND H.RSV_DT = #{rsvDt}
 			</if>
 			AND A.CLS_FG = '1'
-			AND F.LSN_FG = '1'
-			<if test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
+			<if test="lsnFg != null and lsnFg != ''">
+				AND F.LSN_FG = #{lsnFg}
+			</if>
+			<if test="opt1 != null and opt1 != ''">
 				AND H.RSV_DT IS NOT NULL
 			</if>
 		ORDER BY A.COMP_CD
