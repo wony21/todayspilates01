@@ -1,5 +1,6 @@
 var common = {};
 
+// todo : 공통함수로 뺄 것..
 function parse(str) {
     if(!/^(\d){8}$/.test(str)) return "invalid date";
     var y = str.substr(0,4),
@@ -8,16 +9,12 @@ function parse(str) {
     return new Date(y,m,d);
 }
 
-/**
- * @param {day} day (date type)
- * @return day of week name
- */
+//todo : 공통함수로 뺄 것..
 function getDayOfWeek(day) {
 	if ( day == null ) {
 		return '';
 	}
 	var dat1 = parse(day);
-	console.log(dat1);
 	var week = ['일', '월', '화', '수', '목', '금', '토'];
 	var dayOfWeek = week[dat1.getDay()];
 	return '(' + dayOfWeek + ')';
@@ -38,7 +35,7 @@ $(document).ready(function() {
 				n.dayOfWeek = getDayOfWeek(n.rsvDt);
 				n.rsvDt = (n.rsvDt == null) ? '(예약없음)' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);		//mm.dd
 				n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
-				n.lsnEdDt = (n.lsnEdDt == null) ? '' : ax5.util.date(n.lsnEdDt, {return: 'yyyy-MM-dd'});	// yyyy-mm-dd
+				n.lsnEdDt = (n.lsnEdDt == null) ? '' : '`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7);	// yy-mm-dd
 			})
 			console.log(res);
 			var html = Mustache.render(reservation, {list: res});

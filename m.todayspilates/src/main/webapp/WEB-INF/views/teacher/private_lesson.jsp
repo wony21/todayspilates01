@@ -114,7 +114,7 @@
               <thead>
                 <tr style="text-align: center">
                   <th>예약일시</th>
-                  <th>시간</th>
+                  <!--<th>시간</th>-->
 				  <th>회원</th>
                   <th>선생님</th>
                   <th>회차</th>
@@ -125,28 +125,29 @@
               <tbody>
 				{{#list}}
                 <tr data-id="{{lsnCd}}" style="text-align: center;">
-                  <td>{{rsvDt}}</td>
-                  <td>{{rsvTm}}</td>
+                  <td style="height:40px;">{{rsvDt}}({{dy}})<br>{{rsvTm}}</td>
+                  <!--<td>{{rsvTm}}</td>-->
 				  <td>{{memberNm}}</td>
                   <td>{{empNm}}</td>
-                  <td>{{lsnTm}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                  <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>
-				  <td class="select"><select class="custom-select attend-process" style="width: 70px;">
-                  <option value="0">선택</option>
-                  <option value="2">출석</option>
-                  <option value="1">결석</option>
-                  <option value="3">취소</option>
+				  <td class="select"><select id="sel-attend" class="custom-select attend-process" style="width: 70px;">
+                  <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
+                  <option value="2" display-flag="{{optFg1}}" {{sel1}}>출석</option>
+                  <option value="1" display-flag="{{optFg2}}" {{sel2}}>결석</option>
+                  <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
                 </select></td>
                 </tr>
 				{{/list}}	
 				{{^list}}
+<!--
                 <tr data-id="" style="text-align: center;">
-                  <td>2018/09/01</td>
-                  <td>1.5</td>
-                  <td>홍길동</td>
-				  <td>강익수</td>
-                  <td>1/4</td>
-                  <td>2018/12/31</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+				  <td></td>
+                  <td></td>
+                  <td></td>
 					<td><select class="attend-process">
 						<option value="0" selected>선택</option>
 						<option value="2">출석</option>
@@ -154,6 +155,7 @@
 						<option value="3">취소</option>
 					</select></td>
                 </tr>
+-->
 				{{/list}}
               </tbody>
             </table>

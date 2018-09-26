@@ -14,7 +14,6 @@ $(document).ready(function() {
 	let thead = '<tr style="text-align:center; height: 40px;">';
 	let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
 	let today = curr.getDate();
-
 	for (var i = 0; i <= 6; i++) {
 		var date = ax5.util.date(sttDt, {add: {d: i}, return: 'yyyyMMdd'});
 		var day = ax5.util.date(sttDt, {add: {d: i}, return: 'dd'});
@@ -63,8 +62,23 @@ $(document).ready(function() {
 			success: function(res) {
 				//reservation = res.slice();
 				res.forEach(function(n) {
-					n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
-					n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+//					n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
+//					n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+					n.rsvDt = (n.rsvDt == null) ? '' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);	// yy-mm-dd
+					n.lsnEdDt = (n.lsnEdDt == null) ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+					n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
+					// 출/결처리가 된 항목은 '취소'불가 처리(렌더링 후 jquery를 위한 flag 처리)
+					if (n.atndFg == '1') {
+						n.sel1 = 'selected';
+						n.sel3 = 'hidden';
+						n.optFg3 = '0';
+					} else if ( n.atndFg  == '2' ) {
+						n.sel2 = 'selected';
+						n.sel3 = 'hidden';
+						n.optFg3 = '0';
+					} else if ( n.atndFg == '3' ) {
+						n.sel3 = 'selected';
+					}
 				})
 				var html = Mustache.render(reservationTmpl, {list: res});
 				$('#reservation-container').html(html);
@@ -75,6 +89,11 @@ $(document).ready(function() {
 					//reservationList = res.map(n => n);
 				}
 				//reservation = res.map(n => n);
+
+				// 출/결처리가 된 항목은 '취소'는 불가하도록 처리 
+				$("#sel-attend option[display-flag='0']").each(function(){
+					$(this).remove();
+				});
 			}
 		});
 		return false;
@@ -128,6 +147,7 @@ $(document).ready(function() {
 			type: 'PUT',
 			url: url,
 			data: JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
 			success: function(res) {
 				console.log('update success....');
 			}

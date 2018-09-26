@@ -14,7 +14,9 @@ $(document).ready(function(e) {
 		success: function(res) {
 			var regEx = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/;
 			res.forEach(function(n, idx) {
-				n.atndDt = ax5.util.date((n.atndDt == null) ? '' : n.atndDt, {return: 'yyyy/MM/dd'});
+				//n.atndDt = ax5.util.date((n.atndDt == null) ? '' : n.atndDt, {return: 'yyyy/MM/dd'});
+				n.atndDt = '`' + n.atndDt.substr(2, 2) + '.' + n.atndDt.substr(4, 2) + '.' + n.atndDt.substr(6, 7);	// yy-mm-dd
+				n.atndTm = (n.atndTm == null) ? '' : n.atndTm.substr(0, 2) + ':' + n.atndTm.substr(2, 3);  // hh:mm
 				n.idx = idx + 1;
 			})
 			

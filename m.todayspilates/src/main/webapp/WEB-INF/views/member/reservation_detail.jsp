@@ -61,6 +61,7 @@
           	<script type="text/html" id="reservation-template">
 			<div style="text-align: right"><span id="caption"></span></div>
             <table class="table table-striped table-sm">
+<!--
               <thead>
                 <tr style="text-align: center">
                   <th>#순번</th>
@@ -71,10 +72,11 @@
 				  <th>&nbsp;</th>
                 </tr>
               </thead>
+-->
               <tbody>
 				{{#list}}
                 <tr style="text-align: center">
-                  <td>{{idx}}</td>
+                  <td style="height:40px;">{{idx}}</td>
                   <td>{{atndDt}}</td>
                   <td>{{dy}}</td>
                   <td>{{atndTm}}</td>

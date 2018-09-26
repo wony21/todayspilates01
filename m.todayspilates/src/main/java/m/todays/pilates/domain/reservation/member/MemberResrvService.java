@@ -1,5 +1,6 @@
 package m.todays.pilates.domain.reservation.member;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,10 @@ public class MemberResrvService extends BaseService {
 	public List getWeeklyLesson(String compCd, String storCd, String memberNm, String empNo, String rsvDt, String sttDt,
 			String endDt) {
 		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		// 처리가 없는 경우 오늘날짜로 서버에서 설정해준다.
+//		if ( StringUtils.isEmpty(rsvDt)) {
+//			rsvDt = DateFormatUtils.format(new Date(), "yyyyMMdd");
+//		}
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
