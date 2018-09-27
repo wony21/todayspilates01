@@ -133,8 +133,8 @@
                   <td>{{lsnEdDt}}</td>
 				  <td class="select"><select id="sel-attend" class="custom-select attend-process" style="width: 70px;">
                   <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
-                  <option value="2" display-flag="{{optFg1}}" {{sel1}}>출석</option>
-                  <option value="1" display-flag="{{optFg2}}" {{sel2}}>결석</option>
+                  <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
+                  <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
                   <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
                 </select></td>
                 </tr>
