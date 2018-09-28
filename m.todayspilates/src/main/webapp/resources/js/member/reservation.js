@@ -36,6 +36,7 @@ $(document).ready(function() {
 				n.rsvDt = (n.rsvDt == null) ? '(예약없음)' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);		//mm.dd
 				n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
 				n.lsnEdDt = (n.lsnEdDt == null) ? '' : '`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7);	// yy-mm-dd
+				n.lsnTm = n.lsnTm.toFixed(1);
 			})
 			console.log(res);
 			var html = Mustache.render(reservation, {list: res});

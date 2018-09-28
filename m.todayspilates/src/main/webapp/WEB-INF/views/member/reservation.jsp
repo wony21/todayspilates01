@@ -63,7 +63,7 @@
                 <tr style="text-align:center">
                   <th>#구분</th>
                   <th>예약일시</th>
-                  <!--<th>시간</th>-->
+                  <th>시간</th>
                   <th>선생님</th>
                   <th>회차</th>
                   <th>종료일</th>
@@ -74,7 +74,7 @@
                 <tr data-id="{{lsnCd}}" style="text-align: center">
                   <td>{{lsnNm}}</td>
                   <td style="height:45px;">{{rsvDt}}{{dayOfWeek}}<br>{{rsvTm}}</td>
-                  <!--<td>{{rsvTm}}</td>-->
+                  <td>{{lsnTm}}</td>
                   <td>{{empNm}}</td>
                   <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                   <td>{{lsnEdDt}}</td>

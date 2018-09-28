@@ -5,6 +5,9 @@ $(document).ready(function(e) {
 	let user = JSON.parse(window.localStorage.getItem('todays'));
 	let empNm = user.empNm;
 	let lsnNm = user.lsnNm;
+	let lsnCd = user.lsnCd;
+	let memberNm = user.username;
+	
 	$('.username').text(user.username);
 	
 	$.ajax({
