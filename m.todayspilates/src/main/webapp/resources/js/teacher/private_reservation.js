@@ -32,6 +32,8 @@ fnObj.initEvent = function() {
 	$("#reservation-container").on('click', 'tbody tr', function(e) {
 		let lnsData = $(this).data('id');
 		console.log(lnsData);
+		
+		$('#userInfo').text(lnsData.memberNm);
 	});
 	
 	/*$("#teacher").on('change', function(e) {
@@ -90,17 +92,44 @@ fnObj.fn = {
 		}
 	},
 	
-	//예약일자 셋팅 
+	//예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
 	setRsvDate : function() {
-		
+		let option = '';
+		for (var i = 0; i <= 90; i++) {
+			var date = ax5.util.date(new Date(), {add: {d: i}});
+			var formattedDate = ax5.util.date(new Date(), {add: {d: i}, return: 'yyyyMMdd'});
+			var day = WEEKS[date.getDay()];
+			
+			var d = /*'`' + formattedDate.substr(2, 2) + '.' + */formattedDate.substr(4, 2) + '.' + formattedDate.substr(6, 7);
+			option += '<option value="' + formattedDate + '">' + d + ' (' + day + ')' + '</option> ';
+		}
+		$('#rsvDt').html(option);
 	},
 	//예약시간 셋팅 (00 ~ 24)
 	setRsvTime: function() {
+		let option = '';
+		for (var i = 1; i < 24; i++) {
+			//let prefix = (i < 12) ? 'am ' : 'pm ';
+			let tm = ("0" + i).slice(-2) + "00";
+			let formattedTm = /*prefix + */("0" + i).slice(-2) + ":" + "00";
+			
+			option += ' <option value="' + tm + '">' + formattedTm +
+            '</option> ';
+		}
 		
+		let now = new Date($.now());
+		$('#rsvTm').html(option);
+		$('#rsvTm').val(("0" + now.getHours()).slice(-2) + "00");
 	},
 	//레슨시간 셋팅 (0.5 ~ 6.0)
 	setLsnTime: function() {
-		
+		let option = '';
+		for (var i = 0.5; i <= 4; i+= 0.5) {
+			option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
+            '</option> ';
+		}
+		$('#lsnTm').html(option);
+		$('#lsnTm').val('1.0');	//default 값 
 	},
 	//선생님 셋팅 
 	setTeacher: function(user) {
@@ -120,7 +149,8 @@ fnObj.fn = {
 			}
 		});
 		return false;
-	}
+	},
+	
 };
 
 $(document).ready(function() {
@@ -133,5 +163,8 @@ $(document).ready(function() {
 	fnObj.fn.getPrivateLesson(user);
 	//예약등록 선생님 목록 초기화 
 	fnObj.fn.setTeacher(user);
+	fnObj.fn.setRsvTime();
+	fnObj.fn.setLsnTime();
+	fnObj.fn.setRsvDate();
 });
 

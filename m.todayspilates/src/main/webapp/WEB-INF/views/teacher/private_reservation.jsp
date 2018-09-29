@@ -135,7 +135,7 @@
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalCenterTitle">예약등록</h5>
+		        <h5 class="modal-title" id="exampleModalCenterTitle">예약등록 (<span id="userInfo"></span> 님)</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -148,6 +148,7 @@
 	            		<button type="button" class="btn btn-md btn-default pull-right">개인레슨 예약등록</button>
 					</div>
 					 -->
+					
 	                <div id="new-reservation-container">
 	                    <script type="text/html" id="new-reservation-template">
                         <table class="table table-striped table-sm">
@@ -198,28 +199,16 @@
 	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 		        	<div class="btn-toolbar mb-2 mb-md-0">
 		            	<div class="input-group">
-							<select class="custom-select" id="rsvDt" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="rsvDt" style="width: 100px; margin-left: 5px;"></select>
 		                </div>
 		                <div class="input-group">
-			                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+			                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;"></select>
 		                </div>
 						<div class="input-group">
-							<select class="custom-select" id="lsnTm" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="lsnTm" style="width: 60px; margin-left: 5px;"></select>
 						</div>
 						<div class="input-group">
-							<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;"></select>
 						</div>
 		            </div>
 		        </div>
