@@ -46,7 +46,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/member/reservation">예약현황</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/logout" id="logout">로그아웃</a></li>
+				href="#" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 	
@@ -139,6 +139,7 @@
 	<!-- Custom scripts for this template -->
 	<script src="/js/boot4/stylish-portfolio.min.js"></script>
 	<script src="/js/member/reservation_detail.js"></script>
+	<script src="/js/common.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
 	<script src="/js/boot4/vendor/date.format.js"></script>

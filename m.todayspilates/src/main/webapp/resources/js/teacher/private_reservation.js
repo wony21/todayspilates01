@@ -1,9 +1,10 @@
 var common = {};
+let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
-$(document).ready(function() {
-	let user = JSON.parse(window.localStorage.getItem('todays'));
+
+fnObj.initView = function() {
+	console.log('initView');
 	let newReservation = $('#new-reservation-template').html();
-	let reservation = $('#reservation-template').html();
 	let curr = new Date; // get current date
 	let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
 	let last = first + 6; // last day is the first day + 6
@@ -20,29 +21,40 @@ $(document).ready(function() {
 			tbody += '<td class="today">' + i + '</td>';
 		}
 	}
-	$('.username').text(user.username);
-	var html = Mustache.render(newReservation, {list: []});
+	
+	let html = Mustache.render(newReservation, {list: []});
 	$('#new-reservation-container').html(html);
 	
-	//강사목록 조회 
-	$.ajax({
-		type: 'GET',
-		url: '/api/teacher',
-		data: {storCd: user.storCd},
-		success: function(res) {
-			let option = '<option value="">선생님 선택</option>';
-			res.forEach(function(n) {
-				 option += ' <option value="' + n.empNo + '">' + n.empNm +
-                 '</option> ';
-			})
-			$('#teacher').html(option);
-			$('#teacher').val(user.empNo);	//로그인한 선생님으로 선택 
-			getPrivateLesson();
-		}
+}
+
+fnObj.initEvent = function() {
+	console.log('init Event');
+	$("#reservation-container").on('click', 'tbody tr', function(e) {
+		let lnsData = $(this).data('id');
+		console.log(lnsData);
 	});
 	
-	function getPrivateLesson() {
-		let search = getData();
+	/*$("#teacher").on('change', function(e) {
+		//var optionSelected = $("option:selected", this);
+		getPrivateLesson();
+	});
+	*/
+	
+	$("#date-container").on('click', 'td', function(e) {
+		let searchDate = $(this).text();
+		
+		let selected = $(this).hasClass("selected");
+	    $("#date-container td").removeClass("selected");
+	    if(!selected) {
+	    	$(this).addClass("selected");
+	    }
+	});
+}
+
+fnObj.fn = {
+	getPrivateLesson: function(user) {
+		let search = fnObj.fn.getData(user);
+		let reservation = $('#reservation-template').html();
 		console.log(search);
 		$.ajax({
 			type: 'GET',
@@ -59,13 +71,16 @@ $(document).ready(function() {
 					n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
 					n.lsnData = JSON.stringify(n);
 				});
-				var html = Mustache.render(reservation, {list: res});
+				let html = Mustache.render(reservation, {list: res});
 				$('#reservation-container').html(html);
 			}
 		});
-	}
-
-	function getData() {
+	},
+	
+	getData : function(user) {
+		console.log('this is getData function;');
+		$('.username').text(user.username);
+		
 		return {
 			storCd: user.storCd,
 			memberNm: $('#filter').val(),
@@ -73,81 +88,50 @@ $(document).ready(function() {
 			sttDt: ax5.util.date(new Date(), {return: 'yyyyMMdd'}),
 			endDt: '99991231'
 		}
-	}
+	},
 	
-	$(document.body).on('change', '#teacher', function(e) {
-		//var optionSelected = $("option:selected", this);
-		getPrivateLesson();
-	});
-	
-	$("#date-container").on('click', 'td', function(e) {
-		let searchDate = $(this).text();
+	//예약일자 셋팅 
+	setRsvDate : function() {
 		
-		let selected = $(this).hasClass("selected");
-	    $("#date-container td").removeClass("selected");
-	    if(!selected) {
-	    	$(this).addClass("selected");
-	    }
-	});
+	},
+	//예약시간 셋팅 (00 ~ 24)
+	setRsvTime: function() {
+		
+	},
+	//레슨시간 셋팅 (0.5 ~ 6.0)
+	setLsnTime: function() {
+		
+	},
+	//선생님 셋팅 
+	setTeacher: function(user) {
+		//강사목록 조회 
+		$.ajax({
+			type: 'GET',
+			url: '/api/teacher',
+			data: {storCd: user.storCd},
+			success: function(res) {
+				let option = '<option value="">선생님 선택</option>';
+				res.forEach(function(n) {
+					 option += ' <option value="' + n.empNo + '">' + n.empNm +
+	                 '</option> ';
+				})
+				$('#teacher').html(option);
+				$('#teacher').val(user.empNo);	//로그인한 선생님으로 선택 
+			}
+		});
+		return false;
+	}
+};
+
+$(document).ready(function() {
+	let user = JSON.parse(window.localStorage.getItem('todays'));
+
+	fnObj.initView();
+	fnObj.initEvent();
+	
+	//개인레슨 예약조회
+	fnObj.fn.getPrivateLesson(user);
+	//예약등록 선생님 목록 초기화 
+	fnObj.fn.setTeacher(user);
 });
 
-$('#logout').bind('click', function() {
-
-	$.ajax({
-		type: 'POST',
-		url: '/logout',
-		success: function(res) {
-			console.log('logout success...');
-			
-			var protocol = document.location.protocol;
-		    var hostname = window.location.hostname;
-		    var port = document.location.port;
-
-		    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-		    document_root = protocol + '//' + hostname + ':' + port;
-			$(location).attr('href', document_root);
-			return false;
-		}
-	})
-
-});
-
-$("#reservation-container").on('click', 'tbody tr', function(e) {
-	let lnsData = $(this).data('id');
-	console.log(lnsData);
-	
-	
-	
-//	user.lsnCd = lsnCd;
-//	user.lsnNm = lsnNm;
-//	user.empNm = empNm;
-//	window.localStorage.setItem('todays', JSON.stringify(user));
-	
-	//goPage('member/reservation-detail');
-	//goPage('/member/reservation_detail');
-});
-
-$('#reservation').bind('click', function() {
-
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var page = protocol + '//' + hostname + ':' + port + '/member/reservation';
-	$(location).attr('href', page);
-	return false;
-
-});
-
-function goPage(page, params) {
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var url = protocol + '//' + hostname + ':' + port + '/' + page;
-    //window.location = "news_edit.html?article_id=" + articleId;
-	$(location).attr('href', url);
-	//return false;
-}

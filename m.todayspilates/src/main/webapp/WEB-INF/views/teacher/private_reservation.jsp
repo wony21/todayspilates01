@@ -61,7 +61,7 @@
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="#">내수업실적</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
-                                        href="/logout" id="logout">로그아웃</a></li>
+                                        href="#" id="logout">로그아웃</a></li>
     </ul>
 </nav>
 
@@ -140,7 +140,7 @@
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      <div class="modal-body">
+		      <div class="modal-body" style="padding: 0.5rem;">
 		      <!-- 예약잡기 팝업body start -->
 			        <div class="table-responsive" style="margin-top: 30px;">
 	            	<!-- 
@@ -198,7 +198,7 @@
 	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 		        	<div class="btn-toolbar mb-2 mb-md-0">
 		            	<div class="input-group">
-							<select class="custom-select" id="rsvDt" style="width: 100px; margin-left: 5px;">
+							<select class="custom-select" id="rsvDt" style="width: 80px; margin-left: 5px;">
 			                  <option value="">Choose...</option>
 			                  <option>United States</option>
 			                </select>
@@ -274,6 +274,7 @@
 <script src="/js/boot4/vendor/ax5core.min.js"></script>
 <script src="/js/boot4/vendor/ax5formatter.js"></script>
 <script src="/js/boot4/stylish-portfolio.js"></script>
+<script src="/js/common.js"></script>
 <script src="/js/teacher/private_reservation.js"></script>
 </body>
 

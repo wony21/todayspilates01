@@ -1,7 +1,7 @@
 (function() {
 	
-	/*
-	 * @param {v} date
+	/**
+	 * @param {val} date
 	 * @param {dm} delimeter
 	 */
 	dateFormat = function(val, dm) {
@@ -23,7 +23,28 @@
 	        return decodeURIComponent(results[2].replace(/\+/g, " "));
    	}
 	
+	goPage = function(page, params) {
+		var protocol = document.location.protocol;
+	    var hostname = window.location.hostname;
+	    var port = document.location.port;
+
+	    var url = protocol + '//' + hostname + ':' + port + '/' + page;
+	    //window.location = "news_edit.html?article_id=" + articleId;
+	    console.log('url:' + url);
+		$(location).attr('href', url);
+		return false;
+	}
 	
+	$('#logout').bind('click', function() {
+		$.ajax({
+			type: 'POST',
+			url: '/logout',
+			success: function(res) {
+				console.log('logout success...');
+				goPage('login');
+			}
+		})
+	});
 	
 })();
 
