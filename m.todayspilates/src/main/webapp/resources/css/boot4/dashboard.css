@@ -123,6 +123,11 @@ body {
   border-color: rgba(222, 226, 230, 1);
 }
 
+#new-reservation-container .selected {
+  color: #fff;
+  background-color: rgba(255, 0, 0, .5);
+  border-color: rgba(255, 0, 0, 1);
+}
 /*
  * Utilities
  */

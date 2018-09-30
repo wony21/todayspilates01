@@ -33,7 +33,13 @@ fnObj.initEvent = function() {
 	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
 		let lsnData = $(this).data('id');
 		selectedItem = $(this).index(); //selectedItem => 전역변수
-		//console.log(lsnData);
+		
+		//선택한 일자의 개인레슨을 조회 
+		let selected = $(this).children('td').hasClass("selected");
+	    $("#new-reservation-container tbody tr").children('td').removeClass("selected");
+	    if(!selected) {
+	    	$(this).children('td').addClass("selected");
+	    }
 	});
 	
 	//날짜선택시 선택일자 toggle 이벤트 
