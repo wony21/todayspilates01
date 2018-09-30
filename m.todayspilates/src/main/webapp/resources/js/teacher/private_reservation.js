@@ -6,28 +6,9 @@ let selectedItem = 0;
 
 fnObj.initView = function() {
 	console.log('initView');
-	//let newReservation = $('#new-reservation-template').html();
-	let curr = new Date; // get current date
-	let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-	let last = first + 6; // last day is the first day + 6
-	let days = [];
-	let thead = '<tr style="text-align:center; height: 40px;">';
-	let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-	let today = curr.getDate();
-	for (var i = first, idx = 0; i <= last; i++) {
-		if (i !== today) {
-			thead += '<th>' + WEEKS[idx++] + '</th>';
-			tbody += '<td>' + i + '</td>';
-		} else {
-			thead += '<th class="today">' + WEEKS[idx++] + '</th>';
-			tbody += '<td class="today">' + i + '</td>';
-		}
-	}
-	
-	//예약등록 팝업창 렌더링 
+	//예약등록 팝업창 렌더링 초기화 필요
 	let html = Mustache.render(newReservation, {list: []});
 	$('#new-reservation-container').html(html);
-	
 }
 
 fnObj.initEvent = function() {
@@ -52,28 +33,19 @@ fnObj.initEvent = function() {
 	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
 		let lsnData = $(this).data('id');
 		selectedItem = $(this).index(); //selectedItem => 전역변수
-		console.log(lsnData);
-
-		//		//레슨 등록정보 셋팅 
-//		fnObj.fn.setReservationList(lsnData);
-//		fnObj.fn.setLsnCd(lsnData.lsnCd);
-//		fnObj.fn.setRsvDate();
-//		fnObj.fn.setRsvTime();
-//		//fnObj.fn.setLsnTime();
-//		$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
-		
+		//console.log(lsnData);
 	});
 	
 	//날짜선택시 선택일자 toggle 이벤트 
-	$("#date-container").on('click', 'td', function(e) {
-		let searchDate = $(this).text();
-		
-		let selected = $(this).hasClass("selected");
-	    $("#date-container td").removeClass("selected");
-	    if(!selected) {
-	    	$(this).addClass("selected");
-	    }
-	});
+//	$("#date-container").on('click', 'td', function(e) {
+//		let searchDate = $(this).text();
+//		
+//		let selected = $(this).hasClass("selected");
+//	    $("#date-container td").removeClass("selected");
+//	    if(!selected) {
+//	    	$(this).addClass("selected");
+//	    }
+//	});
 	
 	//예약등록 버튼 이벤트
 	$('#add-lesson').on('click', function(e) {
@@ -106,9 +78,6 @@ fnObj.fn = {
 	},
 	
 	getData : function(user) {
-		console.log('this is getData function;');
-		$('.username').text(user.username);
-		
 		return {
 			storCd: user.storCd,
 			memberNm: $('#filter').val(),
@@ -231,7 +200,8 @@ fnObj.fn = {
 
 $(document).ready(function() {
 	let user = JSON.parse(window.localStorage.getItem('todays'));
-
+	$('.username').text(user.username);
+	
 	fnObj.initView();
 	fnObj.initEvent();
 	
