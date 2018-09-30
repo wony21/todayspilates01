@@ -166,8 +166,8 @@
                             <tr data-id="{{lsnCd}}" style="text-align: center;">
                                 <td>{{lsnNm}}</td>
                                 <td>{{status}}</td>
-                                <td>{{lsnUseCnt}}</td>
-                                <td>{{rsvDt}}</td>
+                                <td>{{lsnNum}}/{{lsnCnt}}</td>
+                                <td>{{lsnStDt}}</td>
                                 <td>{{lsnEdDt}}</td>
                             </tr>
                             {{/list}}
@@ -180,7 +180,7 @@
                                 <td>2018/12/31</td>
                             </tr>
 							<tr>
-                                <td>그룹</td>
+                                <td>듀엣</td>
                                 <td>정상</td>
                                 <td>01/05</td>
                                 <td>2018/08/25</td>
@@ -189,7 +189,7 @@
                             {{/list}}
                             </tbody>
                         </table>
-                    </script>
+                    	</script>
 	                </div>
 	            </div>
 	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">

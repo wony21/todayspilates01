@@ -13,3 +13,7 @@
 .custom-control-label::after {
     position: relative;
 }
+
+.modal-header {
+	border-bottom: 0px solid;
+}

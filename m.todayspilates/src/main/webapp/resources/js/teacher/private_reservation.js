@@ -1,10 +1,70 @@
 var common = {};
 let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+let newReservation = $('#new-reservation-template').html();
+let sampleData = [
+	{
+		"lsnNm": "그룹",
+		"lsnTm": 1,
+		"lsnFgNm": "체험",
+		"remark": "",
+		"lsnSeq": null,
+		"lsnTy": "2",
+		"lsnUseCnt": 2,
+		"lsnModCnt": 0,
+		"lsnNo": "002",
+		"lsnFg": "2",
+		"storCd": "001",
+		"rsvTm": null,
+		"dy": null,
+		"atndFg": null,
+		"empNm": null,
+		"lsnStDt": "",
+		"empNo": "",
+		"lsnNum": 2,
+		"clsFg": "1",
+		"compCd": "0001",
+		"lsnCd": "03",
+		"lsnExpWk": 3,
+		"lsnCnt": 20,
+		"memberNo": "00001",
+		"memberNm": "강소윤",
+		"rsvDt": null,
+		"lsnEdDt": null
+		},
+		{
+		"lsnNm": "개인",
+		"lsnTm": 1,
+		"lsnFgNm": "정상",
+		"remark": "",
+		"lsnSeq": null,
+		"lsnTy": "2",
+		"lsnUseCnt": 0,
+		"lsnModCnt": 0,
+		"lsnNo": "004",
+		"lsnFg": "1",
+		"storCd": "001",
+		"rsvTm": null,
+		"dy": null,
+		"atndFg": null,
+		"empNm": "강익수",
+		"lsnStDt": "",
+		"empNo": "00003",
+		"lsnNum": 0,
+		"clsFg": "1",
+		"compCd": "0001",
+		"lsnCd": "01",
+		"lsnExpWk": 5,
+		"lsnCnt": 50,
+		"memberNo": "00001",
+		"memberNm": "강소윤",
+		"rsvDt": null,
+		"lsnEdDt": null
+		}];
 
 fnObj.initView = function() {
 	console.log('initView');
-	let newReservation = $('#new-reservation-template').html();
+	//let newReservation = $('#new-reservation-template').html();
 	let curr = new Date; // get current date
 	let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
 	let last = first + 6; // last day is the first day + 6
@@ -22,6 +82,7 @@ fnObj.initView = function() {
 		}
 	}
 	
+	//예약등록 팝업창 렌더링 
 	let html = Mustache.render(newReservation, {list: []});
 	$('#new-reservation-container').html(html);
 	
@@ -29,11 +90,21 @@ fnObj.initView = function() {
 
 fnObj.initEvent = function() {
 	console.log('init Event');
+	
 	$("#reservation-container").on('click', 'tbody tr', function(e) {
-		let lnsData = $(this).data('id');
-		console.log(lnsData);
+		let lsnData = $(this).data('id');
+		console.log(lsnData);
 		
-		$('#userInfo').text(lnsData.memberNm);
+		$('#userInfo').text(lsnData.memberNm);
+		
+		//레슨 등록정보 셋팅 
+		fnObj.fn.setReservationList(lsnData);
+		fnObj.fn.setLsnCd(lsnData.lsnCd);
+		fnObj.fn.setRsvDate();
+		fnObj.fn.setRsvTime();
+		fnObj.fn.setLsnTime();
+		$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
+		
 	});
 	
 	/*$("#teacher").on('change', function(e) {
@@ -97,13 +168,23 @@ fnObj.fn = {
 		}
 	},
 	
-	setLsnCd: function() {
+	//선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
+	setReservationList: function(lsnData) {
+		//let newReservation = $('#new-reservation-template').html();
+		console.log('isValidDate:' + isValidDate(lsnData.lsnStDt));
+		lsnData.lsnStDt = (isValidDate(lsnData.lsnStDt) === false) ? '' : ('`' + lsnData.lsnStDt.substr(2, 2) + '.' + lsnData.lsnStDt.substr(4, 2) + '.' + lsnData.lsnStDt.substr(6, 7));
+		let html = Mustache.render(newReservation, {list: [lsnData]});
+		$('#new-reservation-container').html(html);
+	},
+	
+	setLsnCd: function(val) {
 		let option = '';
-		
-		option += '<option value="' + 01 + '">' + '개인' + '</option> ';
-		option += '<option value="' + 02 + '">' + '듀엣' + '</option> ';
+		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
+		option += '<option value="01">' + '개인' + '</option> ';
+		option += '<option value="02">' + '듀엣' + '</option> ';
 		
 		$('#lsnCd').html(option);
+		$('#lsnCd').val(val);
 	},
 	
 	//예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
@@ -120,7 +201,7 @@ fnObj.fn = {
 		$('#rsvDt').html(option);
 	},
 	//예약시간 셋팅 (00 ~ 24)
-	setRsvTime: function() {
+	setRsvTime: function(val) {
 		let option = '';
 		for (var i = 1; i < 24; i++) {
 			//let prefix = (i < 12) ? 'am ' : 'pm ';
@@ -133,7 +214,12 @@ fnObj.fn = {
 		
 		let now = new Date($.now());
 		$('#rsvTm').html(option);
-		$('#rsvTm').val(("0" + now.getHours()).slice(-2) + "00");
+		if (typeof val === 'undefined' || val === '' || val === null) {
+			//기본값이 없으면 현재시각을 기본값으로 설정 
+			$('#rsvTm').val(("0" + now.getHours()).slice(-2) + "00");
+		} else {
+			$('#rsvTm').val(val);	//기존예약 시간을 기본값으로 설정 
+		}
 	},
 	//레슨시간 셋팅 (0.5 ~ 6.0)
 	setLsnTime: function() {
@@ -159,7 +245,6 @@ fnObj.fn = {
 	                 '</option> ';
 				})
 				$('#teacher').html(option);
-				$('#teacher').val(user.empNo);	//로그인한 선생님으로 선택 
 			}
 		});
 		return false;
@@ -180,12 +265,7 @@ $(document).ready(function() {
 	
 	//개인레슨 예약조회
 	fnObj.fn.getPrivateLesson(user);
-	//레슨 등록정보 셋팅 
-	fnObj.fn.setLsnCd();
-	fnObj.fn.setRsvDate();
-	fnObj.fn.setRsvTime();
-	fnObj.fn.setLsnTime();
+	//선생님 목록은 예약현황 로드시 한번만 셋팅 
 	fnObj.fn.setTeacher(user);
-
 });
 
