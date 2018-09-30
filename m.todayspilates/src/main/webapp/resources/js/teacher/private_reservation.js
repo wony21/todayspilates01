@@ -2,7 +2,7 @@ var common = {};
 let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 let newReservation = $('#new-reservation-template').html();
-let selectedItem = 0;
+let selectedItem = -1;
 
 fnObj.initView = function() {
 	console.log('initView');
@@ -18,16 +18,40 @@ fnObj.initEvent = function() {
 		let lsnData = $(this).data('id');
 		console.log(lsnData);
 		
-		$('#userInfo').text(lsnData.memberNm);
-		
-		//레슨 등록정보 셋팅 
-		fnObj.fn.setReservationList(lsnData);
-		fnObj.fn.setLsnCd(lsnData.lsnCd);
-		fnObj.fn.setRsvDate();
-		fnObj.fn.setRsvTime();
-		//fnObj.fn.setLsnTime();
-		$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
-		
+		// request data
+		var r = {};
+		r.storCd = lsnData.storCd;
+		r.memberNo = lsnData.memberNo;
+		$.ajax({
+			type: 'GET',
+			url: '/api/teacher/reservation/lesson',
+			data: r,
+			success: function(res) {
+//				if ( res.length == 0) {
+//					alert('관리자에게 예약할 레슨을 등록 후 예약하세요.');
+//					location.refresh();
+//					return false;
+//				}
+				res.forEach(function(n) {
+					n.lsnData = JSON.stringify(n);
+					n.lsnStDt = (n.lsnStDt == '') ? '' : ('`' + n.lsnStDt.substr(2, 2) + '.' + n.lsnStDt.substr(4, 2) + '.' + n.lsnStDt.substr(6, 7));	// yy-mm-dd
+					n.lsnEdDt = (n.lsnEdDt == '') ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+					// n.lsnTm = Number(n.lsnTm).toFixed(1);
+					n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
+				});
+				$('#userInfo').text(lsnData.memberNm);
+				let html = Mustache.render(newReservation, {list: res});
+				$('#new-reservation-container').html(html);
+				
+				//레슨 등록정보 셋팅 
+				//fnObj.fn.setReservationList(n);
+				fnObj.fn.setLsnCd(lsnData.lsnCd);
+				fnObj.fn.setRsvDate();
+				fnObj.fn.setRsvTime();
+				fnObj.fn.setLsnTime();
+				$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
+			}
+		});
 	});
 	
 	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
@@ -94,7 +118,7 @@ fnObj.fn = {
 	},
 	
 	//선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
-	setReservationList: function(item) {
+	setReservationList: function(items) {
 		item.lsnData = JSON.stringify(item);
 		item.lsnStDt = (isValidDate(item.lsnStDt) === false) ? '' : ('`' + item.lsnStDt.substr(2, 2) + '.' + item.lsnStDt.substr(4, 2) + '.' + item.lsnStDt.substr(6, 7));
 		item.lsnEdDt = (isValidDate(item.lsnEdDt) === false) ? '' : ('`' + item.lsnEdDt.substr(2, 2) + '.' + item.lsnEdDt.substr(4, 2) + '.' + item.lsnEdDt.substr(6, 7));
@@ -103,13 +127,13 @@ fnObj.fn = {
 	},
 	
 	setLsnCd: function(val) {
-		let option = '';
-		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
-		option += '<option value="01">' + '개인' + '</option> ';
-		option += '<option value="02">' + '듀엣' + '</option> ';
-		
-		$('#lsnCd').html(option);
-		$('#lsnCd').val(val);
+//		let option = '';
+//		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
+//		option += '<option value="01">' + '개인' + '</option> ';
+//		option += '<option value="02">' + '듀엣' + '</option> ';
+//		
+//		$('#lsnCd').html(option);
+//		$('#lsnCd').val(val);
 	},
 	
 	//예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
@@ -177,6 +201,18 @@ fnObj.fn = {
 	
 	//실제 예약등록 처리 
 	addPrivateLesson: function() {
+		
+		if ( selectedItem == -1) {
+			alert('먼저 예약할 레슨을 선택하세요.');
+			return false;
+		}
+		
+		/* 예약 confirm */
+		var retReserv = confirm("예약하시겠습니까?");
+		if(retReserv != true){
+		  return false;
+		}
+		
 		let item = $("#new-reservation-container tbody").find('tr').eq(selectedItem).data('id');
 		//requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
 		let data = [{
@@ -185,7 +221,7 @@ fnObj.fn = {
 			memberNo: item.memberNo,
 			empNo: item.empNo,
 			lsnNo: item.lsnNo,
-			lsnCd: $('#lsnCd').val(),
+			lsnCd: item.lsnCd,
 			rsvDt: $('#rsvDt').val(),
 			rsvTm: $('#rsvTm').val(),
 			lsnTm: $('#lsnTm').val(),
@@ -197,7 +233,11 @@ fnObj.fn = {
 			data: JSON.stringify(data),
 			contentType : "application/json; charset=UTF-8",
 			success: function(res) {
-				console.log('update success....');
+				alert('예약이 완료되었습니다.');
+				location.reload();
+			},
+			error: function(error) {
+				alert(error);
 			}
 		});
 		return false;

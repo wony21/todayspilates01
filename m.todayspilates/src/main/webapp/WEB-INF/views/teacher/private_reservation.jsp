@@ -166,7 +166,7 @@
                             <tr data-id="{{lsnData}}" style="text-align: center;">
                                 <td>{{lsnNm}}</td>
                                 <td>{{lsnFgNm}}</td>
-                                <td>{{lsnNum}}/{{lsnCnt}}</td>
+                                <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
                                 <td>{{lsnStDt}}</td>
                                 <td>{{lsnEdDt}}</td>
                             </tr>
@@ -194,23 +194,25 @@
 	            </div>
 	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 		        	<div class="btn-toolbar mb-2 mb-md-0" id="new-reservation" data-id="">
+		        		<!-- 
 		        		<div class="input-group">
 							<select class="custom-select" id="lsnCd" style="width: 58px;"></select>
 		                </div>
+		                 -->
 		            	<div class="input-group">
-							<select class="custom-select" id="rsvDt" style="width: 85px; margin-left: 3px;"></select>
+							<select class="custom-select" id="rsvDt" style="width: 25%; margin-left: 3px;"></select>
 		                </div>
 		                <div class="input-group">
-			                <select class="custom-select" id="rsvTm" style="width: 65px; margin-left: 3px;"></select>
+			                <select class="custom-select" id="rsvTm" style="width: 25%; margin-left: 3px;"></select>
 		                </div>
 						<div class="input-group">
-							<select class="custom-select" id="lsnTm" style="width: 52px; margin-left: 3px;">
+							<select class="custom-select" id="lsnTm" style="width: 25%; margin-left: 3px;">
 								<option value="1.0">1.0</option>
 								<option value="1.5">1.5</option>
 							</select>
 						</div>
 						<div class="input-group">
-							<select class="custom-select" id="teacher" style="width: 72px; margin-left: 3px;"></select>
+							<select class="custom-select" id="teacher" style="width: 25%; margin-left: 3px;"></select>
 						</div>
 		            </div>
 		        </div>

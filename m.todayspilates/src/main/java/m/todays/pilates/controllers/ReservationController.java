@@ -167,6 +167,20 @@ public class ReservationController extends BaseController {
 		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNm, empNo, sttDt, endDt);
 	}
 	/**
+	 * 선생님 - 개인레슨예약(레슨목록)
+	 * @param storCd
+	 * @param memberNo
+	 * @return
+	 */
+	@RequestMapping(value = "/api/teacher/reservation/lesson", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getMemberLesson(
+			@RequestParam String storCd,
+			@RequestParam String memberNo) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getMemberLesson(compCd, storCd, memberNo);
+	}
+	/**
 	 * 개인레슨출석부 - 출석
 	 * @package 	: m.todays.pilates.controllers
 	 * @file 		: ReservationController.java
@@ -249,8 +263,5 @@ public class ReservationController extends BaseController {
 	@RequestMapping(value = "/api/teacher/reservation/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addReservation(@RequestBody List<HashMap> requestParams) {
 		return memberResrvService.reservation(requestParams);
-		
-
-		
 	}
 }

@@ -201,7 +201,7 @@
 				AND A.EMP_NO = #{empNo}
 			</if>
 			<if test="rsvDt != null and rsvDt != ''">
-				AND H.RSV_DT = #{rsvDt}
+				<![CDATA[ AND H.RSV_DT >= #{rsvDt} ]]>
 			</if>
 			AND A.CLS_FG = '1'
 			<if test="lsnFg != null and lsnFg != ''">
@@ -345,24 +345,42 @@
 		  AND A.RSV_DT BETWEEN #{sttDt} AND #{endDt}
 		ORDER BY A.COMP_CD, A.STOR_CD, LSN_ED_DT, A.LSN_NO, A.LSN_CD, A.MEMBER_NO
     </select>
+    <select id="getMemberLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, B.LSN_NM, A.LSN_USE_CNT, 
+    		A.LSN_FG, C.NAME LSN_FG_NM, A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
+	FROM MEMBER_LSN_M A
+	INNER JOIN LSN_M B
+	ON A.COMP_CD = B.COMP_CD
+	AND A.STOR_CD = B.STOR_CD
+	AND A.LSN_CD = B.LSN_CD	
+	INNER JOIN COMMON_CODE_M C
+	ON C.GROUP_CD = '003'
+	AND A.LSN_FG = C.CODE
+	WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD = #{storCd}
+		AND A.MEMBER_NO = #{memberNo}
+		AND B.LSN_FG = '1'
+		AND A.CLS_FG = '1'
+	ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
+    </select>
     <insert id="insertAttend" parameterType="hashmap">
     	INSERT INTO ATND_T (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER, UPT_USER)
 		VALUES(#{compCd},#{storCd},#{memberNo},#{lsnNo}, 
-				(SELECT ISNULL(MAX(LSN_SEQ), 1) LSN_SEQ
+				(SELECT ISNULL(MAX(LSN_SEQ)+1, 1) LSN_SEQ
 				FROM ATND_T M
 				WHERE COMP_CD = #{compCd}
 					AND STOR_CD = #{storCd}
 					AND MEMBER_NO = #{memberNo}
 					AND LSN_NO = #{lsnNo}
 					AND LSN_CD  = #{lsnCd}),
-				(SELECT ISNULL(MAX(LSN_NUM), 0) LSN_NUM
+				(SELECT ISNULL(SUM(LSN_TM), 0)+${lsnTm} LSN_NUM
 				FROM ATND_T M
 				WHERE COMP_CD = #{compCd}
 					AND STOR_CD = #{storCd}
 					AND MEMBER_NO = #{memberNo}
 					AND LSN_NO = #{lsnNo}
 					AND LSN_CD  = #{lsnCd}
-					AND LSN_FG IN ('0' ,'1', '2')),
+					AND ATND_FG IN ('0' ,'1', '2')),
 				#{empNo}, 
 				#{lsnCd},
 				#{lsnTm},
@@ -386,6 +404,33 @@
 		  AND LSN_NO = #{lsnNo}
 		  AND LSN_CD = #{lsnCd}
 		  AND LSN_SEQ = ${lsnSeq}
+    </update>
+    <update id="recalculatorLessonNum" parameterType="hashmap">
+	    MERGE INTO ATND_T X
+		USING (
+		SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
+				(SELECT ISNULL(SUM(LSN_TM), 0)+A.LSN_TM
+					FROM ATND_T
+					WHERE COMP_CD = A.COMP_CD
+						AND STOR_CD = A.STOR_CD
+						AND MEMBER_NO = A.MEMBER_NO
+						AND LSN_NO = A.LSN_NO
+						<![CDATA[
+						AND LSN_SEQ < A.LSN_SEQ
+						]]>
+						AND ATND_FG IN ('0','1','2')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
+					FROM ATND_T A
+					WHERE COMP_CD = #{compCd}
+						AND MEMBER_NO = #{memberNo}
+						AND LSN_NO = #{lsnCd}) Y
+		ON (X.COMP_CD = Y.COMP_CD
+			AND X.STOR_CD = Y.STOR_CD
+			AND X.MEMBER_NO = Y.MEMBER_NO
+			AND X.LSN_NO = Y.LSN_NO
+			AND X.LSN_SEQ = Y.LSN_SEQ)
+		WHEN MATCHED THEN
+			UPDATE SET
+			X.LSN_NUM = Y.LSN_NUM;
     </update>
     <update id="updateLessonUseCount" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M
