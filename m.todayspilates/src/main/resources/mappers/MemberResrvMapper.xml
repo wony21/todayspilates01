@@ -373,7 +373,7 @@
 					AND MEMBER_NO = #{memberNo}
 					AND LSN_NO = #{lsnNo}
 					AND LSN_CD  = #{lsnCd}),
-				(SELECT ISNULL(MAX(LSN_NUM), 0)+${lsnTm} LSN_NUM
+				(SELECT ISNULL(SUM(LSN_TM), 0)+${lsnTm} LSN_NUM
 				FROM ATND_T M
 				WHERE COMP_CD = #{compCd}
 					AND STOR_CD = #{storCd}
@@ -404,6 +404,33 @@
 		  AND LSN_NO = #{lsnNo}
 		  AND LSN_CD = #{lsnCd}
 		  AND LSN_SEQ = ${lsnSeq}
+    </update>
+    <update id="recalculatorLessonNum" parameterType="hashmap">
+	    MERGE INTO ATND_T X
+		USING (
+		SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
+				(SELECT ISNULL(SUM(LSN_TM), 0)+A.LSN_TM
+					FROM ATND_T
+					WHERE COMP_CD = A.COMP_CD
+						AND STOR_CD = A.STOR_CD
+						AND MEMBER_NO = A.MEMBER_NO
+						AND LSN_NO = A.LSN_NO
+						<![CDATA[
+						AND LSN_SEQ < A.LSN_SEQ
+						]]>
+						AND ATND_FG IN ('0','1','2')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
+					FROM ATND_T A
+					WHERE COMP_CD = #{compCd}
+						AND MEMBER_NO = #{memberNo}
+						AND LSN_NO = #{lsnCd}) Y
+		ON (X.COMP_CD = Y.COMP_CD
+			AND X.STOR_CD = Y.STOR_CD
+			AND X.MEMBER_NO = Y.MEMBER_NO
+			AND X.LSN_NO = Y.LSN_NO
+			AND X.LSN_SEQ = Y.LSN_SEQ)
+		WHEN MATCHED THEN
+			UPDATE SET
+			X.LSN_NUM = Y.LSN_NUM;
     </update>
     <update id="updateLessonUseCount" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M

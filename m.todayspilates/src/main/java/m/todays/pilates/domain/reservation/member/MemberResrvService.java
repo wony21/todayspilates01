@@ -182,6 +182,7 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.atndFg, atndFg);
 			parameter.put(ParamNames.empNo, empNo);
 			mapper.insertAttend(parameter);
+			mapper.recalculatorLessonNum(parameter);
 			mapper.updateLessonUseCount(parameter);
 		}
 		return ApiResponse.success("ok");
@@ -231,6 +232,7 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.atndFg, atndFg);
 			parameter.put(ParamNames.empNo, empNo);
 			mapper.updateAttend(parameter);
+			mapper.recalculatorLessonNum(parameter);
 			mapper.updateLessonUseCount(parameter);
 		}
 		return ApiResponse.success("ok");

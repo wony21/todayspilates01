@@ -15,6 +15,7 @@ public interface MemberResrvMapper {
 	void insertAttend(Map<String, Object> parameter);
 	void updateAttend(Map<String, Object> parameter);
 	void updateLessonUseCount(Map<String, Object> parameter);
+	void recalculatorLessonNum(Map<String, Object> parameter);
 	void deleteAttend(Map<String, Object> parameter);
 	
 }
