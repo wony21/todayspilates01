@@ -172,16 +172,22 @@ $(document).ready(function() {
 				//출석처리 
 				$.extend(reservationList[lsn], {atndFg: value});
 				updateLessonAttendance(lsn, value);
+				alert('출석처리가 완료되었습니다.');
+				location.refresh();
 			} 
 		} else if (value === '2') {
 			result = confirm('결석처리 하겠습니까?');
 			if (result) {
 				updateLessonAttendance(lsn, value);
+				alert('결석처리가 완료되었습니다.');
+				location.refresh();
 			}
 		} else if (value === '3') {
 			result = confirm('정말 삭제하겠습니까?');
 			if (result) {
 				updateLessonAttendance(lsn, value);
+				alert('예약을 삭제하였습니다');
+				location.refresh();
 			}
 		}
 		
@@ -190,6 +196,8 @@ $(document).ready(function() {
 		}
 		
 		previous = value;
+		
+		
 	});
 	
 	//예약출결처리 이전값 저장 
