@@ -2,7 +2,7 @@ var common = {};
 let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 let newReservation = $('#new-reservation-template').html();
-let selectedItem = 0;
+let selectedItem = -1;
 
 fnObj.initView = function() {
 	console.log('initView');
@@ -19,17 +19,19 @@ fnObj.initEvent = function() {
 		console.log(lsnData);
 		
 		// request data
-		// storCd
-		// memberNo
 		var r = {};
 		r.storCd = lsnData.storCd;
 		r.memberNo = lsnData.memberNo;
-		
 		$.ajax({
 			type: 'GET',
 			url: '/api/teacher/reservation/lesson',
 			data: r,
 			success: function(res) {
+//				if ( res.length == 0) {
+//					alert('관리자에게 예약할 레슨을 등록 후 예약하세요.');
+//					location.refresh();
+//					return false;
+//				}
 				res.forEach(function(n) {
 					n.lsnData = JSON.stringify(n);
 					n.lsnStDt = (n.lsnStDt == '') ? '' : ('`' + n.lsnStDt.substr(2, 2) + '.' + n.lsnStDt.substr(4, 2) + '.' + n.lsnStDt.substr(6, 7));	// yy-mm-dd
@@ -46,13 +48,10 @@ fnObj.initEvent = function() {
 				fnObj.fn.setLsnCd(lsnData.lsnCd);
 				fnObj.fn.setRsvDate();
 				fnObj.fn.setRsvTime();
-				//fnObj.fn.setLsnTime();
+				fnObj.fn.setLsnTime();
 				$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
 			}
 		});
-		
-		
-		
 	});
 	
 	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
@@ -202,6 +201,12 @@ fnObj.fn = {
 	
 	//실제 예약등록 처리 
 	addPrivateLesson: function() {
+		
+		if ( selectedItem == -1) {
+			alert('먼저 예약할 레슨을 선택하세요.');
+			return false;
+		}
+		
 		/* 예약 confirm */
 		var retReserv = confirm("예약하시겠습니까?");
 		if(retReserv != true){
