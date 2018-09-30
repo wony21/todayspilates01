@@ -107,6 +107,7 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.empNo, empNo);
 		parameter.put(ParamNames.sttDt, sttDt);
 		parameter.put(ParamNames.endDt, endDt);
+		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.PRIVATE);
 		List<String> atndFgs = new ArrayList();
 		atndFgs.add(CommonData.ATND_FG.RESERVATION);
 		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
@@ -124,6 +125,15 @@ public class MemberResrvService extends BaseService {
 		return mapper.getUserLession(parameter);
 	}
 
+	public List getMemberLesson(String compCd, String storCd, String memberNo) {
+		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
+		return mapper.getMemberLesson(parameter);
+	}
+	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
