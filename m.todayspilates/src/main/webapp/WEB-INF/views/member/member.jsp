@@ -46,7 +46,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/member/reservation">예약현황</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/logout" id="logout">로그아웃</a></li>
+				href="#" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 
@@ -225,6 +225,7 @@
     <!-- Custom scripts for this template -->
     <script src="js/boot4/stylish-portfolio.min.js"></script>
     <script src="js/member/member.js"></script>
+    <script src="js/common.js"></script>
     <script>
 		let memberNo = '<%=memberNo%>';
 		let storCd = '<%=storCd%>';

@@ -62,7 +62,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/my_lsesson_report">내수업실적</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/logout" id="logout">로그아웃</a></li>
+				href="#" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 
@@ -271,12 +271,11 @@
     <!-- Bootstrap core JavaScript -->
     <script src="js/boot4/jquery.min.js"></script>
     <script src="js/boot4/js/bootstrap.bundle.min.js"></script>
-
     <!-- Plugin JavaScript -->
     <script src="js/boot4/jquery.easing.min.js"></script>
-
     <!-- Custom scripts for this template -->
     <script src="js/boot4/stylish-portfolio.min.js"></script>
+    <script src="js/common.js"></script>
 	<script>
 		let empNo = '<%=empNo%>';
 		let storCd = '<%=storCd%>';

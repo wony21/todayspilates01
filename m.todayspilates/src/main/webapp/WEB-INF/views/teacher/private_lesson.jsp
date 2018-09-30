@@ -60,7 +60,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">내수업실적</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/logout" id="logout">로그아웃</a></li>
+				href="#" id="logout">로그아웃</a></li>
 		</ul>
 	</nav>
 	
@@ -114,7 +114,7 @@
               <thead>
                 <tr style="text-align: center">
                   <th>예약일시</th>
-                  <!--<th>시간</th>-->
+                  <th>시간</th>
 				  <th>회원</th>
                   <th>선생님</th>
                   <th>회차</th>
@@ -126,7 +126,7 @@
 				{{#list}}
                 <tr data-id="{{lsnCd}}" style="text-align: center;">
                   <td style="height:40px;">{{rsvDt}}({{dy}})<br>{{rsvTm}}</td>
-                  <!--<td>{{rsvTm}}</td>-->
+                  <td>{{lsnTm}}</td>
 				  <td>{{memberNm}}</td>
                   <td>{{empNm}}</td>
                   <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
@@ -204,6 +204,7 @@
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
 	<script src="/js/boot4/stylish-portfolio.js"></script>
+	<script src="/js/common.js"></script>
 	<script src="/js/teacher/private_lesson.js"></script>
 </body>
 

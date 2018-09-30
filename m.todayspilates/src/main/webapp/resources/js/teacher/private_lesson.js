@@ -64,9 +64,11 @@ $(document).ready(function() {
 				res.forEach(function(n) {
 //					n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
 //					n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+					n.lsnTm = n.lsnTm.toFixed(1);
 					n.rsvDt = (n.rsvDt == null) ? '' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);	// yy-mm-dd
 					n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
 					n.lsnEdDt = (n.lsnEdDt == null) ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+					
 					// 출/결처리가 된 항목은 '취소'불가 처리(렌더링 후 jquery를 위한 flag 처리)
 					if (n.atndFg == '1') {
 						n.sel1 = 'selected';
@@ -88,7 +90,6 @@ $(document).ready(function() {
 					reservationList = res.slice(0); //res array deep copy
 					//reservationList = res.map(n => n);
 				}
-				//reservation = res.map(n => n);
 
 				// 출/결처리가 된 항목은 '취소'는 불가하도록 처리 
 				$("#sel-attend option[display-flag='0']").each(function(){
@@ -203,55 +204,7 @@ $(document).ready(function() {
     });
     
 });
-
-
 	
-$('#logout').bind('click', function() {
-
-	$.ajax({
-		type: 'POST',
-		url: '/logout',
-		success: function(res) {
-			console.log('logout success...');
-			
-			var protocol = document.location.protocol;
-		    var hostname = window.location.hostname;
-		    var port = document.location.port;
-
-		    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-		    document_root = protocol + '//' + hostname + ':' + port;
-			$(location).attr('href', document_root);
-			return false;
-		}
-	})
-
-});
-/*
-$('#reservation').bind('click', function() {
-
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var page = protocol + '//' + hostname + ':' + port + '/member/reservation';
-	$(location).attr('href', page);
-	return false;
-
-});
-*/
-function goPage(page, params) {
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var url = protocol + '//' + hostname + ':' + port + '/' + page;
-    //window.location = "news_edit.html?article_id=" + articleId;
-	$(location).attr('href', url);
-	//return false;
-}
-
 function makeWeekSelectOptions() {
     var year = $("#sh_year").val();
     var month = $("#sh_month").val();

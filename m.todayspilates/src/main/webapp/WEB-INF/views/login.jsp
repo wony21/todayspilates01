@@ -13,6 +13,7 @@
 <link rel="icon" href="../../favicon.ico">
 
 <title>오늘의 필라테스</title>
+
 <!-- Bootstrap core CSS -->
 <link href="css/boot4/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
@@ -22,12 +23,6 @@
 	rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="css/pilates.css" rel="stylesheet">
-<!-- Custom library -->
-<script src="//code.jquery.com/jquery-3.3.1.js"></script>
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
-<script src="js/boot4/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div id="layout"></div>
@@ -94,6 +89,11 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="js/login.js"></script>
+	<!-- Custom library -->
+	<script src="js/boot4/jquery-3.3.1.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+	<script src="js/boot4/js/bootstrap.min.js"></script>
+	<script src="js/login.js"></script>
 </body>
 </html>

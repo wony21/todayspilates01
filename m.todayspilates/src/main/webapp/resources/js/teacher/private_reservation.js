@@ -1,48 +1,68 @@
 var common = {};
+let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
-$(document).ready(function() {
-	let user = JSON.parse(window.localStorage.getItem('todays'));
-	let newReservation = $('#new-reservation-template').html();
-	let reservation = $('#reservation-template').html();
-	let curr = new Date; // get current date
-	let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-	let last = first + 6; // last day is the first day + 6
-	let days = [];
-	let thead = '<tr style="text-align:center; height: 40px;">';
-	let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-	let today = curr.getDate();
-	for (var i = first, idx = 0; i <= last; i++) {
-		if (i !== today) {
-			thead += '<th>' + WEEKS[idx++] + '</th>';
-			tbody += '<td>' + i + '</td>';
-		} else {
-			thead += '<th class="today">' + WEEKS[idx++] + '</th>';
-			tbody += '<td class="today">' + i + '</td>';
-		}
-	}
-	$('.username').text(user.username);
-	var html = Mustache.render(newReservation, {list: []});
+let newReservation = $('#new-reservation-template').html();
+let selectedItem = 0;
+
+fnObj.initView = function() {
+	console.log('initView');
+	//예약등록 팝업창 렌더링 초기화 필요
+	let html = Mustache.render(newReservation, {list: []});
 	$('#new-reservation-container').html(html);
+}
+
+fnObj.initEvent = function() {
+	console.log('init Event');
 	
-	//강사목록 조회 
-	$.ajax({
-		type: 'GET',
-		url: '/api/teacher',
-		data: {storCd: user.storCd},
-		success: function(res) {
-			let option = '<option value="">선생님 선택</option>';
-			res.forEach(function(n) {
-				 option += ' <option value="' + n.empNo + '">' + n.empNm +
-                 '</option> ';
-			})
-			$('#teacher').html(option);
-			$('#teacher').val(user.empNo);	//로그인한 선생님으로 선택 
-			getPrivateLesson();
-		}
+	$("#reservation-container").on('click', 'tbody tr', function(e) {
+		let lsnData = $(this).data('id');
+		console.log(lsnData);
+		
+		$('#userInfo').text(lsnData.memberNm);
+		
+		//레슨 등록정보 셋팅 
+		fnObj.fn.setReservationList(lsnData);
+		fnObj.fn.setLsnCd(lsnData.lsnCd);
+		fnObj.fn.setRsvDate();
+		fnObj.fn.setRsvTime();
+		//fnObj.fn.setLsnTime();
+		$('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정 
+		
 	});
 	
-	function getPrivateLesson() {
-		let search = getData();
+	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
+		let lsnData = $(this).data('id');
+		selectedItem = $(this).index(); //selectedItem => 전역변수
+		
+		//선택한 일자의 개인레슨을 조회 
+		let selected = $(this).children('td').hasClass("selected");
+	    $("#new-reservation-container tbody tr").children('td').removeClass("selected");
+	    if(!selected) {
+	    	$(this).children('td').addClass("selected");
+	    }
+	});
+	
+	//날짜선택시 선택일자 toggle 이벤트 
+//	$("#date-container").on('click', 'td', function(e) {
+//		let searchDate = $(this).text();
+//		
+//		let selected = $(this).hasClass("selected");
+//	    $("#date-container td").removeClass("selected");
+//	    if(!selected) {
+//	    	$(this).addClass("selected");
+//	    }
+//	});
+	
+	//예약등록 버튼 이벤트
+	$('#add-lesson').on('click', function(e) {
+		fnObj.fn.addPrivateLesson();
+	});
+}
+
+fnObj.fn = {
+	getPrivateLesson: function(user) {
+		let search = fnObj.fn.getData(user);
+		let reservation = $('#reservation-template').html();
 		console.log(search);
 		$.ajax({
 			type: 'GET',
@@ -50,22 +70,20 @@ $(document).ready(function() {
 			data: search,
 			success: function(res) {
 				res.forEach(function(n) {
-					//n.rsvDt = ax5.util.date((n.rsvDt == null) ? '' : n.rsvDt, {return: 'yyyy/MM/dd'});
-					//n.lsnEdDt = ax5.util.date((n.lsnEdDt == null) ? '' : n.lsnEdDt, {return: 'yyyy/MM/dd'});
+					n.lsnData = JSON.stringify(n);
 					n.rsvDt = (n.rsvDt == null) ? '(예약없음)' : n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);	// yy-mm-dd
 					n.rsvTm = (n.rsvTm == null) ? '' : n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
 					n.lsnEdDt = (n.lsnEdDt == null) ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
 					n.lsnTm = Number(n.lsnTm).toFixed(1);
 					n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
-					n.lsnData = JSON.stringify(n);
 				});
-				var html = Mustache.render(reservation, {list: res});
+				let html = Mustache.render(reservation, {list: res});
 				$('#reservation-container').html(html);
 			}
 		});
-	}
-
-	function getData() {
+	},
+	
+	getData : function(user) {
 		return {
 			storCd: user.storCd,
 			memberNm: $('#filter').val(),
@@ -73,81 +91,129 @@ $(document).ready(function() {
 			sttDt: ax5.util.date(new Date(), {return: 'yyyyMMdd'}),
 			endDt: '99991231'
 		}
-	}
+	},
 	
-	$(document.body).on('change', '#teacher', function(e) {
-		//var optionSelected = $("option:selected", this);
-		getPrivateLesson();
-	});
+	//선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
+	setReservationList: function(item) {
+		item.lsnData = JSON.stringify(item);
+		item.lsnStDt = (isValidDate(item.lsnStDt) === false) ? '' : ('`' + item.lsnStDt.substr(2, 2) + '.' + item.lsnStDt.substr(4, 2) + '.' + item.lsnStDt.substr(6, 7));
+		item.lsnEdDt = (isValidDate(item.lsnEdDt) === false) ? '' : ('`' + item.lsnEdDt.substr(2, 2) + '.' + item.lsnEdDt.substr(4, 2) + '.' + item.lsnEdDt.substr(6, 7));
+		let html = Mustache.render(newReservation, {list: [item]});
+		$('#new-reservation-container').html(html);
+	},
 	
-	$("#date-container").on('click', 'td', function(e) {
-		let searchDate = $(this).text();
+	setLsnCd: function(val) {
+		let option = '';
+		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
+		option += '<option value="01">' + '개인' + '</option> ';
+		option += '<option value="02">' + '듀엣' + '</option> ';
 		
-		let selected = $(this).hasClass("selected");
-	    $("#date-container td").removeClass("selected");
-	    if(!selected) {
-	    	$(this).addClass("selected");
-	    }
-	});
-});
-
-$('#logout').bind('click', function() {
-
-	$.ajax({
-		type: 'POST',
-		url: '/logout',
-		success: function(res) {
-			console.log('logout success...');
+		$('#lsnCd').html(option);
+		$('#lsnCd').val(val);
+	},
+	
+	//예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
+	setRsvDate : function() {
+		let option = '';
+		for (var i = 0; i <= 90; i++) {
+			var date = ax5.util.date(new Date(), {add: {d: i}});
+			var formattedDate = ax5.util.date(new Date(), {add: {d: i}, return: 'yyyyMMdd'});
+			var day = WEEKS[date.getDay()];
 			
-			var protocol = document.location.protocol;
-		    var hostname = window.location.hostname;
-		    var port = document.location.port;
-
-		    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-		    document_root = protocol + '//' + hostname + ':' + port;
-			$(location).attr('href', document_root);
-			return false;
+			var d = /*'`' + formattedDate.substr(2, 2) + '.' + */formattedDate.substr(4, 2) + '.' + formattedDate.substr(6, 7);
+			option += '<option value="' + formattedDate + '">' + d + ' (' + day + ')' + '</option> ';
 		}
-	})
+		$('#rsvDt').html(option);
+	},
+	//예약시간 셋팅 (00 ~ 24)
+	setRsvTime: function(val) {
+		let option = '';
+		for (var i = 1; i < 24; i++) {
+			//let prefix = (i < 12) ? 'am ' : 'pm ';
+			let tm = ("0" + i).slice(-2) + "00";
+			let formattedTm = /*prefix + */("0" + i).slice(-2) + ":" + "00";
+			
+			option += ' <option value="' + tm + '">' + formattedTm +
+            '</option> ';
+		}
+		
+		let now = new Date($.now());
+		$('#rsvTm').html(option);
+		if (typeof val === 'undefined' || val === '' || val === null) {
+			//기본값이 없으면 현재시각을 기본값으로 설정 
+			$('#rsvTm').val(("0" + now.getHours()).slice(-2) + "00");
+		} else {
+			$('#rsvTm').val(val);	//기존예약 시간을 기본값으로 설정 
+		}
+	},
+	//레슨시간 셋팅 (0.5 ~ 6.0)
+	setLsnTime: function() {
+//		let option = '';
+//		for (var i = 0.5; i <= 4; i+= 0.5) {
+//			option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
+//            '</option> ';
+//		}
+//		$('#lsnTm').html(option);
+//		$('#lsnTm').val('1.0');	//default 값 
+	},
+	//선생님 셋팅 
+	setTeacher: function(user) {
+		//강사목록 조회 
+		$.ajax({
+			type: 'GET',
+			url: '/api/teacher',
+			data: {storCd: user.storCd},
+			success: function(res) {
+				let option = '<option value="">선생님 선택</option>';
+				res.forEach(function(n) {
+					 option += ' <option value="' + n.empNo + '">' + n.empNm +
+	                 '</option> ';
+				})
+				$('#teacher').html(option);
+			}
+		});
+		return false;
+	},
+	
+	//실제 예약등록 처리 
+	addPrivateLesson: function() {
+		let item = $("#new-reservation-container tbody").find('tr').eq(selectedItem).data('id');
+		//requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
+		let data = [{
+			compCd: item.compCd,
+			storCd: item.storCd,
+			memberNo: item.memberNo,
+			empNo: item.empNo,
+			lsnNo: item.lsnNo,
+			lsnCd: $('#lsnCd').val(),
+			rsvDt: $('#rsvDt').val(),
+			rsvTm: $('#rsvTm').val(),
+			lsnTm: $('#lsnTm').val(),
+		}];
+		
+		$.ajax({
+			type: 'PUT',
+			url: '/api/teacher/reservation/add',
+			data: JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
+			success: function(res) {
+				console.log('update success....');
+			}
+		});
+		return false;
+	},
+};
 
+$(document).ready(function() {
+	let user = JSON.parse(window.localStorage.getItem('todays'));
+	$('.username').text(user.username);
+	
+	fnObj.initView();
+	fnObj.initEvent();
+	
+	//개인레슨 예약조회
+	fnObj.fn.getPrivateLesson(user);
+	//선생님 목록은 예약현황 로드시 한번만 셋팅 
+	fnObj.fn.setTeacher(user);
 });
 
-$("#reservation-container").on('click', 'tbody tr', function(e) {
-	let lnsData = $(this).data('id');
-	console.log(lnsData);
-	
-	
-	
-//	user.lsnCd = lsnCd;
-//	user.lsnNm = lsnNm;
-//	user.empNm = empNm;
-//	window.localStorage.setItem('todays', JSON.stringify(user));
-	
-	//goPage('member/reservation-detail');
-	//goPage('/member/reservation_detail');
-});
-
-$('#reservation').bind('click', function() {
-
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var page = protocol + '//' + hostname + ':' + port + '/member/reservation';
-	$(location).attr('href', page);
-	return false;
-
-});
-
-function goPage(page, params) {
-	var protocol = document.location.protocol;
-    var hostname = window.location.hostname;
-    var port = document.location.port;
-
-    // 식자재 폐기등록 사진파일 업로드용  API PREFIX
-    var url = protocol + '//' + hostname + ':' + port + '/' + page;
-    //window.location = "news_edit.html?article_id=" + articleId;
-	$(location).attr('href', url);
-	//return false;
-}

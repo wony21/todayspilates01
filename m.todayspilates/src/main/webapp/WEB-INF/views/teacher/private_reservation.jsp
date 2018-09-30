@@ -26,7 +26,6 @@
 
 <!-- Bootstrap Core CSS -->
 <link href="/css/boot4/css/bootstrap.min.css" rel="stylesheet">
-
 <!-- Custom Fonts -->
 <link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
@@ -35,6 +34,7 @@
 
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
+<link href="/css/boot4/form-validation.css" rel="stylesheet">
 
 <body id="page-top">
 <!-- Navigation -->
@@ -61,7 +61,7 @@
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="#">내수업실적</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
-                                        href="/logout" id="logout">로그아웃</a></li>
+                                        href="#" id="logout">로그아웃</a></li>
     </ul>
 </nav>
 
@@ -135,12 +135,12 @@
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalCenterTitle">예약등록</h5>
+		        <h5 class="modal-title" id="exampleModalCenterTitle">예약등록 (<span id="userInfo"></span> 님)</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      <div class="modal-body">
+		      <div class="modal-body" style="padding: 0.5rem;">
 		      <!-- 예약잡기 팝업body start -->
 			        <div class="table-responsive" style="margin-top: 30px;">
 	            	<!-- 
@@ -148,6 +148,7 @@
 	            		<button type="button" class="btn btn-md btn-default pull-right">개인레슨 예약등록</button>
 					</div>
 					 -->
+					<!--span> (예약을 원하시면 레슨을 선택하세요)</span-->
 	                <div id="new-reservation-container">
 	                    <script type="text/html" id="new-reservation-template">
                         <table class="table table-striped table-sm">
@@ -158,18 +159,16 @@
                                 <th>회차</th>
                                 <th>시작일</th>
                                 <th>종료일</th>
-                                <th>선택</th>
                             </tr>
                             </thead>
                             <tbody>
                             {{#list}}
-                            <tr data-id="{{lsnCd}}" style="text-align: center;">
+                            <tr data-id="{{lsnData}}" style="text-align: center;">
                                 <td>{{lsnNm}}</td>
-                                <td>{{status}}</td>
-                                <td>{{lsnUseCnt}}</td>
-                                <td>{{rsvDt}}</td>
+                                <td>{{lsnFgNm}}</td>
+                                <td>{{lsnNum}}/{{lsnCnt}}</td>
+                                <td>{{lsnStDt}}</td>
                                 <td>{{lsnEdDt}}</td>
-                                <td></td>
                             </tr>
                             {{/list}}
                             {{^list}}
@@ -179,55 +178,47 @@
                                 <td>00/10</td>
                                 <td>2018/08/01</td>
                                 <td>2018/12/31</td>
-                                <td></td>
                             </tr>
 							<tr>
-                                <td>그룹</td>
+                                <td>듀엣</td>
                                 <td>정상</td>
                                 <td>01/05</td>
                                 <td>2018/08/25</td>
                                 <td>2018/10/25</td>
-                                <td></td>
                             </tr>
                             {{/list}}
                             </tbody>
                         </table>
-                    </script>
+                    	</script>
 	                </div>
 	            </div>
 	            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
-		        	<div class="btn-toolbar mb-2 mb-md-0">
+		        	<div class="btn-toolbar mb-2 mb-md-0" id="new-reservation" data-id="">
+		        		<div class="input-group">
+							<select class="custom-select" id="lsnCd" style="width: 58px;"></select>
+		                </div>
 		            	<div class="input-group">
-							<select class="custom-select" id="rsvDt" style="width: 100px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="rsvDt" style="width: 85px; margin-left: 3px;"></select>
 		                </div>
 		                <div class="input-group">
-			                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+			                <select class="custom-select" id="rsvTm" style="width: 65px; margin-left: 3px;"></select>
 		                </div>
 						<div class="input-group">
-							<select class="custom-select" id="lsnTm" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="lsnTm" style="width: 52px; margin-left: 3px;">
+								<option value="1.0">1.0</option>
+								<option value="1.5">1.5</option>
+							</select>
 						</div>
 						<div class="input-group">
-							<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;">
-			                  <option value="">Choose...</option>
-			                  <option>United States</option>
-			                </select>
+							<select class="custom-select" id="teacher" style="width: 72px; margin-left: 3px;"></select>
 						</div>
 		            </div>
 		        </div>
 		      </div>
 		      <!-- 예약잡기 팝업body end -->
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		        <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
 		      </div>
 		    </div>
 		  </div>
@@ -265,6 +256,7 @@
 <!-- Bootstrap core JavaScript -->
 <script src="/js/boot4/jquery.min.js"></script>
 <script src="/js/boot4/js/bootstrap.bundle.min.js"></script>
+<script src="/js/boot4/js/bootstrap.min.js"></script>
 
 <!-- Plugin JavaScript -->
 <script src="/js/boot4/jquery.easing.min.js"></script>
@@ -273,7 +265,9 @@
 <script src="/js/boot4/vendor/mustache.js"></script>
 <script src="/js/boot4/vendor/ax5core.min.js"></script>
 <script src="/js/boot4/vendor/ax5formatter.js"></script>
+<script src="/js/boot4/vendor/holder.min.js"></script>
 <script src="/js/boot4/stylish-portfolio.js"></script>
+<script src="/js/common.js"></script>
 <script src="/js/teacher/private_reservation.js"></script>
 </body>
 
