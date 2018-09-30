@@ -200,19 +200,19 @@
 		                </div>
 		                 -->
 		            	<div class="input-group">
-							<select class="custom-select" id="rsvDt" style="width: 25%; margin-left: 3px;"></select>
+							<select class="custom-select" id="rsvDt" style="width: 90px;"></select>
 		                </div>
 		                <div class="input-group">
-			                <select class="custom-select" id="rsvTm" style="width: 25%; margin-left: 3px;"></select>
+			                <select class="custom-select" id="rsvTm" style="width: 80px; margin-left: 5px;"></select>
 		                </div>
 						<div class="input-group">
-							<select class="custom-select" id="lsnTm" style="width: 25%; margin-left: 3px;">
+							<select class="custom-select" id="lsnTm" style="width: 70px; margin-left: 5px;">
 								<option value="1.0">1.0</option>
 								<option value="1.5">1.5</option>
 							</select>
 						</div>
 						<div class="input-group">
-							<select class="custom-select" id="teacher" style="width: 25%; margin-left: 3px;"></select>
+							<select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;"></select>
 						</div>
 		            </div>
 		        </div>
