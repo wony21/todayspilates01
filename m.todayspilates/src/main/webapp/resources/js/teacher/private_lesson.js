@@ -137,12 +137,12 @@ $(document).ready(function() {
 		let data = [].concat(reservationList[lsn]);
 		let url = '/api/teacher/lesson/attend';
 		
-		if (val === 1) {
+		if (val === '2') {
 			url = '/api/teacher/lesson/absent';
-		} else if (val === 3) {
+		} else if (val === '3') {
 			url = '/api/teacher/lesson/cancel';
 		} 
-		
+		console.log(url);
 		$.ajax({
 			type: 'PUT',
 			url: url,
@@ -161,18 +161,18 @@ $(document).ready(function() {
 		let lsn = $(this).parent().parent().index();	//선택된 예약정보
 		let value = $(this).val();
 		let result = false;
-		
+		console.log(value);
 		if (value === 0) {
 			return false;
 		}
-		if (value === '2') {
+		if (value === '1') {
 			result = confirm('출석처리 하겠습니까?');
 			if (result) {
 				//출석처리 
 				$.extend(reservationList[lsn], {atndFg: value});
 				updateLessonAttendance(lsn, value);
 			} 
-		} else if (value === '1') {
+		} else if (value === '2') {
 			result = confirm('결석처리 하겠습니까?');
 			if (result) {
 				updateLessonAttendance(lsn, value);

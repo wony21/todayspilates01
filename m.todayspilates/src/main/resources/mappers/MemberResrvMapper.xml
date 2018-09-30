@@ -201,7 +201,7 @@
 				AND A.EMP_NO = #{empNo}
 			</if>
 			<if test="rsvDt != null and rsvDt != ''">
-				AND H.RSV_DT = #{rsvDt}
+				<![CDATA[ AND H.RSV_DT >= #{rsvDt} ]]>
 			</if>
 			AND A.CLS_FG = '1'
 			<if test="lsnFg != null and lsnFg != ''">
