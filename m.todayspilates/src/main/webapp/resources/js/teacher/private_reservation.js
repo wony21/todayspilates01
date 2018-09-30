@@ -41,7 +41,7 @@ fnObj.initEvent = function() {
 		getPrivateLesson();
 	});
 	*/
-	
+	//날짜선택시 선택일자 toggle 이벤트 
 	$("#date-container").on('click', 'td', function(e) {
 		let searchDate = $(this).text();
 		
@@ -50,6 +50,11 @@ fnObj.initEvent = function() {
 	    if(!selected) {
 	    	$(this).addClass("selected");
 	    }
+	});
+	
+	//예약등록 버튼 이벤트
+	$('#add-lesson').on('click', function(e) {
+		fnObj.fn.addPrivateLesson();
 	});
 }
 
@@ -90,6 +95,15 @@ fnObj.fn = {
 			sttDt: ax5.util.date(new Date(), {return: 'yyyyMMdd'}),
 			endDt: '99991231'
 		}
+	},
+	
+	setLsnCd: function() {
+		let option = '';
+		
+		option += '<option value="' + 01 + '">' + '개인' + '</option> ';
+		option += '<option value="' + 02 + '">' + '듀엣' + '</option> ';
+		
+		$('#lsnCd').html(option);
 	},
 	
 	//예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
@@ -151,6 +165,11 @@ fnObj.fn = {
 		return false;
 	},
 	
+	//실제 예약등록 처리 
+	addPrivateLesson: function() {
+		console.log('addPrvateLesson api call...');
+	},
+	
 };
 
 $(document).ready(function() {
@@ -161,10 +180,12 @@ $(document).ready(function() {
 	
 	//개인레슨 예약조회
 	fnObj.fn.getPrivateLesson(user);
-	//예약등록 선생님 목록 초기화 
-	fnObj.fn.setTeacher(user);
+	//레슨 등록정보 셋팅 
+	fnObj.fn.setLsnCd();
+	fnObj.fn.setRsvDate();
 	fnObj.fn.setRsvTime();
 	fnObj.fn.setLsnTime();
-	fnObj.fn.setRsvDate();
+	fnObj.fn.setTeacher(user);
+
 });
 
