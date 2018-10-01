@@ -1,6 +1,7 @@
 var common = {};
 let fnObj = {};
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+let reservation = $('#reservation-template').html();
 let newReservation = $('#new-reservation-template').html();
 let selectedItem = -1;
 
@@ -11,8 +12,12 @@ fnObj.initView = function() {
 	$('#new-reservation-container').html(html);
 }
 
-fnObj.initEvent = function() {
+fnObj.initEvent = function(user) {
 	console.log('init Event');
+	
+	$('#search-member').on('click', function() {
+		fnObj.fn.getPrivateLesson(user);
+	});
 	
 	$("#reservation-container").on('click', 'tbody tr', function(e) {
 		let lsnData = $(this).data('id');
@@ -86,7 +91,6 @@ fnObj.initEvent = function() {
 fnObj.fn = {
 	getPrivateLesson: function(user) {
 		let search = fnObj.fn.getData(user);
-		let reservation = $('#reservation-template').html();
 		console.log(search);
 		$.ajax({
 			type: 'GET',
@@ -249,7 +253,7 @@ $(document).ready(function() {
 	$('.username').text(user.username);
 	
 	fnObj.initView();
-	fnObj.initEvent();
+	fnObj.initEvent(user);
 	
 	//개인레슨 예약조회
 	fnObj.fn.getPrivateLesson(user);

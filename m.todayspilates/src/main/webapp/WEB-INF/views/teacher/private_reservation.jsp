@@ -78,7 +78,7 @@
                                 <input type="text" class="form-control" id="filter" placeholder="회원명"
                                        style="width: 80px;  margin-left: 5px;">
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary">검색</button>
+                                    <button class="btn btn-primary" id="search-member">검색</button>
                                 </div>
                                 <!-- 
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
