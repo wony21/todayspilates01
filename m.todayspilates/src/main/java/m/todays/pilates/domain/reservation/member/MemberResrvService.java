@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import m.todays.pilates.common.BaseService;
+import m.todays.pilates.common.CamelCaseMap;
 import m.todays.pilates.common.CommonData;
 import m.todays.pilates.common.ParamNames;
 import m.todays.pilates.common.SessionUtils;
@@ -132,6 +133,24 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNo, memberNo);
 		return mapper.getMemberLesson(parameter);
+	}
+	
+	public List getGroupLesson(String compCd, String storCd, String schDate) {
+		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.schDt, schDate);
+		List<CamelCaseMap> lesson = mapper.getGroupLesson(parameter);
+		for(CamelCaseMap item : lesson) {
+			String rsvDt = item.getString(ParamNames.schDt);
+			String rsvTm = item.getString(ParamNames.stTm);
+			parameter.put(ParamNames.rsvDt, rsvDt);
+			parameter.put(ParamNames.rsvTm, rsvTm);
+			List<CamelCaseMap> listDetail = mapper.getGroupLessonDetail(parameter);
+			item.put(ParamNames.schedule, listDetail);
+		}
+		return lesson;
 	}
 	
 	@Transactional

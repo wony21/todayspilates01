@@ -14,6 +14,10 @@ public class ParamNames {
 	public final static String empNo = "empNo";
 	public final static String sttDt = "sttDt";
 	public final static String endDt = "endDt";
+	public final static String schDt = "schDt";
+	public final static String stTm = "stTm";
+	public final static String edTm = "edTm";
+	public final static String schedule = "schedule";
 	public final static String memberNm = "memberNm";
 	public final static String empNm = "empNm";
 	public final static String atndFg = "atndFg";
@@ -25,5 +29,7 @@ public class ParamNames {
 	public final static String lsnUseCnt = "lsnUseCnt";
 	public final static String columns = "columns";
 	public final static String opt1 = "opt1";
+	
+	
 	
 }

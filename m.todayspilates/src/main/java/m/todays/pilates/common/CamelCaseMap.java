@@ -19,5 +19,23 @@ public class CamelCaseMap extends HashMap<Object, Object> {
 	public Object put(Object key, Object value) {
 		return super.put(toCamelCase((String)key), value);
 	}
+	
+	public String getString(String key) {
+		Object obj = this.getOrDefault(key, "");
+		String strObj = (String)obj;
+		if ( StringUtils.isEmpty(strObj)) {
+			return "";
+		}
+		return strObj;
+	}
+	
+	public String getString(String key, String defaultValue) {
+		Object obj = this.getOrDefault(key, defaultValue);
+		String strObj = (String)obj;
+		if ( StringUtils.isEmpty(strObj)) {
+			return defaultValue;
+		}
+		return strObj;
+	}
 
 }
