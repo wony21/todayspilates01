@@ -468,7 +468,7 @@
     </delete>
     <select id="getGroupLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
     /* 그룹출석부 - 그룹 스케쥴시간표 */
-	SELECT A.COMP_CD, A.STOR_CD, A.SCH_DT, A.ST_TM, A.SEQ, 
+	SELECT A.COMP_CD, A.STOR_CD, A.SCH_DT, A.ST_TM, A.SEQ,
 			A.LSN_TM, A.LSN_LV, B.NAME AS LSN_LV_NM, A.EMP_NO, C.EMP_NM, A.SCH_WEEK
 	FROM GRP_SCH_M A
 	INNER JOIN COMMON_CODE_M B
