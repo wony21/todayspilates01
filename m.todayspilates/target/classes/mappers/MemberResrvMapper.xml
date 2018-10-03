@@ -359,7 +359,9 @@
 	WHERE A.COMP_CD = #{compCd}
 		AND A.STOR_CD = #{storCd}
 		AND A.MEMBER_NO = #{memberNo}
-		AND B.LSN_FG = '1'
+		<if test="lsnFg != null and lsnFg != ''">
+			AND B.LSN_FG = #{lsnFg}
+		</if>
 		AND A.CLS_FG = '1'
 	ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
     </select>

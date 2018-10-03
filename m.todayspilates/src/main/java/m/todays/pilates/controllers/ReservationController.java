@@ -181,12 +181,26 @@ public class ReservationController extends BaseController {
 		return memberResrvService.getMemberLesson(compCd, storCd, memberNo);
 	}
 	/**
-	 * 선생님 - 그룹레슨조회
+	 * 선생님 - 예약가능한 그룹레슨목록
 	 * @param storCd
 	 * @param memberNo
 	 * @return
 	 */
 	@RequestMapping(value = "/api/teacher/reservation/group", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getMemberGroupLesson(
+			@RequestParam String storCd,
+			@RequestParam String memberNo) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getMemberGroupLesson(compCd, storCd, memberNo);
+	}
+	/**
+	 * 선생님 - 그룹레슨조회
+	 * @param storCd
+	 * @param memberNo
+	 * @return
+	 */
+	@RequestMapping(value = "/api/teacher/reservation/group/list", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getGroupLesson(
 			@RequestParam String storCd,
@@ -194,6 +208,7 @@ public class ReservationController extends BaseController {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return memberResrvService.getGroupLesson(compCd, storCd, schDt);
 	}
+	
 	/**
 	 * 개인레슨출석부 - 출석
 	 * @package 	: m.todays.pilates.controllers

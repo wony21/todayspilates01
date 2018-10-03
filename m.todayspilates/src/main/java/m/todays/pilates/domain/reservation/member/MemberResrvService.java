@@ -132,6 +132,17 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNo, memberNo);
+		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.PRIVATE);
+		return mapper.getMemberLesson(parameter);
+	}
+	
+	public List getMemberGroupLesson(String compCd, String storCd, String memberNo) {
+		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
+		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.GROUP);
 		return mapper.getMemberLesson(parameter);
 	}
 	
