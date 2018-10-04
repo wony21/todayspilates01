@@ -16,14 +16,19 @@ fnObj.initView = function(user) {
 
 //이벤트 초기화 
 fnObj.initEvent = function(user) {
-	// 선생님 변경시 조회
+	// 주차변경시 해당 주로 셋팅
+	$(document.body).on('change', '#week', function(e) {
+		fnObj.fn.setDatePicker($(this).val());
+		fnObj.fn.getPrivateLesson(user);
+	});
+	
+	//선생님 변경시 ... 조회 처리 
 	$(document.body).on('change', '#teacher', function(e) {
-		// var optionSelected = $("option:selected", this);
 		fnObj.fn.getPrivateLesson(user);
 	});
 	
 	// 선택한 일자의 개인레슨을 조회
-	$("#datepicker tbody").on('click', 'td', function(e) {
+	$("#datepicker").on('click', ' tbody td', function(e) {
 		let selected = $(this).hasClass("selected");
 	    $("#datepicker tbody td").removeClass("selected");
 	    if(!selected) {
@@ -109,11 +114,17 @@ fnObj.fn = {
 		});
 	},
 	//주간 Datepicker 초기화 
-	setDatePicker: function() {
+	setDatePicker: function(dateString) {
 		let curr = new Date(); // get current date
-		let first = curr.getDate() - curr.getDay(); // First day is the day of the week.
+		//let first = curr.getDate() - curr.getDay(); // First day is the day of the week.
 		let getDay = curr.getDay();
-		let sttDt = ax5.util.date(curr, { add:{d: -curr.getDay()}, return: 'yyyyMMdd'});
+		let sttDt = '';
+		
+		if (typeof dateString === 'undefined') {
+			sttDt = ax5.util.date(curr, { add:{d: -curr.getDay()}, return: 'yyyyMMdd'});
+		} else {
+			sttDt = dateString;
+		}
 		let endDt = ax5.util.date(curr, { add:{d: 6-getDay}, return: 'yyyyMMdd'});
 		let thead = '<tr style="text-align:center; height: 40px;">';
 		let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
@@ -220,48 +231,12 @@ $(document).ready(function() {
 	let user = JSON.parse(window.localStorage.getItem('todays'));
 	fnObj.initView(user);
 	fnObj.initEvent(user);
+	
+	//주차 datepicker 셋팅 (현재월을 기준으로 -3개월 ~ +3개월)
+	makeWeekSelectOptions('week', 3);
+	//console.log('max weeks:' + getWeekCountOfMonth('201810'));
+	//var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
 	
-function makeWeekSelectOptions() {
-    var year = $("#sh_year").val();
-    var month = $("#sh_month").val();
-    var today = new Date();
-    var sdate = new Date(year, month-1, 01);
-    var lastDay = (new Date(sdate.getFullYear(), sdate.getMonth()+1, 0)).getDate();
-    var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
-    var week = sdate.getDay();
-    sdate.setDate(sdate.getDate() - week);
-    var edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
- 
-    var obj = document.getElementById("sh_week");
-    obj.options.length = 0;
-    var seled = "";
-    while(endDate.getTime() >= edate.getTime()) {
-        var sYear = sdate.getFullYear();
-        var sMonth = (sdate.getMonth()+1);
-        var sDay = sdate.getDate();
- 
-        sMonth = (sMonth < 10) ? "0"+sMonth : sMonth;
-        sDay = (sDay < 10) ? "0"+sDay : sDay;
- 
-        var stxt = sYear + "-" + sMonth + "-" + sDay;
-        edate.setDate(sdate.getDate() + 6);
- 
-        var eYear = edate.getFullYear();
-        var eMonth = (edate.getMonth()+1);
-        var eDay = edate.getDate();
- 
-        eMonth = (eMonth < 10) ? "0"+eMonth : eMonth;
-        eDay = (eDay < 10) ? "0"+eDay : eDay;
-        var etxt = eYear + "-" + eMonth + "-" + eDay;
-        if(today.getTime() >= sdate.getTime() && today.getTime() <= edate.getTime()) {
-            seled = stxt+"|"+etxt;
-        }
- 
-        obj.options[obj.options.length] = new Option(stxt+"~"+etxt, stxt+"|"+etxt);
-        sdate = new Date(edate.getFullYear(), edate.getMonth(), edate.getDate() + 1);
-        edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
-    }
-    if(seled) obj.value = seled;
-}
+
 

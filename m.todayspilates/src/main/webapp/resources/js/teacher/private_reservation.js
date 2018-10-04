@@ -1,9 +1,9 @@
 var common = {};
 let fnObj = {};
-const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 let reservation = $('#reservation-template').html();
 let newReservation = $('#new-reservation-template').html();
 let selectedItem = -1;
+const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 fnObj.initView = function() {
 	console.log('initView');

@@ -35,7 +35,7 @@
 
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
-
+</head>
 <body id="page-top">
 	<!-- Navigation -->
 	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i>
@@ -52,7 +52,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_reservation">개인레슨 예약하기</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#">그룹레슨 출석부</a></li>
+				href="/teacher/group_lesson">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#" id="reservation">그룹레슨 등록현황관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -74,16 +74,10 @@
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 		            <div class="btn-toolbar mb-2 mb-md-0">
 		            	<div class="input-group">
-						<select class="custom-select" id="week" style="width: 100px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
+						<select class="custom-select" id="week" style="width: 140px; margin-left: 5px;"></select>
 		                </div>
 		                <div class="input-group">
-		                <select class="custom-select" id="teacher" style="width: 100px; margin-left: 5px;">
-		                  <option value="">Choose...</option>
-		                  <option>United States</option>
-		                </select>
+		                <select class="custom-select" id="teacher" style="width: 80px; margin-left: 5px;"></select>
 		                </div>
 		              <div class="input-group">
 		              	<input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
