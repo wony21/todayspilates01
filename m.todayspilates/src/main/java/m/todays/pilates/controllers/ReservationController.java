@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import m.todays.pilates.common.BaseController;
 import m.todays.pilates.common.SessionUtils;
 import m.todays.pilates.common.api.ApiResponse;
+import m.todays.pilates.domain.common.CommonService;
 import m.todays.pilates.domain.reservation.member.MemberResrvService;
 /**
  * 
@@ -32,6 +33,9 @@ public class ReservationController extends BaseController {
 
 	@Autowired
 	MemberResrvService memberResrvService;
+	
+	@Autowired
+	CommonService commonService;
 	
 	/**
 	 * 회원 - 예약현황 목록
@@ -292,5 +296,12 @@ public class ReservationController extends BaseController {
 	@RequestMapping(value = "/api/teacher/reservation/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addReservation(@RequestBody List<HashMap> requestParams) {
 		return memberResrvService.reservation(requestParams);
+	}
+	
+	@RequestMapping(value = "/api/common", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getCommon(
+			@RequestParam String groupCd) {
+		return commonService.getCommon(groupCd);
 	}
 }

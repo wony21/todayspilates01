@@ -29,6 +29,7 @@ public class ParamNames {
 	public final static String lsnUseCnt = "lsnUseCnt";
 	public final static String columns = "columns";
 	public final static String opt1 = "opt1";
+	public final static String groupCd = "groupCd";
 	
 	
 	
