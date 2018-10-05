@@ -1,7 +1,8 @@
 <%@page import="m.todays.pilates.common.SessionUtils"%>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false"%>
 <%
 	String userLv = SessionUtils.getCurrentUser().getUserLv();
 	String memberNo = SessionUtils.getCurrentUser().getMemberNo();
@@ -18,27 +19,31 @@
 <head>
 
 <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="">
 
 <title>Todays pilates</title>
 
 <link href="/css/boot4/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
-<link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet"
+	type="text/css">
+<link
+	href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
+	rel="stylesheet" type="text/css">
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
-
 <body id="page-top">
 	<!-- Navigation -->
 	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i></a>
 	<nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
-				href="#page-top">회원<!--( ${userLv} )--> : <span class="username">${username}</span> 님
+				href="#page-top">회원<!--( ${userLv} )--> : <span class="username">${username}</span>
+					님
 			</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/member">Home</a></li>
@@ -50,13 +55,16 @@
 	</nav>
 	<!-- Header -->
 	<header class="d-flex">
-      <div class="container">
-	<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
-	<p>
-          <h4><span class="username"></span>님 예약현황</h4>
-          <div class="table-responsive">
-          	<div id="reservation-container">
-          	<script type="text/html" id="reservation-template">
+		<div class="container">
+			<div class="row"
+				style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
+				<p>
+				<h4>
+					<span class="username"></span>님 예약현황
+				</h4>
+				<div class="table-responsive">
+					<div id="reservation-container">
+						<script type="text/html" id="reservation-template">
 			<div style="text-align: right"><span>&nbsp;</span></div>
             <table class="table table-striped table-sm">
               <thead>
@@ -95,15 +103,15 @@
               </tbody>
             </table>
 			</script>
-			</div>
-          </div>
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-	            <div class="btn-toolbar mb-2 mb-md-0">
-	            </div>
-          </div>
-          <div class="table-responsive">
-          	<div id="summary-container">
-          	<script type="text/html" id="summary-template">
+					</div>
+				</div>
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+					<div class="btn-toolbar mb-2 mb-md-0"></div>
+				</div>
+				<div class="table-responsive">
+					<div id="summary-container">
+						<script type="text/html" id="summary-template">
 			<h4>총 운동횟수는 <span id="lsnUseSum"></span>회 입니다 </h4>
             <table class="table table-striped table-sm">
               <thead>
@@ -142,29 +150,32 @@
               </tbody>
             </table>
 			</script>
+					</div>
+				</div>
 			</div>
-          </div>
-      </div>
-      </div>
-      </header>
+		</div>
+	</header>
 
 	<!-- Footer -->
 	<footer class="footer text-center" style="padding: 0 100 0 0;">
 		<div class="container">
 			<ul class="list-inline mb-5">
-				<li class="list-inline-item"><a
-					class="social-link rounded-circle text-white mr-3" href="#"> <i
-						class="icon-social-facebook"></i>
-				</a></li>
-				<li class="list-inline-item"><a
-					class="social-link rounded-circle text-white mr-3" href="#"> <i
-						class="icon-social-twitter"></i>
-				</a></li>
-				<li class="list-inline-item"><a
-					class="social-link rounded-circle text-white" href="#"> <i
-						class="icon-social-github"></i>
-				</a></li>
-			</ul>
+	        <li class="list-inline-item">
+	            <a class="social-link rounded-circle text-white" href="#">
+	              <i class="icon-home"></i>
+	            </a>
+	          </li>
+	          <li class="list-inline-item">
+	            <a class="social-link rounded-circle text-white mr-3" href="#">
+	              <i class="icon-social-instagram"></i>
+	            </a>
+	          </li>
+	          <li class="list-inline-item">
+	            <a class="social-link rounded-circle text-white mr-3" href="#">
+	              <i class="icon-social-tmblr"></i>
+	            </a>
+	          </li>
+	        </ul>
 			<!-- <div class="text-muted small mb-0">Copyright &copy; Todayspilates
 				2018</div> -->
 		</div>
