@@ -515,9 +515,4 @@
 		AND A.RSV_DT = #{rsvDt}
 		AND A.RSV_TM = #{rsvTm}
     </select>
-    <select id="getCommonCode" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	SELECT GROUP_CD, GROUP_NM, CODE, NAME
-    	FROM COMMON_CODE_M
-    	WHERE GROUP_CD = #{grpCd}
-    </select>
 </mapper>

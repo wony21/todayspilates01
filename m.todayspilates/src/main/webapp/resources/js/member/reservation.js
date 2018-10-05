@@ -20,6 +20,7 @@ function getDayOfWeek(day) {
 	return '(' + dayOfWeek + ')';
 }
 
+
 $(document).ready(function() {
 	var reservation = $('#reservation-template').html();
 	var summary = $('#summary-template').html();

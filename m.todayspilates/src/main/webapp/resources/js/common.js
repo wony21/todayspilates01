@@ -139,5 +139,31 @@
 			}
 		})
 	});
+	
+	let req = {};
+	req.groupCd = '009';
+	$.ajax({
+		type: 'GET',
+		url: '/api/common',
+		data: req,
+		success: function(res) {
+			console.log(res);
+			res.forEach(function(n) {
+				if ( n.code == '01') {
+					$('#lnk-home').bind('click', function() {
+						$(location).attr('href', n.name);
+					});
+				} else if ( n.code == '03') {
+					$('#lnk-instagram').bind('click', function() {
+						$(location).attr('href', n.name);
+					});
+				} else if ( n.code == '02') {
+					$('#lnk-blog').bind('click', function() {
+						$(location).attr('href', n.name);
+					});
+				}
+			})
+		}
+	});
 
 })();
