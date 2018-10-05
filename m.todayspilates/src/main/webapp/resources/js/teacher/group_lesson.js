@@ -48,7 +48,7 @@ fnObj.initEvent = function(user) {
         previous = this.value;
     }).change(function() {
         // Do something with the previous value after the change
-        console.log(previous);
+        //console.log(previous);
         // Make sure the previous value is updated
         // previous = this.value;
     });
@@ -128,12 +128,13 @@ fnObj.fn = {
 		let endDt = ax5.util.date(curr, { add:{d: 6-getDay}, return: 'yyyyMMdd'});
 		let thead = '<tr style="text-align:center; height: 40px;">';
 		let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-		let today = curr.getDate();
+		let today = ax5.util.date(curr, {return: 'yyyyMMdd'});
+		
 		for (var i = 0; i <= 6; i++) {
 			var date = ax5.util.date(sttDt, {add: {d: i}, return: 'yyyyMMdd'});
 			var day = ax5.util.date(sttDt, {add: {d: i}, return: 'dd'});
 			var d = ax5.util.date(sttDt, {add: {d: i}});
-			if (parseInt(day) !== today) {
+			if (date !== today) {
 				thead += '<th>' + WEEKS[i] + '</th>';
 				tbody += '<td data-id="' + date + '">' + day + '</td>';
 			} else {
@@ -153,6 +154,11 @@ fnObj.fn = {
 	getGroupLesson: function(user) {
 		let search = fnObj.fn.getData(user);
 		reservationList.length = 0;
+		
+		//검색일자가 유효하지 않으면 현재일자로 조회 
+		if (isValidDate(search.schDt) === false) {
+			search.schDt = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
+		}
 		
 		$.ajax({
 			type: 'GET',
@@ -235,7 +241,6 @@ $(document).ready(function() {
 	
 	//주차 datepicker 셋팅 (현재월을 기준으로 -3개월 ~ +3개월)
 	makeWeekSelectOptions('week', 3);
-	//console.log('max weeks:' + getWeekCountOfMonth('201810'));
 	//var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
 	
