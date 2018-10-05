@@ -30,6 +30,10 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
     <link href="css/boot4/stylish-portfolio.css" rel="stylesheet">
+    
+    <!-- fontello -->
+<link href="/css/fontello/footer.css" rel="stylesheet" >
+<link href="/css/fontello/css/fontello.css" rel="stylesheet" >
   </head>
   <body id="page-top">
     <!-- Navigation -->
@@ -188,7 +192,7 @@
         <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
       </div>
     </section-->
-    <!-- Footer -->
+    <!-- Footer 
     <footer class="footer text-center">
       <div class="container">
         <ul class="list-inline mb-5">
@@ -211,6 +215,12 @@
         <p class="text-muted small mb-0">Copyright &copy; Your Website 2017</p>
       </div>
     </footer>
+    -->
+    <footer class="footer text-center" style="padding: 0 100 0 0;">
+		<a id="lnk-home" href="#"><i class="ficon icon-home"></i></a>
+		<a id="lnk-instagram" href="#"><i class="ficon icon-instagram-filled"></i></a>
+		<a id="lnk-blog" href="#"><i class="ficon icon-vkontakte-rect-1"></i></a>
+</footer>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
