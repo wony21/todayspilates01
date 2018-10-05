@@ -131,6 +131,20 @@ body {
 /*
  * Utilities
  */
+.group-lesson-tbl-caption { 
+  text-align: left;
+  font-weight: bold;
+  font-size: 110%;
+  color: rgba(29, 128, 159, 1);
+}
+
+.group-lesson-tbl-caption-empty{ 
+  text-align: center;
+  font-weight: bold;
+  font-size: 110%;
+  color: rgba(29, 128, 159, 1);
+  padding: 100px 0 100px 0;
+}
 
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }

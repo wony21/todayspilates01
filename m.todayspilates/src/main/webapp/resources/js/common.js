@@ -19,12 +19,14 @@
 		if (!regEx.test(dateString)) {
 			return false; // Invalid format
 		}
-		
-		/*var d = new Date(dateString);
-		if (Number.isNaN(d.getTime())) {
-			return false; // Invalid date
+		return true;
+	}
+	
+	isValidTime = function(timeString) {
+		var regEx = /^\d{2}\d{2}$/;
+		if (!regEx.test(timeString)) {
+			return false; // Invalid format
 		}
-		return d.toISOString().slice(0, 10) === dateString;*/
 		return true;
 	}
 	
