@@ -16,7 +16,7 @@ public class CommonService extends BaseService {
 		CommonMapper mapper = sqlSession.getMapper(CommonMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.groupCd, groupCd);
-		return mapper.getCommon(parameter);
+		return mapper.getCommonCode(parameter);
 	}
 
 }

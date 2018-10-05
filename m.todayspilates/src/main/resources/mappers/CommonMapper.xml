@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="m.todays.pilates.domain.common.CommonMapper">
+    <select id="getCommonCode" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	SELECT GROUP_CD, GROUP_NM, CODE, NAME
+    	FROM COMMON_CODE_M
+    	WHERE GROUP_CD = #{groupCd}
+    </select>
+</mapper>

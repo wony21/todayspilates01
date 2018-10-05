@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface CommonMapper {
 	
-	List getCommon(Map<String, Object> parameter);
+	List getCommonCode(Map<String, Object> parameter);
 
 }

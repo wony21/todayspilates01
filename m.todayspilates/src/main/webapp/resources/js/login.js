@@ -38,6 +38,22 @@ $(document).ready(function() {
 		complete : function() {
 		}
 	});
+	
+	$.ajax({
+		type : 'GET',
+		url : '/api/common',
+		success : function(data) {
+			data.forEach(function(n){
+				if ( data.code == '01') {
+					window.localStorage.setItem('lnk-homepage', data.name);
+				} else if ( data.code == '02') {
+					window.localStorage.setItem('lnk-instagram', data.name);
+				} else if ( data.code == '03') {
+					window.localStorage.setItem('lnk-blog', data.name);
+				}	
+			});
+		}
+	});
 });
 
 $('#login_btn').bind('click', function() {
