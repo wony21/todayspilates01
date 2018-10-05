@@ -36,6 +36,9 @@
 <link href="/css/boot4/vendor/simple-line-icons.css" rel="stylesheet">
 <link href="/css/boot4/stylish-portfolio.css" rel="stylesheet">
 <link href="/css/boot4/dashboard.css" rel="stylesheet">
+<!-- fontello -->
+<link href="/css/fontello/footer.css" rel="stylesheet" >
+<link href="/css/fontello/css/fontello.css" rel="stylesheet" >
 <body id="page-top">
 	<!-- Navigation -->
 	<a class="menu-toggle rounded" href="#"> <i class="fa fa-bars"></i></a>
@@ -156,7 +159,7 @@
 		</div>
 	</header>
 
-	<!-- Footer -->
+	<!-- Footer
 	<footer class="footer text-center" style="padding: 0 100 0 0;">
 		<div class="container">
 			<ul class="list-inline mb-5">
@@ -172,13 +175,20 @@
 	          </li>
 	          <li class="list-inline-item">
 	            <a class="social-link rounded-circle text-white mr-3" href="#">
-	              <i class="icon-social-tmblr"></i>
+	              <i class="icon-social-naver"></i>
 	            </a>
 	          </li>
 	        </ul>
 			<!-- <div class="text-muted small mb-0">Copyright &copy; Todayspilates
-				2018</div> -->
+				2018</div> 
 		</div>
+	</footer>
+	-->
+	
+	<footer class="footer text-center" style="padding: 0 100 0 0;">
+		<a id="lnk-home" href="#"><i class="ficon icon-home"></i></a>
+		<a id="lnk-instagram" href="#"><i class="ficon icon-instagram-filled"></i></a>
+		<a id="lnk-blog" href="#"><i class="ficon icon-vkontakte-rect-1"></i></a>
 	</footer>
 
 	<!-- Scroll to Top Button-->
@@ -198,6 +208,7 @@
 	<script src="/js/boot4/vendor/mustache.js"></script>
 	<script src="/js/boot4/vendor/ax5core.min.js"></script>
 	<script src="/js/boot4/vendor/ax5formatter.js"></script>
+	
 </body>
 
 </html>

@@ -20,32 +20,6 @@ function getDayOfWeek(day) {
 	return '(' + dayOfWeek + ')';
 }
 
-function setLink() {
-	
-	let req = {};
-	req.groupCd = '009';
-	
-	$.ajax({
-		type: 'GET',
-		url: '/api/common',
-		data: req,
-		success: function(res) {
-			res.forEach(function(n) {
-				if ( n.code == '01') {
-					
-				} else if ( n.code == '02') {
-					
-				} else if ( n.code == '03') {
-					
-				}
-			})
-			console.log(res);
-			var html = Mustache.render(reservation, {list: res});
-			$('#reservation-container').append(html);
-		}
-	});
-	
-}
 
 $(document).ready(function() {
 	var reservation = $('#reservation-template').html();
