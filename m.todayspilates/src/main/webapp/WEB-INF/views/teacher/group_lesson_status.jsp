@@ -60,7 +60,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/group_lesson">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="/teacher/group_lesson_status">그룹레슨 등록현황관리</a></li>
+				href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">회원등록/수업등록</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -74,7 +74,7 @@
 	<header class="d-flex">
 		<div class="container">
 			<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
-				<h4>그룹레슨 등록현황</h4>
+				<h4>그룹레슨 등록현황 관리</h4>
 				<div class="table-responsive">
 					<div id="date-container">
 						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
