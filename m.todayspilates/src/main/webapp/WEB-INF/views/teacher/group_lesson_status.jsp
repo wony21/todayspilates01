@@ -162,7 +162,7 @@
 						<!-- 예약잡기 팝업body start -->
 						<div id="modal-caption" data-id="">test</div>
 						<div class="table-responsive" style="margin-top: 30px;">
-							<div id="date-container">
+							<div id="modal-date-container">
 			                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 			                        <div class="btn-toolbar mb-2 mb-md-0">
 			                            <div class="input-group">
