@@ -80,11 +80,6 @@
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" id="search-member">검색</button>
                                 </div>
-                                <!-- 
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-		  							예약	
-								</button>
-								 -->
                             </div>
                         </div>
                     </div>
@@ -231,23 +226,21 @@
 <!-- Footer -->
 <footer class="footer text-center" style="padding: 0 100 0 0">
     <div class="container">
-        <ul class="list-inline mb-5">
-            <li class="list-inline-item"><a
-                    class="social-link rounded-circle text-white mr-3" href="#"> <i
-                    class="icon-social-facebook"></i>
-            </a></li>
-            <li class="list-inline-item"><a
-                    class="social-link rounded-circle text-white mr-3" href="#"> <i
-                    class="icon-social-twitter"></i>
-            </a></li>
-            <li class="list-inline-item"><a
-                    class="social-link rounded-circle text-white" href="#"> <i
-                    class="icon-social-github"></i>
-            </a></li>
-        </ul>
-        <!-- <div class="text-muted small mb-0">Copyright &copy; Todayspilates
-            2018</div> -->
-    </div>
+			<ul class="list-inline mb-5">
+				<li class="list-inline-item"><a id="lnk-home"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-home"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-instagram"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-social-instagram"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-blog"
+					class="social-link rounded-circle text-white" href="#"> <i
+						class="fa fa-bold"></i>
+				</a></li>
+			</ul>
+		</div>
 </footer>
 
 <!-- Scroll to Top Button-->

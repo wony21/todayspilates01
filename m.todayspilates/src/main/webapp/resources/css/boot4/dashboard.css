@@ -131,8 +131,27 @@ body {
 /*
  * Utilities
  */
+ #caption {
+ 	display: -webkit-flex; /* Safari */
+    -webkit-justify-content: space-between; /* Safari 6.1+ */
+    display: flex;
+    justify-content: space-between;
+ }
+ 
+ #group-lesson-add-btn {
+ 	margin-top: 2px;
+ 	margin-bottom: 2px; 
+ 	margin-right: 5px; 
+ 	margin-left: 5px;
+ 	width: 70px;
+ }
+ 
 .group-lesson-tbl-caption { 
   text-align: left;
+  vertical-align: bottom;
+  margin-bottom: 0px; 
+  padding-top: 5px;
+  padding-right: 10px;
   font-weight: bold;
   font-size: 110%;
   color: rgba(29, 128, 159, 1);
