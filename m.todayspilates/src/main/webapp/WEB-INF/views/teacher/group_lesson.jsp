@@ -103,7 +103,7 @@
 							<div class="input-group" style="vertical-align: bottom;" id="caption">
 								<label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
 								<button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption" 
-									data-toggle="modal" data-target="#exampleModalCenter">예약하기</button>
+									data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
 							</div>
 							<table class="table table-striped table-sm">
 							  <thead>
@@ -160,7 +160,7 @@
 					</div>
 					<div class="modal-body" style="padding: 0.5rem;">
 						<!-- 예약잡기 팝업body start -->
-						<div>test</div>
+						<div id="modal-caption" data-id="">test</div>
 						<div class="table-responsive" style="margin-top: 30px;">
 							<div id="date-container">
 			                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
