@@ -48,7 +48,7 @@ fnObj.initEvent = function(user) {
         previous = this.value;
     }).change(function() {
         // Do something with the previous value after the change
-        console.log(previous);
+        //console.log(previous);
         // Make sure the previous value is updated
         // previous = this.value;
     });
@@ -60,36 +60,38 @@ fnObj.initEvent = function(user) {
 		let value = $(this).val();
 		let result = false;
 		
-		if (value === 0) {
+		if (value == 0) {
 			return false;
 		}
-		if (value === '2') {
+		if (value == '1') {
 			result = confirm('출석처리 하겠습니까?');
 			if (result) {
 				// 출석처리
 				$.extend(reservationList[lsn], {atndFg: value});
 				fnObj.fn.updateLessonAttendance(lsn, value);
 				alert('출석처리가 완료되었습니다.');
-				location.refresh();
+				//location.refresh();
 			} 
-		} else if (value === '1') {
+		} else if (value == '2') {
 			result = confirm('결석처리 하겠습니까?');
 			if (result) {
 				fnObj.fn.updateLessonAttendance(lsn, value);
 				alert('결석처리가 완료되었습니다.');
-				location.refresh();
+				//location.refresh();
 			}
-		} else if (value === '3') {
+		} else if (value == '3') {
 			result = confirm('정말 삭제하겠습니까?');
 			if (result) {
 				fnObj.fn.updateLessonAttendance(lsn, value);
 				alert('예약을 삭제하였습니다');
-				location.refresh();
+				//location.refresh();
 			}
 		}
 		
 		if (!result) {
 			$(this).val(previous);
+		} else {
+			fnObj.fn.getPrivateLesson(user);
 		}
 		previous = value;
 	});
@@ -128,12 +130,12 @@ fnObj.fn = {
 		let endDt = ax5.util.date(curr, { add:{d: 6-getDay}, return: 'yyyyMMdd'});
 		let thead = '<tr style="text-align:center; height: 40px;">';
 		let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-		let today = curr.getDate();
+		let today = ax5.util.date(curr, {return: 'yyyyMMdd'});
 		for (var i = 0; i <= 6; i++) {
 			var date = ax5.util.date(sttDt, {add: {d: i}, return: 'yyyyMMdd'});
 			var day = ax5.util.date(sttDt, {add: {d: i}, return: 'dd'});
 			var d = ax5.util.date(sttDt, {add: {d: i}});
-			if (parseInt(day) !== today) {
+			if (date !== today) {
 				thead += '<th>' + WEEKS[i] + '</th>';
 				tbody += '<td data-id="' + date + '">' + day + '</td>';
 			} else {
@@ -197,9 +199,9 @@ fnObj.fn = {
 		let data = [].concat(reservationList[lsn]);
 		let url = '/api/teacher/lesson/attend';
 		
-		if (val === 1) {
+		if (val == '2') {
 			url = '/api/teacher/lesson/absent';
-		} else if (val === 3) {
+		} else if (val == '3') {
 			url = '/api/teacher/lesson/cancel';
 		} 
 		

@@ -192,35 +192,25 @@
         <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
       </div>
     </section-->
-    <!-- Footer 
-    <footer class="footer text-center">
-      <div class="container">
-        <ul class="list-inline mb-5">
-        <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white" href="#">
-              <i class="icon-home"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-instagram"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-twitter"></i>
-            </a>
-          </li>
-        </ul>
-        <p class="text-muted small mb-0">Copyright &copy; Your Website 2017</p>
-      </div>
-    </footer>
-    -->
+
     <footer class="footer text-center" style="padding: 0 100 0 0;">
-		<a id="lnk-home" href="#"><i class="ficon icon-home"></i></a>
-		<a id="lnk-instagram" href="#"><i class="ficon icon-instagram-filled"></i></a>
-		<a id="lnk-blog" href="#"><i class="ficon icon-vkontakte-rect-1"></i></a>
-</footer>
+		<div class="container">
+			<ul class="list-inline mb-5">
+				<li class="list-inline-item"><a id="lnk-home"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-home"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-instagram"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-social-instagram"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-blog"
+					class="social-link rounded-circle text-white" href="#"> <i
+						class="fa fa-bold"></i>
+				</a></li>
+			</ul>
+		</div>
+	</footer>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">

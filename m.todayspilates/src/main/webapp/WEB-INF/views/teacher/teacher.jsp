@@ -242,25 +242,21 @@
  -->
     <footer class="footer text-center">
       <div class="container">
-        <ul class="list-inline mb-5">
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-facebook"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
-              <i class="icon-social-twitter"></i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white" href="#">
-              <i class="icon-social-github"></i>
-            </a>
-          </li>
-        </ul>
-        <p class="text-muted small mb-0">Copyright &copy; Your Website 2017</p>
-      </div>
+			<ul class="list-inline mb-5">
+				<li class="list-inline-item"><a id="lnk-home"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-home"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-instagram"
+					class="social-link rounded-circle text-white mr-3" href="#"> <i
+						class="icon-social-instagram"></i>
+				</a></li>
+				<li class="list-inline-item"><a id="lnk-blog"
+					class="social-link rounded-circle text-white" href="#"> <i
+						class="fa fa-bold"></i>
+				</a></li>
+			</ul>
+		</div>
     </footer>
 
     <!-- Scroll to Top Button-->

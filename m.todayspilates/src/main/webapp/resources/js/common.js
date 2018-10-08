@@ -45,6 +45,11 @@
 	    return weekSeq;
 	}
 	
+	/**
+	 * 기간내 월별 주차를 셋팅한다.
+	 * @param target target element id
+	 * @param period search period (-period ~ +period)
+	 */
 	makeWeekSelectOptions = function (target, period) {
 		var today = new Date();
 		let sttDt = ax5.util.date(today, { add:{d: -today.getDay()}, return: 'yyyyMMdd'});
@@ -52,9 +57,6 @@
 		var obj = document.getElementById(target);
 	    obj.options.length = 0;
 	    
-	    console.log('ttt:' + ax5.util.weeksOfMonth("2018-09-30").count);
-	    console.log('ttt2:' + ax5.util.weeksOfMonth("2018-12-01").count);
-	    console.log('sttDt:' + sttDt);
 		for (var m = -period; m <= period; m++) {
 			let formattedDate = ax5.util.date((today), {add:{m: m}, return:'yyyy/MM/dd'});
 			let fdate = formattedDate.split('/');
@@ -66,10 +68,9 @@
 		    var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
 		    var week = sdate.getDay();
 		    sdate.setDate(sdate.getDate() - week);
-		    //각 달의 마직막주 시작일자
+		    //각 달의 마지막주 시작일자
 		    var edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
 		    
-		    console.log('edate: ' + edate);
 		    var i = 1;
 		    while(endDate.getTime() >= edate.getTime()) {
 		        var sYear = sdate.getFullYear();
@@ -92,7 +93,7 @@
 		        if(sttDt === stxt) {
 		        	seled = stxt;
 		        }
-		 
+		        //todo : 마지막주와 다음달 첫주의 중복된 경우 처리필요.... (주차로 인정되기 위한 조건은 한주에 4일이상이 표시되어야 한다)
 		        obj.options[obj.options.length] = new Option(year+'년 ' + month + '월 ' + i++ +'주', stxt);
 		        sdate = new Date(edate.getFullYear(), edate.getMonth(), edate.getDate() + 1);
 		        edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
@@ -102,8 +103,8 @@
 	}
 
 	/**
-	 * @param {name} parameter key
-	 * @url {url} default none
+	 * @param name parameter key
+	 * @param url current page url
 	 */
 	getParameterByName = function(name, url) {
 		if (!url)
@@ -125,7 +126,6 @@
 
 		var url = protocol + '//' + hostname + ':' + port + '/' + page;
 		//window.location = "news_edit.html?article_id=" + articleId;
-		console.log('url:' + url);
 		$(location).attr('href', url);
 		return false;
 	}
@@ -135,7 +135,6 @@
 			type : 'POST',
 			url : '/logout',
 			success : function(res) {
-				console.log('logout success...');
 				goPage('login');
 			}
 		})

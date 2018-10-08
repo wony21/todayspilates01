@@ -1,8 +1,8 @@
 var common = {};
 let fnObj = {};
 let reservationList = [];
-let previous = '0';
 let reservationTmpl = $('#reservation-template').html();
+let newReservationTmpl = $('#new-reservation-template').html();
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 //view 초기화 
@@ -42,56 +42,65 @@ fnObj.initEvent = function(user) {
 		fnObj.fn.getGroupLesson(user);
 	});
 	
-	// 예약출결처리 이전값 저장
-	$(".attend-process select").on('focus', function () {
-        // Store the current value on focus and on change
-        previous = this.value;
-    }).change(function() {
-        // Do something with the previous value after the change
-        console.log(previous);
-        // Make sure the previous value is updated
-        // previous = this.value;
-    });
-	
 	// 예약에 대한 출결처리 선택
 	$(document.body).on('change', '.attend-process', function(e) {
 		// var optionSelected = $("option:selected", this);
-		let lsn = $(this).parent().parent().index();	// 선택된 예약정보
+		//let lsn = $(this).parent().parent().index();	// 선택된 예약정보
+		let lsnData = $(this).parent().parent().data('id');
+		let previous = $(this).parent().data('id');
 		let value = $(this).val();
 		let result = false;
 		
 		if (value === 0) {
 			return false;
 		}
-		if (value === '2') {
+		if (value === '1') {
 			result = confirm('출석처리 하겠습니까?');
 			if (result) {
 				// 출석처리
-				$.extend(reservationList[lsn], {atndFg: value});
-				fnObj.fn.updateLessonAttendance(lsn, value);
+				$.extend(lsnData, {atndFg: value});
+				fnObj.fn.updateLessonAttendance(user, lsnData, value);
 				alert('출석처리가 완료되었습니다.');
-				location.refresh();
+				//location.reload();
 			} 
-		} else if (value === '1') {
+		} else if (value === '2') {
 			result = confirm('결석처리 하겠습니까?');
 			if (result) {
-				fnObj.fn.updateLessonAttendance(lsn, value);
+				fnObj.fn.updateLessonAttendance(user, lsnData, value);
 				alert('결석처리가 완료되었습니다.');
-				location.refresh();
+				//location.reload();
 			}
 		} else if (value === '3') {
 			result = confirm('정말 삭제하겠습니까?');
 			if (result) {
-				fnObj.fn.updateLessonAttendance(lsn, value);
+				fnObj.fn.updateLessonAttendance(user, lsnData, value);
 				alert('예약을 삭제하였습니다');
-				location.refresh();
+				//location.reload();
 			}
 		}
 		
 		if (!result) {
 			$(this).val(previous);
+		} else {
+			fnObj.fn.getGroupLesson(user);
 		}
-		previous = value;
+	});
+	
+	$(document.body).on('click', '#group-lesson-add-btn', function(e) {
+		console.log('add button click');
+		fnObj.fn.getGroupLessonByMember();
+	});
+	
+	$("#new-reservation-container").on('click', 'tbody tr', function(e) {
+		let lsnData = $(this).data('id');
+		selectedItem = $(this).index(); //selectedItem => 전역변수
+		
+		//선택한 일자의 개인레슨을 조회 
+		let selected = $(this).children('td').hasClass("selected");
+	    $("#new-reservation-container tbody tr").children('td').removeClass("selected");
+	    if(!selected) {
+	    	$(this).children('td').addClass("selected");
+	    }
 	});
 }
 
@@ -116,7 +125,6 @@ fnObj.fn = {
 	//주간 Datepicker 초기화 
 	setDatePicker: function(dateString) {
 		let curr = new Date(); // get current date
-		//let first = curr.getDate() - curr.getDay(); // First day is the day of the week.
 		let getDay = curr.getDay();
 		let sttDt = '';
 		
@@ -128,12 +136,13 @@ fnObj.fn = {
 		let endDt = ax5.util.date(curr, { add:{d: 6-getDay}, return: 'yyyyMMdd'});
 		let thead = '<tr style="text-align:center; height: 40px;">';
 		let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-		let today = curr.getDate();
+		let today = ax5.util.date(curr, {return: 'yyyyMMdd'});
+		
 		for (var i = 0; i <= 6; i++) {
 			var date = ax5.util.date(sttDt, {add: {d: i}, return: 'yyyyMMdd'});
 			var day = ax5.util.date(sttDt, {add: {d: i}, return: 'dd'});
 			var d = ax5.util.date(sttDt, {add: {d: i}});
-			if (parseInt(day) !== today) {
+			if (date !== today) {
 				thead += '<th>' + WEEKS[i] + '</th>';
 				tbody += '<td data-id="' + date + '">' + day + '</td>';
 			} else {
@@ -154,6 +163,11 @@ fnObj.fn = {
 		let search = fnObj.fn.getData(user);
 		reservationList.length = 0;
 		
+		//검색일자가 유효하지 않으면 현재일자로 조회 
+		if (isValidDate(search.schDt) === false) {
+			search.schDt = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
+		}
+		
 		$.ajax({
 			type: 'GET',
 			url: '/api/teacher/reservation/group/list',
@@ -164,6 +178,12 @@ fnObj.fn = {
 						m.stTm = (isValidTime(m.stTm) === false) ? '' : m.stTm.substr(0, 2) + ':' + m.stTm.substr(2, 3);  // hh:mm
 						m.lsnTm = m.lsnTm.toFixed(1);
 						m.schedule.forEach(function(n, idx) {
+							n.empNo = m.empNo;
+							n.empNm = m.empNm;
+							n.lsnLv = m.lsnLv;
+							n.lsnLvNm = m.lsnLvNm;
+							n.lsnData = JSON.stringify(n);
+							
 							n.idx = idx + 1;
 							n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
 							
@@ -198,13 +218,13 @@ fnObj.fn = {
 		return false;
 	},
 	// 출결처리
-	updateLessonAttendance: function(lsn, val) {
-		let data = [].concat(reservationList[lsn]);
+	updateLessonAttendance: function(user, lsnData, val) {
+		let data = [].concat(lsnData);
 		let url = '/api/teacher/lesson/attend';
 		
-		if (val === 1) {
+		if (val == '2') {
 			url = '/api/teacher/lesson/absent';
-		} else if (val === 3) {
+		} else if (val == '3') {
 			url = '/api/teacher/lesson/cancel';
 		} 
 		
@@ -218,6 +238,24 @@ fnObj.fn = {
 			}
 		});
 		return false;
+	},
+	
+	/**
+	 * 검색된 회원의 레슨목록 조회
+	 * @param storCd store code
+	 * @param memberNm member name
+	 */
+	getGroupLessonByMember: function() {
+		let search = '';
+		$.ajax({
+			type: 'GET',
+			url: '/api/teacher/reservation/group',
+			data: {storCd: '001', memberNo: '00032'},
+			success: function(res) {
+				var html = Mustache.render(newReservationTmpl, {list: res});
+				$('#new-reservation-container').html(html);
+			}
+		});
 	},
 	// 조회조건
 	getData: function(user) {
@@ -235,7 +273,6 @@ $(document).ready(function() {
 	
 	//주차 datepicker 셋팅 (현재월을 기준으로 -3개월 ~ +3개월)
 	makeWeekSelectOptions('week', 3);
-	//console.log('max weeks:' + getWeekCountOfMonth('201810'));
 	//var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
 	
