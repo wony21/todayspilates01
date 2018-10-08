@@ -356,9 +356,18 @@
 	INNER JOIN COMMON_CODE_M C
 	ON C.GROUP_CD = '003'
 	AND A.LSN_FG = C.CODE
+	INNER JOIN MEMBER_M D
+	ON A.COMP_CD = D.COMP_CD
+	AND A.STOR_CD = D.STOR_CD
+	AND A.MEMBER_NO = D.MEMBER_NO
 	WHERE A.COMP_CD = #{compCd}
 		AND A.STOR_CD = #{storCd}
-		AND A.MEMBER_NO = #{memberNo}
+		<if test="memberNo != null and memberNo != ''">
+			AND A.MEMBER_NO = #{memberNo}
+		</if>
+		<if test="memberNm != null and memberNm != ''">
+			AND D.MEMBER_NM = #{memberNm}
+		</if>
 		<if test="lsnFg != null and lsnFg != ''">
 			AND B.LSN_FG = #{lsnFg}
 		</if>

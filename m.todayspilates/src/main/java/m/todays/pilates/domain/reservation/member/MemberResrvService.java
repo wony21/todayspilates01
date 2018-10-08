@@ -136,12 +136,12 @@ public class MemberResrvService extends BaseService {
 		return mapper.getMemberLesson(parameter);
 	}
 	
-	public List getMemberGroupLesson(String compCd, String storCd, String memberNo) {
+	public List getMemberGroupLesson(String compCd, String storCd, String memberNm) {
 		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
-		parameter.put(ParamNames.memberNo, memberNo);
+		parameter.put(ParamNames.memberNm, memberNm);
 		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.GROUP);
 		return mapper.getMemberLesson(parameter);
 	}
