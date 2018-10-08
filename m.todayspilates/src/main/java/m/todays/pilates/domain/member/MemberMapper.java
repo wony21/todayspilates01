@@ -6,4 +6,7 @@ import java.util.Map;
 public interface MemberMapper {
 	
 	List getMember();
+	List getMemberList(Map<String, Object> parameter);
+	List getExistMember(Map<String, Object> parameter);
+	//void addMemberM(Map<String, Object> parameter);
 }

@@ -30,6 +30,10 @@ public class ParamNames {
 	public final static String columns = "columns";
 	public final static String opt1 = "opt1";
 	public final static String groupCd = "groupCd";
+	public final static String mobile = "mobile";
+	public final static String sex = "sex";
+	public final static String remark = "remark";
+	public final static String existMember = "existMember";
 	
 	
 	

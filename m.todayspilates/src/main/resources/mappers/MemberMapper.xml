@@ -13,4 +13,42 @@
         	AND MEMBER_NO = #{memberNo}
         </if>
     </select>
+    <select id="getMemberList" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+	    SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.MEMBER_NM, A.HP, 
+			B.STOR_NM, A.ENT_FG, C.NAME AS ENT_FG_NM,
+			CASE WHEN A.SEX = 'F' THEN '여' ELSE '남' END SEX, A.REMARK
+		FROM MEMBER_M A
+		INNER JOIN STOR_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		INNER JOIN COMMON_CODE_M C
+		ON C.GROUP_CD = '006'
+		AND C.CODE = A.ENT_FG
+		WHERE A.COMP_CD = #{compCd}
+		<if test="storCd != null and storCd != ''">
+			AND A.STOR_CD = #{storCd}
+		</if>
+		<if test="memberNm != null and memberNm != ''">
+			AND A.MEMBER_NM LIKE '%' + #{memberNm} + '%'
+		</if>
+		ORDER BY A.COMP_CD, A.STOR_CD, A.MEMBER_NO
+    </select>
+    <select id="getExistMember" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+	    SELECT *
+		FROM MEMBER_M A
+		WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD = #{storCd}
+		AND replace(A.HP, '-', '') = replace(#{mobile}, '-', '')
+    </select>
+    <!-- 
+    <insert id="addMemberM" parameterType="hashmap">
+    INSERT INTO MEMBER_M (COMP_CD, STOR_CD, MEMBER_NO, MEMBER_NM, HP, SEX, ENT_DT, ENT_FG, REMARK, USE_YN, INS_USER, UPT_USER)
+	VALUES (#{compCd}, #{storCd}, (SELECT REPLICATE('0', 5-LEN(MEMBER_NO))+MEMBER_NO MEMBER_NO
+	  							FROM (
+									SELECT 
+										CONVERT(VARCHAR, ISNULL(MAX(CONVERT(INT, MEMBER_NO)), 0)+1) MEMBER_NO
+									FROM MEMBER_M ) X),
+			#{memberNm}, REPLACE(#{mobile}, '-', ''), #{sex}, CONVERT(VARCHAR, GETDATE(), 112), '1', #{remark}, 'Y', #{userCd}, #{userCd})
+    </insert>
+     -->
 </mapper>
