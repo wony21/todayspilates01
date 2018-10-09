@@ -18,6 +18,7 @@ import m.todays.pilates.common.BaseController;
 import m.todays.pilates.common.SessionUtils;
 import m.todays.pilates.common.api.ApiResponse;
 import m.todays.pilates.domain.common.CommonService;
+import m.todays.pilates.domain.member.MemberService;
 import m.todays.pilates.domain.reservation.member.MemberResrvService;
 /**
  * 
@@ -33,6 +34,9 @@ public class ReservationController extends BaseController {
 
 	@Autowired
 	MemberResrvService memberResrvService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	CommonService commonService;

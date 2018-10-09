@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import m.todays.pilates.common.BaseController;
 import m.todays.pilates.common.ParamNames;
 import m.todays.pilates.common.SessionUtils;
+import m.todays.pilates.common.api.ApiResponse;
 import m.todays.pilates.domain.member.MemberService;
 
 @Controller
@@ -53,6 +55,23 @@ public class MemberController extends BaseController {
 		List array = new ArrayList();
 		array.add(result);
 		return array;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/member/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse addMember(@RequestBody List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd =  SessionUtils.getCurrentUser().getMemberNo();
+		for(HashMap<String, Object> item : requestParams) {
+			String storCd = (String)item.get(ParamNames.storCd);
+			String mobile = (String)item.get(ParamNames.mobile);
+			String memberNm = (String)item.get(ParamNames.memberNm);
+			String sex = (String)item.get(ParamNames.sex);
+			String entDt = (String)item.get(ParamNames.entDt);
+			String remark = (String)item.get(ParamNames.remark);
+			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entDt, remark, userCd);
+		}
+		return ApiResponse.success("ok");
 	}
 }
 

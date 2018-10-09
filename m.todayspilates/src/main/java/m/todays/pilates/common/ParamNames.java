@@ -33,6 +33,7 @@ public class ParamNames {
 	public final static String mobile = "mobile";
 	public final static String sex = "sex";
 	public final static String remark = "remark";
+	public final static String entDt = "entDt";
 	public final static String existMember = "existMember";
 	
 	

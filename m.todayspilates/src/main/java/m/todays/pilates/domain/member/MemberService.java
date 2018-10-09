@@ -1,16 +1,21 @@
 package m.todays.pilates.domain.member;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import m.todays.pilates.common.ParamNames;
+import m.todays.pilates.common.api.ApiResponse;
 
 @Service
 public class MemberService {
@@ -45,8 +50,9 @@ public class MemberService {
 		parameter.put(ParamNames.mobile, mobile);
 		return memberMapper.getExistMember(parameter);
 	}
-	/**
-	public void addMember(String compCd, String storCd, String mobile, String memberNm, String sex, String entDt, String remark, String userCd) {
+	
+	@Transactional
+	public ApiResponse addMember(String compCd, String storCd, String mobile, String memberNm, String sex, String entDt, String remark, String userCd) {
 		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
@@ -56,12 +62,20 @@ public class MemberService {
 		String sexCode = "F";
 		if ( sex.equals("남")) {
 			sexCode = "M";
-		} 
+		}
+		Date today = new Date();
+		String entDt2 = DateFormatUtils.format(today, "yyyyMMdd");
+		parameter.put(ParamNames.entDt, entDt);
 		parameter.put(ParamNames.sex, sexCode);
 		parameter.put(ParamNames.remark, remark);
 		parameter.put(ParamNames.userCd, userCd);
-		memberMapper.addMemberM(parameter);
+		try {
+			memberMapper.addMember(parameter);
+			return ApiResponse.success("ok");
+		} catch (Exception e) {
+			return ApiResponse.error("exist user");
+		}
+		
 		
 	}
-	**/
 }

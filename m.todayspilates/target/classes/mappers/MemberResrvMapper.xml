@@ -1,366 +1,490 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="m.todays.pilates.domain.reservation.member.MemberResrvMapper">
-    <select id="getRervation_tmp" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-        /* 회원 예약 조회 */
-        SELECT A.COMP_CD, A.STOR_CD, A.LSN_CD, A.LSN_NM, B.EMP_NO, B.MEMBER_NO, B.RSV_DT, B.DY, B.RSV_TM, A.LSN_TM, B.EMP_NM, B.LSN_USE_CNT, B.LSN_CNT, B.LSN_ED_DT
-		FROM LSN_M A 
-		  LEFT OUTER JOIN (
-		  SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, C.EMP_NO,
-		      D.MEMBER_NM, A.RSV_DT, SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1) DY, A.RSV_TM,
-		      C.EMP_NM, LSN_USE_CNT, LSN_CNT, LSN_ED_DT
-		  FROM (SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ, A.EMP_NO, A.LSN_CD, A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM, A.ATND_FG
-		        FROM ATND_T A,
-		        (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ
-		        FROM ATND_T
-		        WHERE COMP_CD = #{compCd}
-		          AND STOR_CD = #{storCd}
-		          AND MEMBER_NO = #{memberNo}
-		        GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
-		        WHERE A.COMP_CD = B.COMP_CD
-		        AND A.STOR_CD = B.STOR_CD
-		        AND A.MEMBER_NO = B.MEMBER_NO
-		        AND A.LSN_NO = B.LSN_NO
-		        AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M C, MEMBER_M D
-		  WHERE A.COMP_CD = B.COMP_CD
-		    AND A.STOR_CD = B.STOR_CD
-		    AND A.MEMBER_NO = B.MEMBER_NO
-		    AND A.LSN_NO = B.LSN_NO
-		    AND A.COMP_CD = C.COMP_CD
-		    AND A.STOR_CD = C.STOR_CD
-		    AND A.EMP_NO = C.EMP_NO
-		    AND A.COMP_CD = D.COMP_CD
-		    AND A.STOR_CD = D.STOR_CD
-		    AND A.MEMBER_NO = D.MEMBER_NO ) B
-		ON A.COMP_CD = B.COMP_CD
-		  AND A.STOR_CD = B.STOR_CD
-		  AND A.LSN_CD = B.LSN_CD
-		ORDER BY COMP_CD, STOR_CD, LSN_CD
-    </select>
-    <select id="getRervation_bak2" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-        /* 회원 예약 조회 */
-        SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, H.LSN_SEQ
-        	,M.MEMBER_NM
-			,F.LSN_NM, F.LSN_TM
-			,A.LSN_TY, A.LSN_FG
-			,G.NAME AS LSN_FG_NM
-			,A.LSN_CNT
-			,A.LSN_USE_CNT
-			,A.LSN_MOD_CNT
-			,A.LSN_ST_DT
-			,A.LSN_ED_DT
-			,H.ATND_FG
-			,A.LSN_EXP_WK
-			,ISNULL(H.LSN_NUM, 0) AS LSN_NUM
-			,H.RSV_DT
-			,H.RSV_TM
-			,A.EMP_NO
-			,E.EMP_NM
-			,A.REMARK
-			,A.CLS_FG
-		FROM MEMBER_LSN_M A
-		LEFT OUTER JOIN EMP_M E ON A.COMP_CD = E.COMP_CD
-			AND A.STOR_CD = E.STOR_CD
-			AND A.EMP_NO = E.EMP_NO
-		INNER JOIN LSN_M F ON A.COMP_CD = F.COMP_CD
-			AND A.STOR_CD = F.STOR_CD
-			AND A.LSN_CD = F.LSN_CD
-		INNER JOIN (
-			SELECT CODE, NAME
-			FROM COMMON_CODE_M
-			WHERE GROUP_CD = '003'
-			) G ON A.LSN_FG = G.CODE
-		INNER JOIN (
-			SELECT T.COMP_CD, T.STOR_CD, T.MEMBER_NO, T.LSN_NO, T.LSN_NUM, T.LSN_SEQ, T.ATND_FG, T.RSV_DT, T.RSV_TM
-			FROM ATND_T T
-			INNER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_NUM) AS LSN_NUM
-						FROM ATND_T
-						WHERE COMP_CD = #{compCd}
-							AND STOR_CD = #{storCd}
-							<if test="memberNo != null and memberNo != ''">
-								AND MEMBER_NO = #{memberNo}
-							</if>
-							AND ATND_FG IN ('0','1','2','4')
-						GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) T2
-			ON T.COMP_CD = T2.COMP_CD
-			AND T.STOR_CD = T2.STOR_CD
-			AND T.MEMBER_NO = T2.MEMBER_NO
-			AND T.LSN_NO = T2.LSN_NO
-			AND T.LSN_NUM = T2.LSN_NUM
-			<if test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
-				AND T.RSV_DT BETWEEN #{sttDt} AND #{endDt}
-				AND T.RSV_DT IS NOT NULL
-			</if>
-			) H ON A.COMP_CD = H.COMP_CD
-			AND A.STOR_CD = H.STOR_CD
-			AND A.MEMBER_NO = H.MEMBER_NO
-			AND A.LSN_NO = H.LSN_NO
-		INNER JOIN MEMBER_M M
-		ON A.COMP_CD = M.COMP_CD
-		AND A.STOR_CD = M.STOR_CD
-		AND A.MEMBER_NO = M.MEMBER_NO
-		WHERE A.COMP_CD = #{compCd}
-			AND A.STOR_CD = #{storCd}
-			<if test="memberNo != null and memberNo != ''">
-				AND A.MEMBER_NO = #{memberNo}
-			</if>
-			<if test="memberNm != null and memberNm != ''">
-				AND A.MEMBER_NO IN (SELECT MEMBER_NO 
-									FROM MEMBER_M
-									WHERE COMP_CD = #{compCd}
-										AND STOR_CD = #{storCd}
-										AND MEMBER_NM LIKE '%' + #{memberNm} + '%')	
-			</if>
-			<if test="empNo != null and empNo != ''">
-				AND A.EMP_NO = #{empNo}
-			</if>
-			<if test="rsvDt != null and rsvDt != ''">
-				AND H.RSV_DT = #{rsvDt}
-			</if>
-			AND A.CLS_FG = '1'
-			AND F.LSN_FG = '1'
-			<if test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
-				AND H.RSV_DT IS NOT NULL
-			</if>
-		ORDER BY A.COMP_CD
-			,A.STOR_CD
-			,A.MEMBER_NO
-    </select>
-    <select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-        /* 회원 예약 조회 */
-        SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, H.LSN_SEQ
-        	,M.MEMBER_NM
-			,F.LSN_NM, F.LSN_TM
-			,A.LSN_TY, A.LSN_FG
-			,G.NAME AS LSN_FG_NM
-			,A.LSN_CNT
-			,A.LSN_USE_CNT
-			,A.LSN_MOD_CNT
-			,A.LSN_ST_DT
-			,CASE WHEN A.LSN_ED_DT = '' THEN NULL ELSE A.LSN_ED_DT END LSN_ED_DT
-			,H.ATND_FG
-			,A.LSN_EXP_WK
-			,ISNULL(H.LSN_NUM, A.LSN_USE_CNT) AS LSN_NUM
-			,H.RSV_DT, H.RSV_TM
-			,CASE WHEN H.RSV_DT IS NOT NULL THEN SUBSTRING(DATENAME(DW, H.RSV_DT), 1, 1) END AS DY
-			,A.EMP_NO
-			,E.EMP_NM
-			,A.REMARK
-			,A.CLS_FG
-		FROM MEMBER_LSN_M A
-		LEFT OUTER JOIN EMP_M E ON A.COMP_CD = E.COMP_CD
-			AND A.STOR_CD = E.STOR_CD
-			AND A.EMP_NO = E.EMP_NO
-		INNER JOIN LSN_M F ON A.COMP_CD = F.COMP_CD
-			AND A.STOR_CD = F.STOR_CD
-			AND A.LSN_CD = F.LSN_CD
-		INNER JOIN (
-			SELECT CODE, NAME
-			FROM COMMON_CODE_M
-			WHERE GROUP_CD = '003'
-			) G ON A.LSN_FG = G.CODE
-		LEFT OUTER JOIN (
-			SELECT T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM
-				,T.LSN_SEQ ,T.ATND_FG ,T.RSV_DT ,T.RSV_TM
-			FROM ATND_T T
-			<where>
-				<if test="atndFg != null and atndFg != ''">
-					ATND_FG IN	
-					<foreach collection="atndFg" open="(" close=")" index="i" item="atnd" separator=",">
-						#{atnd}	
-					</foreach>
-				</if>
-			</where>
-			) H ON A.COMP_CD = H.COMP_CD
-			AND A.STOR_CD = H.STOR_CD
-			AND A.MEMBER_NO = H.MEMBER_NO
-			AND A.LSN_NO = H.LSN_NO
-			<if test="memberNo != null and memberNo != ''">
-				AND H.MEMBER_NO = #{memberNo}
-			</if>
-			<if test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
-				AND H.RSV_DT BETWEEN #{sttDt} AND #{endDt}
-			</if>
-		INNER JOIN MEMBER_M M
-		ON A.COMP_CD = M.COMP_CD
-		AND A.STOR_CD = M.STOR_CD
-		AND A.MEMBER_NO = M.MEMBER_NO
-		WHERE A.COMP_CD = #{compCd}
-			AND A.STOR_CD = #{storCd}
-			<if test="memberNo != null and memberNo != ''">
-				AND A.MEMBER_NO = #{memberNo}
-			</if>
-			<if test="memberNm != null and memberNm != ''">
-				AND A.MEMBER_NO IN (SELECT MEMBER_NO 
-									FROM MEMBER_M
-									WHERE COMP_CD = #{compCd}
-										AND STOR_CD = #{storCd}
-										AND MEMBER_NM LIKE '%' + #{memberNm} + '%')	
-			</if>
-			<if test="empNo != null and empNo != ''">
-				AND A.EMP_NO = #{empNo}
-			</if>
-			<if test="rsvDt != null and rsvDt != ''">
-				<![CDATA[ AND H.RSV_DT >= #{rsvDt} ]]>
-			</if>
-			AND A.CLS_FG = '1'
-			<if test="lsnFg != null and lsnFg != ''">
-				AND F.LSN_FG = #{lsnFg}
-			</if>
-			<if test="opt1 != null and opt1 != ''">
-				AND H.RSV_DT IS NOT NULL
-			</if>
-		ORDER BY A.COMP_CD
-			,A.STOR_CD
-			,A.MEMBER_NO
-			,RSV_DT ASC, RSV_TM ASC
-    </select>
-    <select id="getDetailUseLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	/* 사용내역보기 */
-    	SELECT 
-		  COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
-		  ATND_DT, SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG,
-			CASE 
-				WHEN ATND_FG = '0' THEN '예약'
-				WHEN ATND_FG = '1' THEN '출석'
-				WHEN ATND_FG = '2' THEN '결석'
-				WHEN ATND_FG = '3' THEN '취소'
-				WHEN ATND_FG = '4' THEN '조정'
-				ELSE ''
-			END ATND_NM,
-			CANC_RMK
-		FROM ATND_T
-		WHERE COMP_CD = #{compCd}
-		  AND STOR_CD = #{storCd}
-		  AND LSN_CD = #{lsnCd}
-		  AND MEMBER_NO = #{memberNo}
-		  AND ATND_FG IN ('1','2','3')
-		ORDER BY LSN_SEQ
-    </select>
-    <select id="getLessonSummary" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	/* 총 운동횟수 */
-    	SELECT 
-    		${columns}
-		    ISNULL(SUM(B.LSN_USE_CNT), 0) LSN_USE_SUM
+<mapper
+	namespace="m.todays.pilates.domain.reservation.member.MemberResrvMapper">
+	<select id="getRervation_tmp" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 회원 예약 조회 */
+		SELECT A.COMP_CD,
+		A.STOR_CD, A.LSN_CD, A.LSN_NM, B.EMP_NO, B.MEMBER_NO,
+		B.RSV_DT, B.DY,
+		B.RSV_TM, A.LSN_TM, B.EMP_NM, B.LSN_USE_CNT,
+		B.LSN_CNT, B.LSN_ED_DT
 		FROM LSN_M A
-		  LEFT OUTER JOIN 
-		  (SELECT COMP_CD, STOR_CD, LSN_CD, SUM(LSN_USE_CNT) AS LSN_USE_CNT
-		    FROM MEMBER_LSN_M A
-		    WHERE COMP_CD = #{compCd}
-		      AND STOR_CD = #{storCd}
-		      AND MEMBER_NO = #{memberNo}
-		    GROUP BY COMP_CD, STOR_CD, LSN_CD) B
+		LEFT OUTER JOIN (
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO,
+		A.LSN_NO, A.LSN_CD, C.EMP_NO,
+		D.MEMBER_NM, A.RSV_DT,
+		SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1)
+		DY, A.RSV_TM,
+		C.EMP_NM,
+		LSN_USE_CNT, LSN_CNT, LSN_ED_DT
+		FROM (SELECT A.COMP_CD, A.STOR_CD,
+		A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ,
+		A.EMP_NO, A.LSN_CD, A.RSV_DT,
+		A.RSV_TM, A.ATND_DT, A.ATND_TM,
+		A.ATND_FG
+		FROM ATND_T A,
+		(SELECT COMP_CD,
+		STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ
+		FROM ATND_T
+		WHERE
+		COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO = #{memberNo}
+		GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
+		WHERE A.COMP_CD =
+		B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.MEMBER_NO = B.MEMBER_NO
+		AND
+		A.LSN_NO = B.LSN_NO
+		AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M
+		C, MEMBER_M D
+		WHERE A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND
+		A.MEMBER_NO = B.MEMBER_NO
+		AND A.LSN_NO = B.LSN_NO
+		AND A.COMP_CD =
+		C.COMP_CD
+		AND A.STOR_CD = C.STOR_CD
+		AND A.EMP_NO = C.EMP_NO
+		AND A.COMP_CD
+		= D.COMP_CD
+		AND A.STOR_CD = D.STOR_CD
+		AND A.MEMBER_NO = D.MEMBER_NO ) B
 		ON A.COMP_CD = B.COMP_CD
 		AND A.STOR_CD = B.STOR_CD
-		AND A.LSN_CD = B.LSN_CD
-		WHERE A.USE_YN = 'Y'
-    </select>
-    <select id="getWeeklyLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	/* 주간 레슨 정보 */
-    	SELECT RSV_DT, COUNT(*) RSV_CNT
-		FROM (
-		SELECT T.COMP_CD, T.STOR_CD, T.MEMBER_NO, T.LSN_NO, ATND_FG, RSV_DT
+		AND A.LSN_CD =
+		B.LSN_CD
+		ORDER BY COMP_CD, STOR_CD, LSN_CD
+	</select>
+	<select id="getRervation_bak2" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 회원 예약 조회 */
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO,
+		A.LSN_CD, H.LSN_SEQ
+		,M.MEMBER_NM
+		,F.LSN_NM, F.LSN_TM
+		,A.LSN_TY, A.LSN_FG
+		,G.NAME AS LSN_FG_NM
+		,A.LSN_CNT
+		,A.LSN_USE_CNT
+		,A.LSN_MOD_CNT
+		,A.LSN_ST_DT
+		,A.LSN_ED_DT
+		,H.ATND_FG
+		,A.LSN_EXP_WK
+		,ISNULL(H.LSN_NUM, 0)
+		AS LSN_NUM
+		,H.RSV_DT
+		,H.RSV_TM
+		,A.EMP_NO
+		,E.EMP_NM
+		,A.REMARK
+		,A.CLS_FG
+		FROM
+		MEMBER_LSN_M A
+		LEFT OUTER JOIN EMP_M E ON A.COMP_CD = E.COMP_CD
+		AND
+		A.STOR_CD = E.STOR_CD
+		AND A.EMP_NO = E.EMP_NO
+		INNER JOIN LSN_M F ON
+		A.COMP_CD = F.COMP_CD
+		AND A.STOR_CD = F.STOR_CD
+		AND A.LSN_CD = F.LSN_CD
+		INNER JOIN (
+		SELECT CODE, NAME
+		FROM COMMON_CODE_M
+		WHERE GROUP_CD = '003'
+		) G ON A.LSN_FG = G.CODE
+		INNER JOIN (
+		SELECT T.COMP_CD, T.STOR_CD,
+		T.MEMBER_NO, T.LSN_NO, T.LSN_NUM, T.LSN_SEQ,
+		T.ATND_FG, T.RSV_DT,
+		T.RSV_TM
 		FROM ATND_T T
-		INNER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ FROM ATND_T
-		GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) T2
+		INNER JOIN (SELECT COMP_CD, STOR_CD, MEMBER_NO,
+		LSN_NO, MAX(LSN_NUM) AS
+		LSN_NUM
+		FROM ATND_T
+		WHERE COMP_CD = #{compCd}
+		AND
+		STOR_CD = #{storCd}
+		<if test="memberNo != null and memberNo != ''">
+			AND MEMBER_NO = #{memberNo}
+		</if>
+		AND ATND_FG IN ('0','1','2','4')
+		GROUP BY COMP_CD, STOR_CD, MEMBER_NO,
+		LSN_NO) T2
 		ON T.COMP_CD = T2.COMP_CD
 		AND T.STOR_CD = T2.STOR_CD
-		AND T.MEMBER_NO = T2.MEMBER_NO
-		AND T.LSN_SEQ = T2.LSN_SEQ
-		WHERE T.COMP_CD = #{compCd}
-			AND T.STOR_CD = #{storCd}
-			AND T.MEMBER_NO IN (SELECT MEMBER_NO FROM MEMBER_M
-								WHERE COMP_CD = #{compCd}
-									AND STOR_CD = #{storCd}
-									AND MEMBER_NM LIKE '%' + #{memberNm} +  '%')
-			AND T.EMP_NO = #{empNo}
-			AND T.ATND_FG = '0'
-			AND T.RSV_DT BETWEEN #{sttDt} AND #{endDt}) X
-		GROUP BY RSV_DT 
-    </select>
-    <select id="getUserLession" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	/* 개인레슨 예약현황 조회 */
-    	SELECT C.NAME,  A.LSN_TY, 
-				 A.LSN_FG, A.LSN_USE_CNT, A.LSN_CNT,
-				 A.LSN_ST_DT, A.LSN_ED_DT,
-				  A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, A.MEMBER_NO, A.EMP_NO
-		FROM MEMBER_LSN_M A
-			INNER JOIN LSN_M B
-			ON A.COMP_CD = B.COMP_CD
-			AND A.STOR_CD = B.STOR_CD
-			AND A.LSN_CD = B.LSN_CD
-			INNER JOIN (SELECT NAME, CODE 
-								FROM COMMON_CODE_M
-								WHERE GROUP_CD = '003'
-									AND USE_YN = 'Y') C
-			ON A.LSN_TY = C.CODE
-		WHERE A.COMP_CD = #{compCd}
-			AND A.STOR_CD = #{storCd}
+		AND
+		T.MEMBER_NO = T2.MEMBER_NO
+		AND T.LSN_NO = T2.LSN_NO
+		AND T.LSN_NUM =
+		T2.LSN_NUM
+		<if
+			test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
+			AND T.RSV_DT BETWEEN #{sttDt} AND #{endDt}
+			AND T.RSV_DT IS NOT
+			NULL
+		</if>
+		) H ON A.COMP_CD = H.COMP_CD
+		AND A.STOR_CD = H.STOR_CD
+		AND A.MEMBER_NO =
+		H.MEMBER_NO
+		AND A.LSN_NO = H.LSN_NO
+		INNER JOIN MEMBER_M M
+		ON A.COMP_CD =
+		M.COMP_CD
+		AND
+		A.STOR_CD = M.STOR_CD
+		AND A.MEMBER_NO = M.MEMBER_NO
+		WHERE
+		A.COMP_CD =
+		#{compCd}
+		AND A.STOR_CD = #{storCd}
+		<if test="memberNo != null and memberNo != ''">
 			AND A.MEMBER_NO = #{memberNo}
-    </select>
-    <select id="getWeeklyDetail" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    	/* 개인레슨 출석부(예약목록) */
-    	SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.EMP_NO, A.LSN_NO, A.LSN_CD, A.LSN_TM, A.LSN_SEQ, E.LSN_NM,
-		    D.MEMBER_NM, A.RSV_DT, SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1) DY, A.RSV_TM,
-		    C.EMP_NM, LSN_USE_CNT, LSN_CNT, LSN_ED_DT, A.ATND_FG
-		FROM (SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ, A.EMP_NO, A.LSN_CD, A.LSN_TM, A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM, A.ATND_FG
-		      FROM ATND_T A,
-		      (SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ
-		      FROM ATND_T
-		      WHERE COMP_CD = #{compCd}
-		        AND STOR_CD = #{storCd}
-		      <if test="memberNo != null and memberNo != ''">
-     	        AND MEMBER_NO = #{memberNo}
-		      </if>
-		      <if test="empNo != null and empNo != ''">
-	            AND EMP_NO = #{empNo}
-		      </if>
-		      <if test="lsnNo != null and lsnNo != ''">
-			  	AND LSN_NO = #{lsnNo}
-			  </if>
-			  <if test="lsnCd != null and lsnCd != ''">
-			  	AND LSN_CD = #{lsnCd}
-			  </if>
-		      GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
-		      WHERE A.COMP_CD = B.COMP_CD
-		      AND A.STOR_CD = B.STOR_CD
-		      AND A.MEMBER_NO = B.MEMBER_NO
-		      AND A.LSN_NO = B.LSN_NO
-		      AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M C, MEMBER_M D, LSN_M E
+		</if>
+		<if test="memberNm != null and memberNm != ''">
+			AND A.MEMBER_NO IN (SELECT MEMBER_NO
+			FROM MEMBER_M
+			WHERE
+			COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NM LIKE '%' +
+			#{memberNm} + '%')
+		</if>
+		<if test="empNo != null and empNo != ''">
+			AND A.EMP_NO = #{empNo}
+		</if>
+		<if test="rsvDt != null and rsvDt != ''">
+			AND H.RSV_DT = #{rsvDt}
+		</if>
+		AND A.CLS_FG = '1'
+		AND F.LSN_FG = '1'
+		<if
+			test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
+			AND H.RSV_DT IS NOT NULL
+		</if>
+		ORDER BY A.COMP_CD
+		,A.STOR_CD
+		,A.MEMBER_NO
+	</select>
+	<select id="getRervation" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		/* 회원 예약 조회 */
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO,
+		A.LSN_CD, H.LSN_SEQ
+		,M.MEMBER_NM
+		,F.LSN_NM, F.LSN_TM
+		,A.LSN_TY, A.LSN_FG
+		,G.NAME AS LSN_FG_NM
+		,A.LSN_CNT
+		,A.LSN_USE_CNT
+		,A.LSN_MOD_CNT
+		,A.LSN_ST_DT
+		,CASE WHEN A.LSN_ED_DT = '' THEN NULL ELSE A.LSN_ED_DT END
+		LSN_ED_DT
+		,H.ATND_FG
+		,A.LSN_EXP_WK
+		,ISNULL(H.LSN_NUM, A.LSN_USE_CNT) AS
+		LSN_NUM
+		,H.RSV_DT, H.RSV_TM
+		,CASE WHEN H.RSV_DT IS NOT NULL THEN
+		SUBSTRING(DATENAME(DW, H.RSV_DT), 1,
+		1) END AS DY
+		,A.EMP_NO
+		,E.EMP_NM
+		,A.REMARK
+		,A.CLS_FG
+		FROM MEMBER_LSN_M A
+		LEFT OUTER JOIN EMP_M E ON
+		A.COMP_CD = E.COMP_CD
+		AND A.STOR_CD = E.STOR_CD
+		AND A.EMP_NO = E.EMP_NO
+		INNER JOIN LSN_M F ON A.COMP_CD = F.COMP_CD
+		AND A.STOR_CD = F.STOR_CD
+		AND A.LSN_CD = F.LSN_CD
+		INNER JOIN (
+		SELECT CODE, NAME
+		FROM COMMON_CODE_M
+		WHERE GROUP_CD = '003'
+		) G ON A.LSN_FG = G.CODE
+		LEFT OUTER JOIN (
+		SELECT
+		T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM
+		,T.LSN_SEQ
+		,T.ATND_FG ,T.RSV_DT ,T.RSV_TM
+		FROM ATND_T T
+		<where>
+			<if test="atndFg != null and atndFg != ''">
+				ATND_FG IN
+				<foreach collection="atndFg" open="(" close=")" index="i"
+					item="atnd" separator=",">
+					#{atnd}
+				</foreach>
+			</if>
+		</where>
+		) H ON A.COMP_CD = H.COMP_CD
+		AND A.STOR_CD = H.STOR_CD
+		AND A.MEMBER_NO = H.MEMBER_NO
+		AND A.LSN_NO = H.LSN_NO
+		<if test="memberNo != null and memberNo != ''">
+			AND H.MEMBER_NO = #{memberNo}
+		</if>
+		<if
+			test="sttDt != null and sttDt != '' and endDt != null and endDt != ''">
+			AND H.RSV_DT BETWEEN #{sttDt} AND #{endDt}
+		</if>
+		INNER JOIN MEMBER_M M
+		ON A.COMP_CD = M.COMP_CD
+		AND A.STOR_CD = M.STOR_CD
+		AND A.MEMBER_NO = M.MEMBER_NO
+		WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD
+		= #{storCd}
+		<if test="memberNo != null and memberNo != ''">
+			AND A.MEMBER_NO = #{memberNo}
+		</if>
+		<if test="memberNm != null and memberNm != ''">
+			AND A.MEMBER_NO IN (SELECT MEMBER_NO
+			FROM MEMBER_M
+			WHERE
+			COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NM LIKE '%' +
+			#{memberNm} + '%')
+		</if>
+		<if test="empNo != null and empNo != ''">
+			AND A.EMP_NO = #{empNo}
+		</if>
+		<if test="rsvDt != null and rsvDt != ''">
+				<![CDATA[ AND H.RSV_DT >= #{rsvDt} ]]>
+		</if>
+		AND A.CLS_FG = '1'
+		<if test="lsnFg != null and lsnFg != ''">
+			AND F.LSN_FG = #{lsnFg}
+		</if>
+		<if test="opt1 != null and opt1 != ''">
+			AND H.RSV_DT IS NOT NULL
+		</if>
+		ORDER BY A.COMP_CD
+		,A.STOR_CD
+		,A.MEMBER_NO
+		,RSV_DT ASC, RSV_TM ASC
+	</select>
+	<select id="getDetailUseLesson" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 사용내역보기 */
+		SELECT
+		COMP_CD,
+		STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
+		ATND_DT,
+		SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG,
+		CASE
+		WHEN ATND_FG = '0' THEN '예약'
+		WHEN ATND_FG = '1' THEN '출석'
+		WHEN ATND_FG =
+		'2' THEN '결석'
+		WHEN ATND_FG = '3' THEN '취소'
+		WHEN ATND_FG = '4' THEN '조정'
+		ELSE ''
+		END ATND_NM,
+		CANC_RMK
+		FROM ATND_T
+		WHERE COMP_CD = #{compCd}
+		AND
+		STOR_CD = #{storCd}
+		AND LSN_CD = #{lsnCd}
+		AND MEMBER_NO = #{memberNo}
+		AND ATND_FG IN ('1','2','3')
+		ORDER BY LSN_SEQ
+	</select>
+	<select id="getLessonSummary" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 총 운동횟수 */
+		SELECT
+		${columns}
+		ISNULL(SUM(B.LSN_USE_CNT), 0) LSN_USE_SUM
+		FROM LSN_M A
+		LEFT OUTER JOIN
+		(SELECT COMP_CD, STOR_CD, LSN_CD, SUM(LSN_USE_CNT) AS LSN_USE_CNT
+		FROM
+		MEMBER_LSN_M A
+		WHERE COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND
+		MEMBER_NO = #{memberNo}
+		GROUP BY COMP_CD, STOR_CD, LSN_CD) B
+		ON
+		A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD =
+		B.STOR_CD
+		AND A.LSN_CD = B.LSN_CD
+		WHERE A.USE_YN = 'Y'
+	</select>
+	<select id="getWeeklyLesson" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 주간 레슨 정보 */
+		SELECT RSV_DT,
+		COUNT(*) RSV_CNT
+		FROM (
+		SELECT T.COMP_CD, T.STOR_CD,
+		T.MEMBER_NO,
+		T.LSN_NO, ATND_FG, RSV_DT
+		FROM ATND_T T
+		INNER JOIN (SELECT
+		COMP_CD,
+		STOR_CD, MEMBER_NO, LSN_NO, MAX(LSN_SEQ) LSN_SEQ FROM ATND_T
+		GROUP BY
+		COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) T2
+		ON T.COMP_CD =
+		T2.COMP_CD
+		AND
+		T.STOR_CD = T2.STOR_CD
+		AND T.MEMBER_NO = T2.MEMBER_NO
+		AND
+		T.LSN_SEQ =
+		T2.LSN_SEQ
+		WHERE T.COMP_CD = #{compCd}
+		AND T.STOR_CD = #{storCd}
+		AND
+		T.MEMBER_NO IN (SELECT MEMBER_NO FROM MEMBER_M
+		WHERE COMP_CD =
+		#{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NM LIKE '%' + #{memberNm} +
+		'%')
+		AND T.EMP_NO = #{empNo}
+		AND T.ATND_FG = '0'
+		AND T.RSV_DT BETWEEN
+		#{sttDt} AND #{endDt}) X
+		GROUP BY RSV_DT
+	</select>
+	<select id="getUserLession" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 개인레슨 예약현황 조회 */
+		SELECT C.NAME,
+		A.LSN_TY,
+		A.LSN_FG, A.LSN_USE_CNT, A.LSN_CNT,
+		A.LSN_ST_DT, A.LSN_ED_DT,
+		A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, A.MEMBER_NO, A.EMP_NO
+		FROM
+		MEMBER_LSN_M
+		A
+		INNER JOIN LSN_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD =
+		B.STOR_CD
+		AND A.LSN_CD = B.LSN_CD
+		INNER JOIN (SELECT NAME, CODE
+		FROM
+		COMMON_CODE_M
+		WHERE GROUP_CD = '003'
+		AND USE_YN = 'Y') C
+		ON A.LSN_TY =
+		C.CODE
+		WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD = #{storCd}
+		AND
+		A.MEMBER_NO = #{memberNo}
+	</select>
+	<select id="getWeeklyDetail" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 개인레슨 출석부(예약목록) */
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO,
+		A.EMP_NO, A.LSN_NO, A.LSN_CD,
+		A.LSN_TM, A.LSN_SEQ, E.LSN_NM,
+		D.MEMBER_NM, A.RSV_DT, SUBSTRING(DATENAME(WEEKDAY, A.RSV_DT), 1, 1)
+		DY, A.RSV_TM,
+		C.EMP_NM, LSN_USE_CNT, LSN_CNT, LSN_ED_DT, A.ATND_FG
+		FROM
+		(SELECT
+		A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ,
+		A.EMP_NO,
+		A.LSN_CD, A.LSN_TM, A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM,
+		A.ATND_FG
+		FROM ATND_T A,
+		(SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO,
+		MAX(LSN_SEQ) LSN_SEQ
+		FROM ATND_T
+		WHERE COMP_CD = #{compCd}
+		AND STOR_CD =
+		#{storCd}
+		<if test="memberNo != null and memberNo != ''">
+			AND MEMBER_NO = #{memberNo}
+		</if>
+		<if test="empNo != null and empNo != ''">
+			AND EMP_NO = #{empNo}
+		</if>
+		<if test="lsnNo != null and lsnNo != ''">
+			AND LSN_NO = #{lsnNo}
+		</if>
+		<if test="lsnCd != null and lsnCd != ''">
+			AND LSN_CD = #{lsnCd}
+		</if>
+		GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
+		WHERE A.COMP_CD =
+		B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.MEMBER_NO = B.MEMBER_NO
+		AND
+		A.LSN_NO = B.LSN_NO
+		AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M
+		C, MEMBER_M D, LSN_M
+		E
 		WHERE A.COMP_CD = B.COMP_CD
-		  AND A.STOR_CD = B.STOR_CD
-		  AND A.MEMBER_NO = B.MEMBER_NO
-		  AND A.LSN_NO = B.LSN_NO
-		  AND A.COMP_CD = C.COMP_CD
-		  AND A.STOR_CD = C.STOR_CD
-		  AND A.EMP_NO = C.EMP_NO
-		  AND A.COMP_CD = D.COMP_CD
-		  AND A.STOR_CD = D.STOR_CD
-		  AND A.MEMBER_NO = D.MEMBER_NO
-		  AND A.COMP_CD = E.COMP_CD
-	      AND A.STOR_CD = E.STOR_CD
-	      AND A.LSN_CD = E.LSN_CD
-	      AND E.USE_YN = 'Y'
-	      AND E.LSN_CD IN ('01','02','04','05') -- 개인,듀엣,키즈P,키즈D
-		  AND A.RSV_DT BETWEEN #{sttDt} AND #{endDt}
-		ORDER BY A.COMP_CD, A.STOR_CD, LSN_ED_DT, A.LSN_NO, A.LSN_CD, A.MEMBER_NO
-    </select>
-    <select id="getMemberLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, B.LSN_NM, A.LSN_USE_CNT, 
-    		A.LSN_FG, C.NAME LSN_FG_NM, A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
-	FROM MEMBER_LSN_M A
-	INNER JOIN LSN_M B
-	ON A.COMP_CD = B.COMP_CD
-	AND A.STOR_CD = B.STOR_CD
-	AND A.LSN_CD = B.LSN_CD	
-	INNER JOIN COMMON_CODE_M C
-	ON C.GROUP_CD = '003'
-	AND A.LSN_FG = C.CODE
-	INNER JOIN MEMBER_M D
-	ON A.COMP_CD = D.COMP_CD
-	AND A.STOR_CD = D.STOR_CD
-	AND A.MEMBER_NO = D.MEMBER_NO
-	WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD =
+		B.STOR_CD
+		AND A.MEMBER_NO = B.MEMBER_NO
+		AND A.LSN_NO = B.LSN_NO
+		AND
+		A.COMP_CD = C.COMP_CD
+		AND A.STOR_CD = C.STOR_CD
+		AND A.EMP_NO = C.EMP_NO
+		AND A.COMP_CD = D.COMP_CD
+		AND A.STOR_CD = D.STOR_CD
+		AND A.MEMBER_NO =
+		D.MEMBER_NO
+		AND A.COMP_CD = E.COMP_CD
+		AND A.STOR_CD = E.STOR_CD
+		AND
+		A.LSN_CD = E.LSN_CD
+		AND E.USE_YN = 'Y'
+		AND E.LSN_CD IN
+		('01','02','04','05') -- 개인,듀엣,키즈P,키즈D
+		AND A.RSV_DT BETWEEN #{sttDt}
+		AND #{endDt}
+		ORDER BY A.COMP_CD, A.STOR_CD,
+		LSN_ED_DT, A.LSN_NO,
+		A.LSN_CD, A.MEMBER_NO
+	</select>
+	<select id="getMemberLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD,
+		B.LSN_NM, A.LSN_USE_CNT, D.MEMBER_NM,
+		A.LSN_FG, C.NAME LSN_FG_NM,
+		A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
+		FROM MEMBER_LSN_M A
+		INNER
+		JOIN LSN_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND
+		A.LSN_CD = B.LSN_CD
+		INNER JOIN COMMON_CODE_M C
+		ON C.GROUP_CD = '003'
+		AND
+		A.LSN_FG = C.CODE
+		INNER JOIN MEMBER_M D
+		ON A.COMP_CD = D.COMP_CD
+		AND
+		A.STOR_CD = D.STOR_CD
+		AND A.MEMBER_NO = D.MEMBER_NO
+		WHERE A.COMP_CD =
+		#{compCd}
 		AND A.STOR_CD = #{storCd}
 		<if test="memberNo != null and memberNo != ''">
 			AND A.MEMBER_NO = #{memberNo}
@@ -372,156 +496,200 @@
 			AND B.LSN_FG = #{lsnFg}
 		</if>
 		AND A.CLS_FG = '1'
-	ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
-    </select>
-    <insert id="insertAttend" parameterType="hashmap">
-    	INSERT INTO ATND_T (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER, UPT_USER)
-		VALUES(#{compCd},#{storCd},#{memberNo},#{lsnNo}, 
-				(SELECT ISNULL(MAX(LSN_SEQ)+1, 1) LSN_SEQ
-				FROM ATND_T M
-				WHERE COMP_CD = #{compCd}
-					AND STOR_CD = #{storCd}
-					AND MEMBER_NO = #{memberNo}
-					AND LSN_NO = #{lsnNo}
-					AND LSN_CD  = #{lsnCd}),
-				(SELECT ISNULL(SUM(LSN_TM), 0)+${lsnTm} LSN_NUM
-				FROM ATND_T M
-				WHERE COMP_CD = #{compCd}
-					AND STOR_CD = #{storCd}
-					AND MEMBER_NO = #{memberNo}
-					AND LSN_NO = #{lsnNo}
-					AND LSN_CD  = #{lsnCd}
-					AND ATND_FG IN ('0' ,'1', '2')),
-				#{empNo}, 
-				#{lsnCd},
-				#{lsnTm},
-				#{rsvDt},
-				#{rsvTm},
-				0,
-				0,
-				#{userCd},
-				#{userCd})
-    </insert>
-    <update id="updateAttend" parameterType="hashmap">
-    	UPDATE ATND_T
-		SET ATND_DT = CONVERT(CHAR, GETDATE(), 112),
-		  ATND_TM = SUBSTRING(REPLACE(CONVERT(CHAR, GETDATE(), 24), ':', ''), 1, 4),
-		  ATND_FG = #{atndFg},
-		  UPT_USER = #{userCd},
-		  UPT_DATE = GETDATE()
+		ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
+	</select>
+	<insert id="insertAttend" parameterType="hashmap">
+		INSERT INTO ATND_T
+		(COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM,
+		EMP_NO, LSN_CD,
+		LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER,
+		UPT_USER)
+		VALUES(#{compCd},#{storCd},#{memberNo},#{lsnNo},
+		(SELECT
+		ISNULL(MAX(LSN_SEQ)+1, 1) LSN_SEQ
+		FROM ATND_T M
+		WHERE COMP_CD =
+		#{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_NO
+		= #{lsnNo}
+		AND LSN_CD = #{lsnCd}),
+		(SELECT ISNULL(SUM(LSN_TM),
+		0)+${lsnTm} LSN_NUM
+		FROM ATND_T M
 		WHERE COMP_CD = #{compCd}
-		  AND STOR_CD = #{storCd}
-		  AND MEMBER_NO = #{memberNo}
-		  AND LSN_NO = #{lsnNo}
-		  AND LSN_CD = #{lsnCd}
-		  AND LSN_SEQ = ${lsnSeq}
-    </update>
-    <update id="recalculatorLessonNum" parameterType="hashmap">
-	    MERGE INTO ATND_T X
+		AND STOR_CD =
+		#{storCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_NO = #{lsnNo}
+		AND LSN_CD =
+		#{lsnCd}
+		AND ATND_FG IN ('0' ,'1', '2')),
+		#{empNo},
+		#{lsnCd},
+		#{lsnTm},
+		#{rsvDt},
+		#{rsvTm},
+		0,
+		0,
+		#{userCd},
+		#{userCd})
+	</insert>
+	<update id="updateAttend" parameterType="hashmap">
+		UPDATE ATND_T
+		SET ATND_DT
+		= CONVERT(CHAR, GETDATE(), 112),
+		ATND_TM =
+		SUBSTRING(REPLACE(CONVERT(CHAR, GETDATE(), 24), ':', ''), 1, 4),
+		ATND_FG = #{atndFg},
+		UPT_USER = #{userCd},
+		UPT_DATE = GETDATE()
+		WHERE
+		COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_NO = #{lsnNo}
+		AND LSN_CD = #{lsnCd}
+		AND LSN_SEQ = ${lsnSeq}
+	</update>
+	<update id="recalculatorLessonNum" parameterType="hashmap">
+		MERGE INTO ATND_T X
 		USING (
-		SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
-				(SELECT ISNULL(SUM(LSN_TM), 0)+A.LSN_TM
-					FROM ATND_T
-					WHERE COMP_CD = A.COMP_CD
-						AND STOR_CD = A.STOR_CD
-						AND MEMBER_NO = A.MEMBER_NO
-						AND LSN_NO = A.LSN_NO
+		SELECT COMP_CD, STOR_CD, MEMBER_NO, LSN_NO,
+		LSN_SEQ,
+		(SELECT ISNULL(SUM(LSN_TM), 0)+A.LSN_TM
+		FROM ATND_T
+		WHERE
+		COMP_CD = A.COMP_CD
+		AND STOR_CD = A.STOR_CD
+		AND MEMBER_NO = A.MEMBER_NO
+		AND LSN_NO = A.LSN_NO
 						<![CDATA[
 						AND LSN_SEQ < A.LSN_SEQ
 						]]>
-						AND ATND_FG IN ('0','1','2')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
-					FROM ATND_T A
-					WHERE COMP_CD = #{compCd}
-						AND MEMBER_NO = #{memberNo}
-						AND LSN_NO = #{lsnCd}) Y
+		AND ATND_FG IN ('0','1','2')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
+		FROM
+		ATND_T A
+		WHERE COMP_CD = #{compCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_NO
+		= #{lsnCd}) Y
 		ON (X.COMP_CD = Y.COMP_CD
-			AND X.STOR_CD = Y.STOR_CD
-			AND X.MEMBER_NO = Y.MEMBER_NO
-			AND X.LSN_NO = Y.LSN_NO
-			AND X.LSN_SEQ = Y.LSN_SEQ)
+		AND X.STOR_CD = Y.STOR_CD
+		AND
+		X.MEMBER_NO = Y.MEMBER_NO
+		AND X.LSN_NO = Y.LSN_NO
+		AND X.LSN_SEQ =
+		Y.LSN_SEQ)
 		WHEN MATCHED THEN
-			UPDATE SET
-			X.LSN_NUM = Y.LSN_NUM;
-    </update>
-    <update id="updateLessonUseCount" parameterType="hashmap">
-    	UPDATE MEMBER_LSN_M
-    	SET LSN_USE_CNT = (SELECT ISNULL(MAX(LSN_NUM), 0) LSN_NUM
-							FROM ATND_T M
-							WHERE COMP_CD = #{compCd}
-								AND STOR_CD = #{storCd}
-								AND MEMBER_NO = #{memberNo}
-								AND LSN_NO = #{lsnNo}
-								AND LSN_CD  = #{lsnCd}
-								AND LSN_SEQ = (SELECT MAX(LSN_SEQ)
-												FROM ATND_T 
-												WHERE COMP_CD = M.COMP_CD
-												AND STOR_CD = M.STOR_CD
-												AND MEMBER_NO = M.MEMBER_NO
-												AND LSN_NO = M.LSN_NO
-												AND LSN_CD = M.LSN_CD)),
-    		UPT_DATE = GETDATE(),
-    		UPT_USER = #{userCd}
-    	WHERE COMP_CD = #{compCd}
-    		AND STOR_CD = #{storCd}
-    		AND MEMBER_NO = #{memberNo}
-    		AND LSN_CD = #{lsnCd}
-    		AND LSN_NO = #{lsnNo}
-    </update>
-    <delete id="deleteAttend" parameterType="hashmap">
-    	DELETE ATND_T
-    	WHERE COMP_CD = #{compCd}
-    		AND STOR_CD = #{storCd}
-    		AND MEMBER_NO = #{memberNo}
-    		AND LSN_NO = #{lsnNo}
-    		AND LSN_SEQ = ${lsnSeq}
-    </delete>
-    <select id="getGroupLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    /* 그룹출석부 - 그룹 스케쥴시간표 */
-	SELECT A.COMP_CD, A.STOR_CD, A.SCH_DT, A.ST_TM, A.SEQ,
-			A.LSN_TM, A.LSN_LV, B.NAME AS LSN_LV_NM, A.EMP_NO, C.EMP_NM, A.SCH_WEEK
-	FROM GRP_SCH_M A
-	INNER JOIN COMMON_CODE_M B
-	ON B.GROUP_CD = '007'
-	AND A.LSN_LV = B.CODE
-	INNER JOIN EMP_M C
-	ON A.COMP_CD = C.COMP_CD
-	AND A.STOR_CD = C.STOR_CD
-	AND A.EMP_NO = C.EMP_NO
-	WHERE A.COMP_CD = #{compCd}
-		AND A.STOR_CD = #{storCd}
+		UPDATE SET
+		X.LSN_NUM = Y.LSN_NUM;
+	</update>
+	<update id="updateLessonUseCount" parameterType="hashmap">
+		UPDATE
+		MEMBER_LSN_M
+		SET LSN_USE_CNT = (SELECT ISNULL(MAX(LSN_NUM), 0) LSN_NUM
+		FROM ATND_T M
+		WHERE COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND
+		MEMBER_NO = #{memberNo}
+		AND LSN_NO = #{lsnNo}
+		AND LSN_CD = #{lsnCd}
+		AND
+		LSN_SEQ = (SELECT MAX(LSN_SEQ)
+		FROM ATND_T
+		WHERE COMP_CD = M.COMP_CD
+		AND
+		STOR_CD = M.STOR_CD
+		AND MEMBER_NO = M.MEMBER_NO
+		AND LSN_NO = M.LSN_NO
+		AND LSN_CD = M.LSN_CD)),
+		UPT_DATE = GETDATE(),
+		UPT_USER = #{userCd}
+		WHERE COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO =
+		#{memberNo}
+		AND LSN_CD = #{lsnCd}
+		AND LSN_NO = #{lsnNo}
+	</update>
+	<delete id="deleteAttend" parameterType="hashmap">
+		DELETE ATND_T
+		WHERE
+		COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_NO = #{lsnNo}
+		AND LSN_SEQ = ${lsnSeq}
+	</delete>
+	<select id="getGroupLesson" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 그룹출석부 - 그룹 스케쥴시간표 */
+		SELECT
+		A.COMP_CD, A.STOR_CD, A.SCH_DT, A.ST_TM, A.SEQ,
+		A.LSN_TM, A.LSN_LV,
+		B.NAME AS LSN_LV_NM, A.EMP_NO, C.EMP_NM, A.SCH_WEEK
+		FROM GRP_SCH_M A
+		INNER JOIN COMMON_CODE_M B
+		ON B.GROUP_CD = '007'
+		AND A.LSN_LV = B.CODE
+		INNER JOIN EMP_M C
+		ON A.COMP_CD = C.COMP_CD
+		AND A.STOR_CD = C.STOR_CD
+		AND A.EMP_NO = C.EMP_NO
+		WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD =
+		#{storCd}
 		AND A.SCH_DT = #{schDt}
-	ORDER BY COMP_CD, STOR_CD, SCH_DT, ST_TM
-    </select>
-    <select id="getGroupLessonDetail" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
-    /* 그룹 예약현황 상세 */
-	SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, B.MEMBER_NM, A.LSN_NO, C.LSN_NM, 
-			A.LSN_SEQ, A.LSN_NUM, A.LSN_CD, A.LSN_TM, A.ATND_FG, A.GRP_SEQ,
-			A.RSV_DT, A.RSV_TM, A.ATND_DT, A.ATND_TM, E.LSN_USE_CNT, E.LSN_CD, E.LSN_ST_DT, E.LSN_ED_DT
-	FROM ATND_T A
-	INNER JOIN MEMBER_M B
-	ON A.COMP_CD = B.COMP_CD
-	AND A.STOR_CD = B.STOR_CD
-	AND A.MEMBER_NO = B.MEMBER_NO
-	INNER JOIN LSN_M C
-	ON A.COMP_CD = C.COMP_CD
-	AND A.STOR_CD = C.STOR_CD
-	AND A.LSN_CD = C.LSN_CD
-	AND C.LSN_FG = '2'
-	INNER JOIN GRP_SCH_M D
-	ON A.COMP_CD = D.COMP_CD
-	AND A.STOR_CD = D.STOR_CD
-	AND A.RSV_DT = D.SCH_DT
-	AND A.RSV_TM = D.ST_TM
-	AND A.GRP_SEQ = D.SEQ
-	INNER JOIN MEMBER_LSN_M E
-	ON A.COMP_CD = E.COMP_CD
-	AND A.STOR_CD = E.STOR_CD
-	AND A.MEMBER_NO = E.MEMBER_NO
-	AND A.LSN_CD = E.LSN_CD
-	AND A.LSN_NO = E.LSN_NO
-	WHERE A.COMP_CD = #{compCd}
+		ORDER BY COMP_CD, STOR_CD, SCH_DT,
+		ST_TM
+	</select>
+	<select id="getGroupLessonDetail" parameterType="hashmap"
+		resultType="camelmap" statementType="PREPARED">
+		/* 그룹 예약현황 상세 */
+		SELECT A.COMP_CD,
+		A.STOR_CD, A.MEMBER_NO, B.MEMBER_NM, A.LSN_NO, C.LSN_NM,
+		A.LSN_SEQ,
+		A.LSN_NUM, A.LSN_CD, A.LSN_TM, A.ATND_FG, A.GRP_SEQ,
+		A.RSV_DT,
+		A.RSV_TM, A.ATND_DT, A.ATND_TM, E.LSN_USE_CNT, E.LSN_CD,
+		E.LSN_ST_DT,
+		E.LSN_ED_DT
+		FROM ATND_T A
+		INNER JOIN MEMBER_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.MEMBER_NO = B.MEMBER_NO
+		INNER JOIN LSN_M
+		C
+		ON A.COMP_CD = C.COMP_CD
+		AND A.STOR_CD = C.STOR_CD
+		AND A.LSN_CD =
+		C.LSN_CD
+		AND C.LSN_FG = '2'
+		INNER JOIN GRP_SCH_M D
+		ON A.COMP_CD =
+		D.COMP_CD
+		AND A.STOR_CD = D.STOR_CD
+		AND A.RSV_DT = D.SCH_DT
+		AND A.RSV_TM
+		= D.ST_TM
+		AND A.GRP_SEQ = D.SEQ
+		INNER JOIN MEMBER_LSN_M E
+		ON A.COMP_CD =
+		E.COMP_CD
+		AND A.STOR_CD = E.STOR_CD
+		AND A.MEMBER_NO = E.MEMBER_NO
+		AND
+		A.LSN_CD = E.LSN_CD
+		AND A.LSN_NO = E.LSN_NO
+		WHERE A.COMP_CD = #{compCd}
 		AND A.STOR_CD = #{storCd}
 		AND A.RSV_DT = #{rsvDt}
-		AND A.RSV_TM = #{rsvTm}
-    </select>
+		AND A.RSV_TM =
+		#{rsvTm}
+	</select>
+	
 </mapper>

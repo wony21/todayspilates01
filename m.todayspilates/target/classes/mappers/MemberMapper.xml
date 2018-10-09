@@ -51,4 +51,17 @@
 			#{memberNm}, REPLACE(#{mobile}, '-', ''), #{sex}, CONVERT(VARCHAR, GETDATE(), 112), '1', #{remark}, 'Y', #{userCd}, #{userCd})
     </insert>
      -->
+     <insert id="addMember" parameterType="hashmap" statementType="CALLABLE">
+		{ call dbo.SP_ADD_MEMBER(
+			#{compCd, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{storCd, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{memberNm, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{mobile, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{sex, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{entDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{remark, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{userCd, mode=IN, jdbcType=VARCHAR, javaType=string}
+			)
+		}
+	</insert>
 </mapper>
