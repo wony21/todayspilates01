@@ -19,5 +19,14 @@ public class LessonService extends BaseService {
 		parameter.put(ParamNames.storCd, storCd);
 		return mapper.getLesson(parameter);
 	}
+	
+	public List getRegisterLessons(String compCd, String storCd, String memberNm) {
+		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNm, memberNm);
+		return mapper.getRegisterLessons(parameter);
+	}
 
 }

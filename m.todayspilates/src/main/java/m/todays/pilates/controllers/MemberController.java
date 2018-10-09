@@ -69,6 +69,10 @@ public class MemberController extends BaseController {
 			String sex = (String)item.get(ParamNames.sex);
 			String entDt = (String)item.get(ParamNames.entDt);
 			String remark = (String)item.get(ParamNames.remark);
+			List existMembers = existMember(storCd, mobile);
+			if ( existMembers.size() > 0 ) {
+				return ApiResponse.error("exist user");		
+			}
 			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entDt, remark, userCd);
 		}
 		return ApiResponse.success("ok");
