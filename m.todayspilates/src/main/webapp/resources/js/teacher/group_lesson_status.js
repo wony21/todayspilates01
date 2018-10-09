@@ -311,7 +311,6 @@ fnObj.fn = {
 
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
-        let data = [];
         let lsnData = $('#modal-caption').data('id');
         let item = $('#new-reservation-container tbody tr .selected').
             data('id');

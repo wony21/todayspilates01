@@ -131,7 +131,7 @@
 								</tr>
 								{{/schedule}}
 								{{^schedule}}
-									<tr" style="text-align: center;">
+									<tr style="text-align: center;">
 										<td colspan="5">그룹레슨 예약없음</td>
 									</tr>
 								{{/schedule}}
