@@ -146,7 +146,8 @@ body {
  	width: 70px;
  }
  
-.group-lesson-tbl-caption { 
+ 
+.group-lesson-tbl-caption, #modal-caption { 
   text-align: left;
   vertical-align: bottom;
   margin-bottom: 0px; 

@@ -60,7 +60,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#" id="reservation">그룹레슨 등록현황관리</a></li>
+				href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">회원등록/수업등록</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -103,7 +103,7 @@
 							<div class="input-group" style="vertical-align: bottom;" id="caption">
 								<label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
 								<button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption" 
-									data-toggle="modal" data-target="#exampleModalCenter">예약하기</button>
+									data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
 							</div>
 							<table class="table table-striped table-sm">
 							  <thead>
@@ -131,7 +131,7 @@
 								</tr>
 								{{/schedule}}
 								{{^schedule}}
-									<tr" style="text-align: center;">
+									<tr style="text-align: center;">
 										<td colspan="5">그룹레슨 예약없음</td>
 									</tr>
 								{{/schedule}}
@@ -160,9 +160,9 @@
 					</div>
 					<div class="modal-body" style="padding: 0.5rem;">
 						<!-- 예약잡기 팝업body start -->
-						<div>test</div>
+						<div id="modal-caption" data-id="">test</div>
 						<div class="table-responsive" style="margin-top: 30px;">
-							<div id="date-container">
+							<div id="modal-date-container">
 			                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 			                        <div class="btn-toolbar mb-2 mb-md-0">
 			                            <div class="input-group">
