@@ -27,6 +27,9 @@ public class ParamNames {
 	public final static String lsnNm = "lsnNm";
 	public final static String lsnCnt = "lsnCnt";
 	public final static String lsnUseCnt = "lsnUseCnt";
+	public final static String lsnTy = "lsnTy";
+	public final static String payTp = "payTp";
+	public final static String lsnExpWk = "lsnExpWk";
 	public final static String columns = "columns";
 	public final static String opt1 = "opt1";
 	public final static String groupCd = "groupCd";
@@ -34,8 +37,9 @@ public class ParamNames {
 	public final static String sex = "sex";
 	public final static String remark = "remark";
 	public final static String entDt = "entDt";
+	public final static String regDt = "regDt";
 	public final static String existMember = "existMember";
-	
-	
+	public final static String lsnAmt = "lsnAmt";
+	public final static String clsFg = "clsFg";
 	
 }

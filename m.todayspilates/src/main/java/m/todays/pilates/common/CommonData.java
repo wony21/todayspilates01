@@ -33,6 +33,11 @@ public class CommonData {
 		public final static String MODIFY = "4";
 	}
 	
+	public class CLS_FG {
+		public final static String ING = "1";
+		public final static String RELEASE = "1";
+	}
+	
 	public class LSN_FG {
 		public final static String PRIVATE = "1";
 		public final static String GROUP = "2"; 
