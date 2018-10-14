@@ -218,6 +218,21 @@ public class ReservationController extends BaseController {
 	}
 	
 	/**
+	 * 선생님 - 그룹현황조회
+	 * @param storCd
+	 * @param schDt
+	 * @return
+	 */
+	@RequestMapping(value = "/api/teacher/reservation/group/view", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getGroupLessonView(
+			@RequestParam String storCd,
+			@RequestParam String schDt) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getGroupLessonView(compCd, storCd, schDt);
+	}
+	
+	/**
 	 * 개인레슨출석부 - 출석
 	 * @package 	: m.todays.pilates.controllers
 	 * @file 		: ReservationController.java

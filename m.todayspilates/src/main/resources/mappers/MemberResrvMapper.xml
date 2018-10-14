@@ -646,8 +646,7 @@
 		ORDER BY COMP_CD, STOR_CD, SCH_DT,
 		ST_TM
 	</select>
-	<select id="getGroupLessonDetail" parameterType="hashmap"
-		resultType="camelmap" statementType="PREPARED">
+	<select id="getGroupLessonDetail" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
 		/* 그룹 예약현황 상세 */
 		SELECT A.COMP_CD,
 		A.STOR_CD, A.MEMBER_NO, B.MEMBER_NM, A.LSN_NO, C.LSN_NM,
@@ -690,6 +689,61 @@
 		AND A.RSV_DT = #{rsvDt}
 		AND A.RSV_TM =
 		#{rsvTm}
+	</select>	
+	<select id="getGroupLessonView" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		SELECT   A.COMP_CD, 
+	         A.STOR_CD, 
+	         A.EMP_NO, 
+	         B.EMP_NM, 
+	         A.ST_TM, 
+	         A.SEQ, 
+	         A.LSN_LV, 
+	         A.LSN_TM, 
+	         F.NAME AS LSN_LV_NM, 
+	         C.MEMBER_NO,
+	         D.MEMBER_NM,
+	         C.LSN_NO,
+	         C.LSN_NUM,
+	         C.LSN_SEQ,
+	         C.LSN_TM AS MEM_LSN_TM,
+	         C.LSN_SEQ,
+	         E.LSN_CNT,
+	         E.LSN_USE_CNT,
+	         E.LSN_MOD_CNT,
+	         E.LSN_ST_DT,
+	         E.LSN_ED_DT,
+	         E.LSN_EXP_WK,
+	         C.ATND_FG, 
+	         C.ATND_DT, 
+	         C.ATND_TM, 
+	         C.CANC_RMK 
+	    FROM GRP_SCH_M AS A
+	         INNER JOIN EMP_M B
+	         ON  A.COMP_CD = B.COMP_CD 
+	         AND A.EMP_NO = B.EMP_NO 
+	         LEFT OUTER JOIN ATND_T C
+	         ON  A.COMP_CD = C.COMP_CD
+	         AND A.STOR_CD = A.STOR_CD
+	         AND A.SCH_DT = C.RSV_DT
+	         AND A.ST_TM = C.RSV_TM
+	         AND A.SEQ = C.GRP_SEQ
+	         AND C.ATND_FG IN ('0','1','2')
+	         LEFT OUTER JOIN MEMBER_M D
+	         ON  C.COMP_CD = D.COMP_CD
+	         AND C.STOR_CD = D.STOR_CD
+	         AND C.MEMBER_NO = D.MEMBER_NO
+	         LEFT OUTER JOIN MEMBER_LSN_M E
+	         ON  C.COMP_CD = E.COMP_CD
+	         AND C.STOR_CD = E.STOR_CD
+	         AND C.MEMBER_NO = E.MEMBER_NO
+	         AND C.LSN_NO = E.LSN_NO
+	         LEFT OUTER JOIN (SELECT CODE, NAME FROM COMMON_CODE_M WHERE GROUP_CD = '007') F
+	         ON  A.LSN_LV = F.CODE 
+	WHERE A.COMP_CD  = #{compCd}
+	   AND A.STOR_CD  = #{storCd}
+	  AND A.SCH_DT = #{schDt}
+	  AND A.USE_YN = 'Y' 
+	 ORDER BY A.ST_TM, A.SEQ, C.INS_DATE 
 	</select>
 	
 </mapper>

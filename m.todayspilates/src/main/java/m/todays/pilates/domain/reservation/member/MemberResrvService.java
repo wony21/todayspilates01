@@ -164,6 +164,15 @@ public class MemberResrvService extends BaseService {
 		return lesson;
 	}
 	
+	public List getGroupLessonView(String compCd, String storCd, String schDate) {
+		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.schDt, schDate);
+		return mapper.getGroupLessonView(parameter);
+	}
+	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
@@ -267,6 +276,8 @@ public class MemberResrvService extends BaseService {
 		}
 		return ApiResponse.success("ok");
 	}
+	
+	
 	
 	@Transactional
 	public ApiResponse reservation(List<HashMap> requestParams) {
