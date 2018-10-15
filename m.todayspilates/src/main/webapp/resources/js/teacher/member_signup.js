@@ -110,23 +110,11 @@ fnObj.initEvent = function(user) {
 
     // 회원명 검색버튼 조회
     $('#search-member').on('click', function(e) {
-        fnObj.fn.getGroupLessonByMember(user);
-    });
-    //검색된 그룹레슨 클릭 이벤트
-    $('#new-reservation-container').on('click', 'tbody tr', function(e) {
-        let lsnData = $(this).data('id');
-        //선택한 일자의 개인레슨을 조회
-        let selected = $(this).children('td').hasClass('selected');
-        $('#new-reservation-container tbody tr').
-            children('td').
-            removeClass('selected');
-        if (!selected) {
-            $(this).children('td').addClass('selected');
-        }
+        //fnObj.fn.getGroupLessonByMember(user);
     });
 
     $('#add-lesson').on('click', function(e) {
-        fnObj.fn.addGroupLesson();
+        //fnObj.fn.addGroupLesson();
     });
 };
 
@@ -310,7 +298,6 @@ fnObj.fn = {
 
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
-        let data = [];
         let lsnData = $('#modal-caption').data('id');
         let item = $('#new-reservation-container tbody tr .selected').
             data('id');

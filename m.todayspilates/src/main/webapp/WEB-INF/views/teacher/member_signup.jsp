@@ -194,49 +194,85 @@
                 </div>
                 <div class="modal-body" style="padding: 0.5rem;">
                     <!-- 예약잡기 팝업body start -->
-                    <div id="modal-caption" data-id="">test</div>
-                    <div class="table-responsive" style="margin-top: 30px;">
-                        <div id="modal-date-container">
+                    <div class="table-responsive" style="margin-top: 0px;">
+                        <%--<div id="modal-date-container">
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                                 <div class="btn-toolbar mb-2 mb-md-0">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="filter2" placeholder="회원명"
                                                style="width: 80px;  margin-left: 0px;">
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" id="search-member">검색</button>
+                                            <button class="btn btn-primary" id="search-member">중복확인</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>--%>
                         <div id="new-reservation-container">
-                            <script type="text/html" id="new-reservation-template">
+                            <%--<script type="text/html" id="new-reservation-template">--%>
                                 <table class="table table-striped table-sm">
                                     <thead>
-                                    <tr style="text-align: center">
+                                    <%--<tr style="text-align: center">
                                         <th width="12%">#구분</th>
                                         <th width="18%">회차</th>
                                         <th>시작일</th>
                                         <th>종료일</th>
-                                    </tr>
+                                    </tr>--%>
                                     </thead>
                                     <tbody>
-                                    {{#list}}
-                                    <tr data-id="{{lsnData}}" style="text-align: center;">
-                                        <td>{{lsnNm}}</td>
-                                        <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
-                                        <td>{{lsnStDt}}</td>
-                                        <td>{{lsnEdDt}}</td>
-                                    </tr>
-                                    {{/list}}
-                                    {{^list}}
-                                    <tr>
-                                        <td colspan="4">등록정보가 없습니다.</td>
-                                    </tr>
-                                    {{/list}}
+                                        <%--{{#list}}--%>
+                                        <tr data-id="{{lsnData}}" style="text-align: center;">
+                                            <td width="50%" style="height:40px;">회원명</td>
+                                            <td width="50%">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="memberNm" placeholder="회원명"
+                                                           style="width: 80px;  margin-left: 0px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" id="search-member">중복확인</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="50%" style="height:40px;">모바일</td>
+                                            <td width="50%">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="010-1234-5678"
+                                                           style="width: 80px;  margin-left: 0px;">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="50%" style="height:40px;">성별</td>
+                                            <td width="50%"><select id="sel-sex" class="custom-select">
+                                                <option value="남">남성</option>
+                                                <option value="여">여성</option>
+                                            </select></td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="50%" style="height:40px;">가입경로</td>
+                                            <td width="50%">
+                                                <select id="signup-path" class="custom-select"></select>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="50%" style="height:40px;">상태</td>
+                                            <td width="50%"><select id="member-status" class="custom-select">
+                                                <option value="Y">활동</option>
+                                                <option value="N">비활동</option>
+                                            </select></td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="100%" colspan="2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="메모">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <%--{{/list}}--%>
                                     </tbody>
                                 </table>
-                            </script>
+                            <%--/*</script>*/--%>
                         </div>
                     </div>
                 </div>
