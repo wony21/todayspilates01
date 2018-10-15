@@ -1,8 +1,8 @@
-<%@page import="m.todays.pilates.common.SessionUtils" %>
+<%@page import="m.todays.pilates.common.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-         pageEncoding="utf-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+         pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false"%>
 <%
     String userLv = SessionUtils.getCurrentUser().getUserLv();
     String empNo = SessionUtils.getCurrentUser().getEmpNo();
@@ -58,7 +58,7 @@
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="/teacher/private_reservation">개인레슨 예약하기</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
-                                        href="/teacher/group_lesson">그룹레슨 출석부</a></li>
+                                        href="#">그룹레슨 출석부</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -74,25 +74,47 @@
 <header class="d-flex">
     <div class="container">
         <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
-            <h4>그룹레슨 등록현황 관리</h4>
+            <h4>회원등록</h4>
             <div class="table-responsive">
                 <div id="date-container">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="input-group">
-                                <select class="custom-select" id="week"
-                                        style="width: 140px; margin-left: 5px;"></select>
+                                <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
+                                <div class="input-group-append">
+                                    <button id="search-attend" class="btn btn-primary">검색</button>
+                                </div>
                             </div>
+
+                            <!--<div class="btn-group mr-2" style="float: right; margin-left: 5px;">
+                              <button class="btn btn-outline-secondary">예약하기</button>
+                            </div> -->
                         </div>
                     </div>
-                    <table class="table table-striped table-sm" id="datepicker">
+                    <%--<script type="text/html" id="member-template">--%>
+                    <table class="table table-striped table-sm">
                         <thead>
-                        <!-- 동적생성 -->
+                        <tr style="text-align: center">
+                            <th width="12%">#순번</th>
+                            <th width="18%">회원명</th>
+                            <th width="18%">모바일</th>
+                            <th width="*">메모</th>
+                            <th width="12%">상태</th>
+                        </tr>
                         </thead>
                         <tbody>
-                        <!-- 동적생성 -->
+                        {{#list}}
+                        <tr data-id="{{lsnData}}" style="text-align: center;">
+                            <td style="height:40px;">{{idx}}</td>
+                            <td>{{memberNm}}</td>
+                            <td>{{mobile}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                            <td>{{memo}}</td>
+                            <td>{{status}}</td>
+                        </tr>
+                        {{/list}}
                         </tbody>
                     </table>
+                   <%-- </script>--%>
                 </div>
                 <!-- end date-container -->
             </div>
@@ -101,74 +123,40 @@
                     <script type="text/html" id="reservation-template">
                         {{#list}}
                         <div class="input-group" style="vertical-align: bottom;" id="caption">
-                            <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}})
-                                {{empNm}}
-                            </label>
+                            <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
+                            <button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
+                                    data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
                         </div>
                         <table class="table table-striped table-sm">
                             <thead>
-                            <%--<tr style="text-align: center">
-                              <th width="25%">회원명</th>
-                              <th width="25%">등록처리</th>
-                              <th width="25%">회원명</th>
-                              <th width="25%">등록처리</th>
-                            </tr>--%>
+                            <tr style="text-align: center">
+                                <th width="12%">#순번</th>
+                                <th width="*">회원</th>
+                                <th width="18%">회차</th>
+                                <th width="25%">종료일</th>
+                                <th width="22%">출결처리</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {{#schedule}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
+                                <td style="height:40px;">{{idx}}</td>
+                                <td>{{memberNm}}</td>
+                                <td>{{lsnNum}}/{{lsnUseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnEdDt}}</td>
+                                <td class="select" data-id="{{atndFg}}"><select id="sel-attend" class="custom-select attend-process">
+                                    <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
+                                    <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
+                                    <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
+                                    <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
+                                </select></td>
                             </tr>
                             {{/schedule}}
-                            <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td width="15%">미등록</td>
-                                <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
-                                <td width="15%">미등록</td>
-                                <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
-                                <td width="15%">미등록</td>
-                                <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                </td>
+                            {{^schedule}}
+                            <tr style="text-align: center;">
+                                <td colspan="5">그룹레슨 예약없음</td>
                             </tr>
+                            {{/schedule}}
                             </tbody>
                         </table>
                         {{/list}}
@@ -181,8 +169,7 @@
         </div><!-- row -->
     </div><!-- container -->
     <!-- modal start -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -201,7 +188,7 @@
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                                 <div class="btn-toolbar mb-2 mb-md-0">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="filter" placeholder="회원명"
+                                        <input type="text" class="form-control" id="filter2" placeholder="회원명"
                                                style="width: 80px;  margin-left: 0px;">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" id="search-member">검색</button>
@@ -244,8 +231,7 @@
                 <!-- 예약잡기 팝업body end -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">취소
-                    </button>
+                            data-dismiss="modal">취소</button>
                     <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
                 </div>
             </div>
@@ -291,6 +277,6 @@
 <script src="/js/boot4/vendor/ax5formatter.js"></script>
 <script src="/js/boot4/stylish-portfolio.js"></script>
 <script src="/js/common.js"></script>
-<script src="/js/teacher/group_lesson_status.js"></script>
+<script src="/js/teacher/member_signup.js"></script>
 </body>
 </html>

@@ -62,7 +62,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#">회원등록/수업등록</a></li>
+				href="/teacher/member_signup">회원등록/수업등록</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#">내수업실적</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"

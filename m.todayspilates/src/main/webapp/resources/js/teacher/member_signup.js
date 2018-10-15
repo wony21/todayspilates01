@@ -1,11 +1,11 @@
-let common = {};
+var common = {};
 let fnObj = {};
 let reservationList = [];
 let reservationTmpl = $('#reservation-template').html();
 let newReservationTmpl = $('#new-reservation-template').html();
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
-//view 초기화 
+//view 초기화
 fnObj.initView = function(user) {
     $('.username').text(user.username);
 
@@ -14,7 +14,7 @@ fnObj.initView = function(user) {
     fnObj.fn.getGroupLesson(user);
 };
 
-//이벤트 초기화 
+//이벤트 초기화
 fnObj.initEvent = function(user) {
     // 주차변경시 해당 주로 셋팅
     $(document.body).on('change', '#week', function(e) {
@@ -33,7 +33,7 @@ fnObj.initEvent = function(user) {
     });
 
     // 예약에 대한 출결처리 선택
-    $(document.body).on('change', '.member-process', function(e) {
+    $(document.body).on('change', '.attend-process', function(e) {
         // var optionSelected = $("option:selected", this);
         //let lsn = $(this).parent().parent().index();	// 선택된 예약정보
         let lsnData = $(this).parent().parent().data('id');
@@ -45,21 +45,34 @@ fnObj.initEvent = function(user) {
             return false;
         }
         if (value === '1') {
-            //console.log('선택된 회원을 등록하겠습니까? 팝업 띄우기');
-            fnObj.fn.updateLessonMember(user, lsnData, value);
-            alert('등록처리가 완료되었습니다.');
-        } else if (value === '2') {
-            result = confirm('등록된 회원을 삭제하겠습니까?');
+            result = confirm('출석처리 하겠습니까?');
             if (result) {
-                fnObj.fn.updateLessonMember(user, lsnData, value);
-                alert('삭제처리가 완료되었습니다.');
+                // 출석처리
+                $.extend(lsnData, {atndFg: value});
+                fnObj.fn.updateLessonAttendance(user, lsnData, value);
+                alert('출석처리가 완료되었습니다.');
+                //location.reload();
+            }
+        } else if (value === '2') {
+            result = confirm('결석처리 하겠습니까?');
+            if (result) {
+                fnObj.fn.updateLessonAttendance(user, lsnData, value);
+                alert('결석처리가 완료되었습니다.');
+                //location.reload();
+            }
+        } else if (value === '3') {
+            result = confirm('정말 삭제하겠습니까?');
+            if (result) {
+                fnObj.fn.updateLessonAttendance(user, lsnData, value);
+                alert('예약을 삭제하였습니다');
+                //location.reload();
             }
         }
 
         if (!result) {
             $(this).val(previous);
         } else {
-            fnObj.fn.getGroupLesson(user);  //처리 후 재조회 및 뷰 업데이트
+            fnObj.fn.getGroupLesson(user);
         }
     });
 
@@ -76,8 +89,7 @@ fnObj.initEvent = function(user) {
             '' :
             lsnData.stTm.substr(0, 2) + ':' + lsnData.stTm.substr(2, 3);  // hh:mm
         let caption = dt + '(' + dy + ') ' + stTm + ' ' + lsnData.lsnLvNm +
-            ' (' +
-            lsnData.lsnTm.toFixed(1) + ') ' + lsnData.empNm;
+            ' (' + lsnData.lsnTm.toFixed(1) + ') ' + lsnData.empNm;
         let captionData = {
             rsvDt: rsvDt,
             dy: dy,
@@ -210,8 +222,8 @@ fnObj.fn = {
                             n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ?
                                 '' :
                                 ('`' + n.lsnEdDt.substr(2, 2) + '.' +
-                                    n.lsnEdDt.substr(4, 2) +
-                                    '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+                                    n.lsnEdDt.substr(4, 2) + '.' +
+                                    n.lsnEdDt.substr(6, 7));	// yy-mm-dd
 
                             // 출/결처리가 된 항목은 '취소'불가 처리(렌더링 후 jquery를 위한 flag 처리)
                             if (n.atndFg == '1') {
@@ -244,7 +256,7 @@ fnObj.fn = {
         return false;
     },
     // 출결처리
-    updateLessonMember: function(user, lsnData, val) {
+    updateLessonAttendance: function(user, lsnData, val) {
         let data = [].concat(lsnData);
         let url = '/api/teacher/lesson/attend';
 
@@ -253,9 +265,6 @@ fnObj.fn = {
         } else if (val == '3') {
             url = '/api/teacher/lesson/cancel';
         }
-
-        //일단 테스트라서...
-        return false;
 
         $.ajax({
             type: 'PUT',
@@ -301,6 +310,7 @@ fnObj.fn = {
 
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
+        let data = [];
         let lsnData = $('#modal-caption').data('id');
         let item = $('#new-reservation-container tbody tr .selected').
             data('id');
@@ -358,6 +368,6 @@ $(document).ready(function() {
     makeWeekSelectOptions('week', 3);
     //var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
-	
+
 
 
