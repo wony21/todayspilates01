@@ -75,7 +75,7 @@
     <div class="container">
         <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
             <h4>회원등록</h4>
-            <div class="table-responsive">
+            <%--<div class="table-responsive">
                 <div id="date-container">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                         <div class="btn-toolbar mb-2 mb-md-0">
@@ -93,7 +93,7 @@
                             </div> -->
                         </div>
                     </div>
-                    <%--<script type="text/html" id="member-template">--%>
+                    &lt;%&ndash;<script type="text/html" id="member-template">&ndash;%&gt;
                     <table class="table table-striped table-sm">
                         <thead>
                         <tr style="text-align: center">
@@ -116,55 +116,65 @@
                         {{/list}}
                         </tbody>
                     </table>
-                   <%-- </script>--%>
+                   &lt;%&ndash; </script>&ndash;%&gt;
                 </div>
                 <!-- end date-container -->
-            </div>
+            </div>--%>
             <div class="table-responsive" style="margin-top: 20px;">
                 <div id="reservation-container">
                     <script type="text/html" id="reservation-template">
                         <%--<div class="input-group" style="vertical-align: bottom;" id="caption">
-                            <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
+                            <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
+                            <div class="input-group-append">
+                                <button id="search-attend" class="btn btn-primary">검색</button>
+                            </div>
                             <button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
                                     data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
                         </div>--%>
-                        {{#list}}
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
+                                    <div class="input-group-append">
+                                        <button id="search-attend" class="btn btn-primary">검색</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
+                                <button type="button" id="member-add-btn" class="btn btn-primary" for="tbl-caption"
+                                        data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">회원등록</button>
+                            </div>
+                        </div>
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
                                 <th width="12%">#순번</th>
-                                <th width="*">회원</th>
-                                <th width="18%">회차</th>
-                                <th width="25%">종료일</th>
-                                <th width="22%">출결처리</th>
+                                <th width="18%">회원명</th>
+                                <th width="12%">성별</th>
+                                <th width="18%">모바일</th>
+                                <th width="*">메모</th>
+                                <th width="12%">상태</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{#schedule}}
+                            {{#list}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
                                 <td style="height:40px;">{{idx}}</td>
                                 <td>{{memberNm}}</td>
-                                <td>{{lsnNum}}/{{lsnUseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
-                                <td>{{lsnEdDt}}</td>
-                                <td class="select" data-id="{{atndFg}}"><select id="sel-attend" class="custom-select attend-process">
-                                    <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
-                                    <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
-                                    <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
-                                    <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
-                                </select></td>
+                                <td>{{sex}}</td>
+                                <td>{{mobile}}</td>
+                                <td>{{memo}}</td>
+                                <td>{{status}}</td>
                             </tr>
-                            {{/schedule}}
-                            {{^schedule}}
+                            {{/list}}
+                            {{^list}}
                             <tr style="text-align: center;">
                                 <td colspan="5">그룹레슨 예약없음</td>
                             </tr>
-                            {{/schedule}}
+                            {{/list}}
                             </tbody>
                         </table>
-                        {{/list}}
-                        {{^list}}
-                        <div class="group-lesson-tbl-caption-empty">그룹레슨 시간표가 없습니다</div>
-                        {{/list}}
                     </script>
                 </div>
             </div> <!-- table responsive -->
@@ -176,7 +186,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">
-                        그룹레슨 예약등록
+                        회원등록
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
