@@ -46,8 +46,9 @@ fnObj.initEvent = function(user) {
         }
         if (value === '1') {
             //console.log('선택된 회원을 등록하겠습니까? 팝업 띄우기');
+            $('#exampleModalCenter').modal('toggle');
             fnObj.fn.updateLessonMember(user, lsnData, value);
-            alert('등록처리가 완료되었습니다.');
+            //alert('등록처리가 완료되었습니다.');
         } else if (value === '2') {
             result = confirm('등록된 회원을 삭제하겠습니까?');
             if (result) {
@@ -113,8 +114,9 @@ fnObj.initEvent = function(user) {
         }
     });
 
-    $('#add-lesson').on('click', function(e) {
-        fnObj.fn.addGroupLesson();
+    $('#add-member').on('click', function(e) {
+        //fnObj.fn.addGroupLesson();
+        alert('선택된 회원이 등록되었습니다');
     });
 };
 

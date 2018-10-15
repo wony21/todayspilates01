@@ -123,10 +123,10 @@
 								  <td>{{lsnNum}}/{{lsnUseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
 								  <td>{{lsnEdDt}}</td>
 								  <td class="select" data-id="{{atndFg}}"><select id="sel-attend" class="custom-select attend-process">
-								  <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
-								  <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
-								  <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
-								  <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
+                                      <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
+                                      <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
+                                      <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
+                                      <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
 								</select></td>
 								</tr>
 								{{/schedule}}

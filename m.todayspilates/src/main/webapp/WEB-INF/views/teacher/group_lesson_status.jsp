@@ -167,6 +167,7 @@
                                         <option value="1">등록</option>
                                         <option value="2">삭제</option>
                                     </select>
+                                    <%--<button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-outline-secondary">등록</button>--%>
                                 </td>
                             </tr>
                             </tbody>
@@ -246,7 +247,7 @@
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">취소
                     </button>
-                    <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
+                    <button type="button" class="btn btn-primary" id="add-member">등록</button>
                 </div>
             </div>
         </div>
