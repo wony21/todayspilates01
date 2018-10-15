@@ -188,7 +188,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">
-                        그룹레슨 예약등록
+                        그룹레슨 회원등록
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -196,8 +196,8 @@
                 </div>
                 <div class="modal-body" style="padding: 0.5rem;">
                     <!-- 예약잡기 팝업body start -->
-                    <div id="modal-caption" data-id="">test</div>
-                    <div class="table-responsive" style="margin-top: 30px;">
+                    <%--<div id="modal-caption" data-id="">test</div>--%>
+                    <div class="table-responsive" style="margin-top: 0px;">
                         <div id="modal-date-container">
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                                 <div class="btn-toolbar mb-2 mb-md-0">
@@ -211,13 +211,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="new-reservation-container">
-                            <script type="text/html" id="new-reservation-template">
+                        <div id="new-member-container">
+                            <script type="text/html" id="new-member-template">
                                 <table class="table table-striped table-sm">
                                     <thead>
                                     <tr style="text-align: center">
                                         <th width="12%">#구분</th>
-                                        <th width="18%">회차</th>
+                                        <th width="18%">회원명</th>
                                         <th>시작일</th>
                                         <th>종료일</th>
                                     </tr>
@@ -226,7 +226,7 @@
                                     {{#list}}
                                     <tr data-id="{{lsnData}}" style="text-align: center;">
                                         <td>{{lsnNm}}</td>
-                                        <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
+                                        <td>{{memberNm}}</td>
                                         <td>{{lsnStDt}}</td>
                                         <td>{{lsnEdDt}}</td>
                                     </tr>

@@ -2,7 +2,7 @@ let common = {};
 let fnObj = {};
 let reservationList = [];
 let reservationTmpl = $('#reservation-template').html();
-let newReservationTmpl = $('#new-reservation-template').html();
+let newMemberTmpl = $('#new-member-template').html();
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 //view 초기화 
@@ -58,7 +58,7 @@ fnObj.initEvent = function(user) {
         }
 
         if (!result) {
-            $(this).val(previous);
+            $(this).val(0);
         } else {
             fnObj.fn.getGroupLesson(user);  //처리 후 재조회 및 뷰 업데이트
         }
@@ -92,8 +92,8 @@ fnObj.initEvent = function(user) {
         $('#modal-caption').attr('data-id', JSON.stringify(captionData));
         $('#modal-caption').text(caption);
 
-        var html = Mustache.render(newReservationTmpl, {list: []});
-        $('#new-reservation-container').html(html);
+        var html = Mustache.render(newMemberTmpl, {list: []});
+        $('#new-member-container').html(html);
 
     });
 
@@ -102,11 +102,11 @@ fnObj.initEvent = function(user) {
         fnObj.fn.getGroupLessonByMember(user);
     });
     //검색된 그룹레슨 클릭 이벤트
-    $('#new-reservation-container').on('click', 'tbody tr', function(e) {
+    $('#new-member-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
-        $('#new-reservation-container tbody tr').
+        $('#new-member-container tbody tr').
             children('td').
             removeClass('selected');
         if (!selected) {
@@ -117,6 +117,7 @@ fnObj.initEvent = function(user) {
     $('#add-member').on('click', function(e) {
         //fnObj.fn.addGroupLesson();
         alert('선택된 회원이 등록되었습니다');
+        $('#exampleModalCenter').modal('hide');
     });
 };
 
@@ -295,8 +296,8 @@ fnObj.fn = {
             url: '/api/teacher/reservation/group',
             data: {storCd: user.storCd, memberNm: memberNm},
             success: function(res) {
-                var html = Mustache.render(newReservationTmpl, {list: res});
-                $('#new-reservation-container').html(html);
+                var html = Mustache.render(newMemberTmpl, {list: res});
+                $('#new-member-container').html(html);
             },
         });
     },
@@ -304,17 +305,17 @@ fnObj.fn = {
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
         let lsnData = $('#modal-caption').data('id');
-        let item = $('#new-reservation-container tbody tr .selected').
+        let item = $('#new-member-container tbody tr .selected').
             data('id');
 
         //선택된 레슨이 있는지 체크
         if (typeof item === 'undefined') {
-            alert('먼저 예약할 레슨을 선택하세요.');
+            alert('먼저 등록할 회원을 선택하세요.');
             return false;
         }
 
-        /* 예약 confirm */
-        var retReserv = confirm('예약하시겠습니까?');
+        /* 등록 confirm */
+        var retReserv = confirm('선택된 회원을 등록하겠습니까?');
         if (retReserv != true) {
             return false;
         }
