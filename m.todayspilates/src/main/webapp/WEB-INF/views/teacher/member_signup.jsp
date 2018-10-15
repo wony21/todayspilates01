@@ -58,7 +58,7 @@
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="/teacher/private_reservation">개인레슨 예약하기</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
-                                        href="#">그룹레슨 출석부</a></li>
+                                        href="/teacher/group_lesson">그룹레슨 출석부</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
                                         href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
         <li class="sidebar-nav-item"><a class="js-scroll-trigger"
@@ -84,6 +84,8 @@
                                 <div class="input-group-append">
                                     <button id="search-attend" class="btn btn-primary">검색</button>
                                 </div>
+                                <button type="button" id="member-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
+                                        data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">회원등록</button>
                             </div>
 
                             <!--<div class="btn-group mr-2" style="float: right; margin-left: 5px;">
@@ -121,12 +123,12 @@
             <div class="table-responsive" style="margin-top: 20px;">
                 <div id="reservation-container">
                     <script type="text/html" id="reservation-template">
-                        {{#list}}
-                        <div class="input-group" style="vertical-align: bottom;" id="caption">
+                        <%--<div class="input-group" style="vertical-align: bottom;" id="caption">
                             <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
                             <button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
                                     data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
-                        </div>
+                        </div>--%>
+                        {{#list}}
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">

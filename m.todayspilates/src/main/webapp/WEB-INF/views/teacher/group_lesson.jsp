@@ -58,7 +58,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/private_reservation">개인레슨 예약하기</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#">그룹레슨 출석부</a></li>
+				href="/teacher/group_lesson">그룹레슨 출석부</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/group_lesson_status">그룹레슨 등록현황 관리</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
