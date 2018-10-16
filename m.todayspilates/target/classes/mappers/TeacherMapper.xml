@@ -13,4 +13,34 @@
         </if>
         ORDER BY EMP_NO
     </select>
+   	<select id="getTeacherPerformance" resultType="camelmap" statementType="PREPARED">
+	   	SELECT A.COMP_CD, A.STOR_CD, B.EMP_NM, A.ATND_MONTH,
+			A.LSN_CNT_PRIVATE, A.LSN_CNT_DUET, A.LSN_CNT_GROUP, A.LSN_CNT_KID_P, A.LSN_CNT_KID_D
+		FROM 
+		(SELECT COMP_CD, STOR_CD, EMP_NO, ATND_MONTH,
+			SUM(CASE WHEN LSN_CD = '01' THEN LSN_CNT ELSE 0 END) LSN_CNT_PRIVATE,
+			SUM(CASE WHEN LSN_CD = '02' THEN LSN_CNT ELSE 0 END) LSN_CNT_DUET,
+			SUM(CASE WHEN LSN_CD = '03' THEN LSN_CNT ELSE 0 END) LSN_CNT_GROUP,
+			SUM(CASE WHEN LSN_CD = '04' THEN LSN_CNT ELSE 0 END) LSN_CNT_KID_P,
+			SUM(CASE WHEN LSN_CD = '05' THEN LSN_CNT ELSE 0 END) LSN_CNT_KID_D
+		FROM (SELECT COMP_CD, STOR_CD, SUBSTRING(ATND_DT, 1, 6) ATND_MONTH, EMP_NO, LSN_CD, SUM(LSN_TM) LSN_CNT
+			FROM ATND_T
+			WHERE ATND_FG IN ('1', '2')
+				AND ATND_DT LIKE #{schMonth} +'%'
+			GROUP BY COMP_CD, STOR_CD, SUBSTRING(ATND_DT, 1, 6), EMP_NO, LSN_CD) X
+		GROUP BY COMP_CD, STOR_CD, EMP_NO, ATND_MONTH ) A
+		INNER JOIN EMP_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.EMP_NO = B.EMP_NO
+		WHERE A.COMP_CD = #{compCd}
+			<if test="storCd != null and storCd != ''">
+				AND A.STOR_CD = #{storCd}
+			</if>
+			<if test="empNo != null and empNo != ''">
+				AND A.EMP_NO = #{empNo}
+			</if>
+			AND B.USE_YN = 'Y'
+		ORDER BY A.COMP_CD, A.STOR_CD, B.EMP_NM
+   	</select>
 </mapper>

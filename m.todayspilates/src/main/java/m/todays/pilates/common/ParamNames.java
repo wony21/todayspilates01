@@ -41,5 +41,6 @@ public class ParamNames {
 	public final static String existMember = "existMember";
 	public final static String lsnAmt = "lsnAmt";
 	public final static String clsFg = "clsFg";
+	public final static String schMonth = "schMonth";
 	
 }

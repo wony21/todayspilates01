@@ -6,5 +6,6 @@ import java.util.Map;
 public interface TeacherMapper {
 
 	List getTeacher(Map<String, Object> parameter);
+	List getTeacherPerformance(Map<String, Object> parameter);
 	
 }
