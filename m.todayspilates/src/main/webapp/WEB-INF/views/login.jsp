@@ -43,9 +43,7 @@
 										<span class="input-group-text"><ion-icon
 												name="business"></ion-icon></span>
 									</div>
-									<select id="studio" class="custom-select">
-										<option value="" selected>스튜디오를 선택하세요</option>
-									</select>
+									<select id="studio" class="custom-select"></select>
 								</div>
 
 							</div>
@@ -63,9 +61,8 @@
 										</select>
 									</div>
 
-									<input type="text" id="phone2" class="form-control"
-										placeholder="전화번호('-'제외)"> <input type="hidden"
-										id="id" name="id">
+									<input type="text" id="phone2" class="form-control" placeholder="전화번호('-'제외)">
+									<input type="hidden" id="id" name="id">
 								</div>
 							</div>
 							<div class="form-group form-check">

@@ -9,172 +9,30 @@ const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 fnObj.initView = function(user) {
     $('.username').text(user.username);
 
-    fnObj.fn.setTeacher(user);
-    fnObj.fn.setDatePicker();
-    fnObj.fn.getGroupLesson(user);
+    var html = Mustache.render(newReservationTmpl, {list: []});
+    $('#new-reservation-container').html(html);
 };
 
 //이벤트 초기화
 fnObj.initEvent = function(user) {
-    // 주차변경시 해당 주로 셋팅
-    $(document.body).on('change', '#week', function(e) {
-        fnObj.fn.setDatePicker($(this).val());
-        //fnObj.fn.getGroupLesson(user);
-    });
-
-    // 선택한 일자의 그룹레슨을 조회
-    $('#datepicker').on('click', ' tbody td', function(e) {
-        let selected = $(this).hasClass('selected');
-        $('#datepicker tbody td').removeClass('selected');
-        if (!selected) {
-            $(this).addClass('selected');
-        }
-        fnObj.fn.getGroupLesson(user);
-    });
-
-    // 예약에 대한 출결처리 선택
-    $(document.body).on('change', '.attend-process', function(e) {
-        // var optionSelected = $("option:selected", this);
-        //let lsn = $(this).parent().parent().index();	// 선택된 예약정보
-        let lsnData = $(this).parent().parent().data('id');
-        let previous = $(this).parent().data('id');
-        let value = $(this).val();
-        let result = false;
-
-        if (value === 0) {
-            return false;
-        }
-        if (value === '1') {
-            result = confirm('출석처리 하겠습니까?');
-            if (result) {
-                // 출석처리
-                $.extend(lsnData, {atndFg: value});
-                fnObj.fn.updateLessonAttendance(user, lsnData, value);
-                alert('출석처리가 완료되었습니다.');
-                //location.reload();
-            }
-        } else if (value === '2') {
-            result = confirm('결석처리 하겠습니까?');
-            if (result) {
-                fnObj.fn.updateLessonAttendance(user, lsnData, value);
-                alert('결석처리가 완료되었습니다.');
-                //location.reload();
-            }
-        } else if (value === '3') {
-            result = confirm('정말 삭제하겠습니까?');
-            if (result) {
-                fnObj.fn.updateLessonAttendance(user, lsnData, value);
-                alert('예약을 삭제하였습니다');
-                //location.reload();
-            }
-        }
-
-        if (!result) {
-            $(this).val(previous);
-        } else {
-            fnObj.fn.getGroupLesson(user);
-        }
-    });
-
-    $(document.body).on('click', '#group-lesson-add-btn', function(e) {
-        console.log('add button click');
-        //fnObj.fn.getGroupLessonByMember(user);
-        //예약일자,
-        let dy = WEEKS[$('#datepicker tbody tr .selected').index()];
-        let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
-        let lsnData = $(this).data('id');
-        let dt = rsvDt.substr(0, 4) + '년 ' + rsvDt.substr(4, 2) + '월 ' +
-            rsvDt.substr(6, 2) + '일 ';
-        let stTm = (isValidTime(lsnData.stTm) === false) ?
-            '' :
-            lsnData.stTm.substr(0, 2) + ':' + lsnData.stTm.substr(2, 3);  // hh:mm
-        let caption = dt + '(' + dy + ') ' + stTm + ' ' + lsnData.lsnLvNm +
-            ' (' + lsnData.lsnTm.toFixed(1) + ') ' + lsnData.empNm;
-        let captionData = {
-            rsvDt: rsvDt,
-            dy: dy,
-            stTm: lsnData.stTm,
-            lsnTm: lsnData.lsnTm,
-            lsnLv: lsnData.lsnLv,
-            lsnLvNm: lsnData.lsnLvNm,
-            empNo: lsnData.empNo,
-        };
-
-        $('#modal-caption').attr('data-id', JSON.stringify(captionData));
-        $('#modal-caption').text(caption);
-
-        var html = Mustache.render(newReservationTmpl, {list: []});
-        $('#new-reservation-container').html(html);
-
-    });
-
-    // 회원명 검색버튼 조회
+    // 회원명 조회
     $('#search-member').on('click', function(e) {
+        console.log('search member clicked...');
         //fnObj.fn.getGroupLessonByMember(user);
     });
 
+    // 회원등록(팝업창)
+    $('#add-member').on('click', function(e) {
+        console.log('add member...');
+    });
+
+    // 수업등록
     $('#add-lesson').on('click', function(e) {
-        //fnObj.fn.addGroupLesson();
+        console.log('add-lesson');
     });
 };
 
 fnObj.fn = {
-    // 강사목록 조회
-    setTeacher: function(user) {
-        $.ajax({
-            type: 'GET',
-            url: '/api/teacher',
-            data: {storCd: user.storCd},
-            success: function(res) {
-                let option = '<option value="">선생님(전체)</option>';
-                res.forEach(function(n) {
-                    option += ' <option value="' + n.empNo + '">' + n.empNm +
-                        '</option> ';
-                });
-                $('#teacher').html(option);
-                $('#teacher').val(user.empNo);	// 로그인한 선생님으로 선택
-            },
-        });
-    },
-    //주간 Datepicker 초기화
-    setDatePicker: function(dateString) {
-        let curr = new Date(); // get current date
-        let getDay = curr.getDay();
-        let sttDt = '';
-
-        if (typeof dateString === 'undefined') {
-            sttDt = ax5.util.date(curr,
-                {add: {d: -curr.getDay()}, return: 'yyyyMMdd'});
-        } else {
-            sttDt = dateString;
-        }
-        let endDt = ax5.util.date(curr,
-            {add: {d: 6 - getDay}, return: 'yyyyMMdd'});
-        let thead = '<tr style="text-align:center; height: 40px;">';
-        let tbody = '<tr data-id="" style="text-align: center; vertical-align: middle; height: 40px;">';
-        let today = ax5.util.date(curr, {return: 'yyyyMMdd'});
-
-        for (var i = 0; i <= 6; i++) {
-            var date = ax5.util.date(sttDt, {add: {d: i}, return: 'yyyyMMdd'});
-            var day = ax5.util.date(sttDt, {add: {d: i}, return: 'dd'});
-            var d = ax5.util.date(sttDt, {add: {d: i}});
-            if (date !== today) {
-                thead += '<th>' + WEEKS[i] + '</th>';
-                tbody += '<td data-id="' + date + '">' + day + '</td>';
-            } else {
-                thead += '<th class="today">' + WEEKS[i] + '</th>';
-                tbody += '<td class="today" data-id="' + date + '">' + day +
-                    '</td>';
-            }
-        }
-        $('#datepicker thead').html(thead);
-        $('#datepicker tbody').html(tbody);
-
-        //선택된 주의 처음일자와 마지막 일자 조회 테스트
-        //let firstDate = $('#datepicker tbody tr').find(":first").data('id');
-        //let lastDate = $('#datepicker tbody tr').find(":last").data('id');
-    },
-
     //예약정보조회 (선택주, 선생님, 회원명, 일자)
     getGroupLesson: function(user) {
         let search = fnObj.fn.getData(user);
@@ -350,11 +208,4 @@ $(document).ready(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);
-
-    //주차 datepicker 셋팅 (현재월을 기준으로 -3개월 ~ +3개월)
-    makeWeekSelectOptions('week', 3);
-    //var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
-
-
-

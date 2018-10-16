@@ -75,74 +75,68 @@
     <div class="container">
         <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
             <h4>회원등록</h4>
-            <%--<div class="table-responsive">
-                <div id="date-container">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
-                                <div class="input-group-append">
-                                    <button id="search-attend" class="btn btn-primary">검색</button>
-                                </div>
-                                <button type="button" id="member-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
-                                        data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">회원등록</button>
-                            </div>
-
-                            <!--<div class="btn-group mr-2" style="float: right; margin-left: 5px;">
-                              <button class="btn btn-outline-secondary">예약하기</button>
-                            </div> -->
-                        </div>
-                    </div>
-                    &lt;%&ndash;<script type="text/html" id="member-template">&ndash;%&gt;
-                    <table class="table table-striped table-sm">
-                        <thead>
-                        <tr style="text-align: center">
-                            <th width="12%">#순번</th>
-                            <th width="18%">회원명</th>
-                            <th width="18%">모바일</th>
-                            <th width="*">메모</th>
-                            <th width="12%">상태</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#list}}
-                        <tr data-id="{{lsnData}}" style="text-align: center;">
-                            <td style="height:40px;">{{idx}}</td>
-                            <td>{{memberNm}}</td>
-                            <td>{{mobile}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
-                            <td>{{memo}}</td>
-                            <td>{{status}}</td>
-                        </tr>
-                        {{/list}}
-                        </tbody>
-                    </table>
-                   &lt;%&ndash; </script>&ndash;%&gt;
-                </div>
-                <!-- end date-container -->
-            </div>--%>
             <div class="table-responsive" style="margin-top: 20px;">
                 <div id="reservation-container">
                     <script type="text/html" id="reservation-template">
-                        <%--<div class="input-group" style="vertical-align: bottom;" id="caption">
-                            <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
-                            <div class="input-group-append">
-                                <button id="search-attend" class="btn btn-primary">검색</button>
-                            </div>
-                            <button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption"
-                                    data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
-                        </div>--%>
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                             <div class="btn-toolbar mb-2 mb-md-0">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="filter" placeholder="회원명" style="width: 80px;  margin-left: 5px;">
                                     <div class="input-group-append">
-                                        <button id="search-attend" class="btn btn-primary">검색</button>
+                                        <button id="search-member" class="btn btn-primary">검색</button>
                                     </div>
 
                                 </div>
                             </div>
                             <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
-                                <button type="button" id="member-add-btn" class="btn btn-primary" for="tbl-caption"
+                                <button type="button" id="call-add-member" class="btn btn-primary" for="tbl-caption"
+                                        data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">회원등록</button>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-sm">
+                            <thead>
+                            <tr style="text-align: center">
+                                <th width="12%">#순번</th>
+                                <th width="18%">회원명</th>
+                                <th width="12%">성별</th>
+                                <th width="18%">모바일</th>
+                                <th width="*">메모</th>
+                                <th width="12%">상태</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#list}}
+                            <tr data-id="{{lsnData}}" style="text-align: center;">
+                                <td style="height:40px;">{{idx}}</td>
+                                <td>{{memberNm}}</td>
+                                <td>{{sex}}</td>
+                                <td>{{mobile}}</td>
+                                <td>{{memo}}</td>
+                                <td>{{status}}</td>
+                            </tr>
+                            {{/list}}
+                            {{^list}}
+                            <tr style="text-align: center;">
+                                <td colspan="5">그룹레슨 예약없음</td>
+                            </tr>
+                            {{/list}}
+                            </tbody>
+                        </table>
+                    </script>
+                </div>
+            </div> <!-- table responsive -->
+        </div><!-- row -->
+        <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
+            <h4>수업등록</h4>
+            <div class="table-responsive" style="margin-top: 20px;">
+                <div id="lesson-container">
+                    <script type="text/html" id="lesson-template">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="input-group"></div>
+                            </div>
+                            <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
+                                <button type="button" id="add-lesson" class="btn btn-primary" for="tbl-caption"
                                         data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">회원등록</button>
                             </div>
                         </div>
@@ -180,7 +174,7 @@
             </div> <!-- table responsive -->
         </div><!-- row -->
     </div><!-- container -->
-    <!-- modal start -->
+    <!-- member modal start -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -195,19 +189,6 @@
                 <div class="modal-body" style="padding: 0.5rem;">
                     <!-- 예약잡기 팝업body start -->
                     <div class="table-responsive" style="margin-top: 0px;">
-                        <%--<div id="modal-date-container">
-                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
-                                <div class="btn-toolbar mb-2 mb-md-0">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="filter2" placeholder="회원명"
-                                               style="width: 80px;  margin-left: 0px;">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" id="search-member">중복확인</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--%>
                         <div id="new-reservation-container">
                             <%--<script type="text/html" id="new-reservation-template">--%>
                                 <table class="table table-striped table-sm">
@@ -228,7 +209,7 @@
                                                     <input type="text" class="form-control" id="memberNm" placeholder="회원명"
                                                            style="width: 80px;  margin-left: 0px;">
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-primary" id="search-member">중복확인</button>
+                                                        <button class="btn btn-primary" id="check-member">중복확인</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -276,11 +257,100 @@
                         </div>
                     </div>
                 </div>
-                <!-- 예약잡기 팝업body end -->
+                <!-- 회원등록 팝업body end -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
+                    <button type="button" class="btn btn-primary" id="add-member">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+    <!-- lesson modal start -->
+    <div class="modal fade" id="lessonModalCenter" tabindex="-1" role="dialog" aria-labelledby="lessonModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lessonModalCenterTitle">
+                        회원등록
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 0.5rem;">
+                    <!-- 예약잡기 팝업body start -->
+                    <div class="table-responsive" style="margin-top: 0px;">
+                        <div id="new-lesson-container">
+                            <%--<script type="text/html" id="new-reservation-template">--%>
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <%--<tr style="text-align: center">
+                                        <th width="12%">#구분</th>
+                                        <th width="18%">회차</th>
+                                        <th>시작일</th>
+                                        <th>종료일</th>
+                                    </tr>--%>
+                                </thead>
+                                <tbody>
+                                    <%--{{#list}}--%>
+                                    <tr data-id="{{lsnData}}" style="text-align: center;">
+                                        <td width="50%" style="height:40px;">회원명</td>
+                                        <td width="50%">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="회원명"
+                                                       style="width: 80px;  margin-left: 0px;">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="50%" style="height:40px;">모바일</td>
+                                        <td width="50%">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="010-1234-5678"
+                                                       style="width: 80px;  margin-left: 0px;">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="50%" style="height:40px;">성별</td>
+                                        <td width="50%"><select class="custom-select">
+                                            <option value="남">남성</option>
+                                            <option value="여">여성</option>
+                                        </select></td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="50%" style="height:40px;">가입경로</td>
+                                        <td width="50%">
+                                            <select class="custom-select"></select>
+                                        </td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="50%" style="height:40px;">상태</td>
+                                        <td width="50%"><select class="custom-select">
+                                            <option value="Y">활동</option>
+                                            <option value="N">비활동</option>
+                                        </select></td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="100%" colspan="2">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="메모">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <%--/*</script>*/--%>
+                        </div>
+                    </div>
+                </div>
+                <!-- 회원등록 팝업body end -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="add-member">등록</button>
                 </div>
             </div>
         </div>
