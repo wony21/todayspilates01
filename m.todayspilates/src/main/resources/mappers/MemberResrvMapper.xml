@@ -33,14 +33,12 @@
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
 		GROUP BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO) B
-		WHERE A.COMP_CD =
-		B.COMP_CD
+		WHERE A.COMP_CD = B.COMP_CD
 		AND A.STOR_CD = B.STOR_CD
 		AND A.MEMBER_NO = B.MEMBER_NO
 		AND
 		A.LSN_NO = B.LSN_NO
-		AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M
-		C, MEMBER_M D
+		AND A.LSN_SEQ = B.LSN_SEQ) A, MEMBER_LSN_M B, EMP_M C, MEMBER_M D
 		WHERE A.COMP_CD = B.COMP_CD
 		AND A.STOR_CD = B.STOR_CD
 		AND
@@ -196,15 +194,11 @@
 		,CASE WHEN H.RSV_DT IS NOT NULL THEN
 		SUBSTRING(DATENAME(DW, H.RSV_DT), 1,
 		1) END AS DY
-		,A.EMP_NO
-		,E.EMP_NM
+		,H.EMP_NO
+		,H.EMP_NM
 		,A.REMARK
 		,A.CLS_FG
 		FROM MEMBER_LSN_M A
-		LEFT OUTER JOIN EMP_M E ON
-		A.COMP_CD = E.COMP_CD
-		AND A.STOR_CD = E.STOR_CD
-		AND A.EMP_NO = E.EMP_NO
 		INNER JOIN LSN_M F ON A.COMP_CD = F.COMP_CD
 		AND A.STOR_CD = F.STOR_CD
 		AND A.LSN_CD = F.LSN_CD
@@ -217,8 +211,12 @@
 		SELECT
 		T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM
 		,T.LSN_SEQ
-		,T.ATND_FG ,T.RSV_DT ,T.RSV_TM
+		,T.ATND_FG ,T.RSV_DT ,T.RSV_TM, T.EMP_NO, E.EMP_NM
 		FROM ATND_T T
+		LEFT OUTER JOIN EMP_M E
+		ON T.COMP_CD = E.COMP_CD
+		AND T.STOR_CD = E.STOR_CD
+		AND T.EMP_NO = E.EMP_NO
 		<where>
 			<if test="atndFg != null and atndFg != ''">
 				ATND_FG IN
@@ -228,7 +226,8 @@
 				</foreach>
 			</if>
 		</where>
-		) H ON A.COMP_CD = H.COMP_CD
+		 ) H 
+		ON A.COMP_CD = H.COMP_CD
 		AND A.STOR_CD = H.STOR_CD
 		AND A.MEMBER_NO = H.MEMBER_NO
 		AND A.LSN_NO = H.LSN_NO
@@ -262,7 +261,7 @@
 			AND A.EMP_NO = #{empNo}
 		</if>
 		<if test="rsvDt != null and rsvDt != ''">
-				<![CDATA[ AND H.RSV_DT >= #{rsvDt} ]]>
+				<![CDATA[ AND H.RSV_DT = #{rsvDt} ]]>
 		</if>
 		AND A.CLS_FG = '1'
 		<if test="lsnFg != null and lsnFg != ''">
@@ -273,7 +272,6 @@
 		</if>
 		ORDER BY A.COMP_CD
 		,A.STOR_CD
-		,A.MEMBER_NO
 		,RSV_DT ASC, RSV_TM ASC
 	</select>
 	<select id="getDetailUseLesson" parameterType="hashmap"
