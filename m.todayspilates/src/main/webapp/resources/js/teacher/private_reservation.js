@@ -37,14 +37,17 @@ fnObj.initEvent = function(user) {
 //					location.refresh();
 //					return false;
 //				}
+				var memberNm = '';
 				res.forEach(function(n) {
 					n.lsnData = JSON.stringify(n);
-					n.lsnStDt = (n.lsnStDt == '') ? '' : ('`' + n.lsnStDt.substr(2, 2) + '.' + n.lsnStDt.substr(4, 2) + '.' + n.lsnStDt.substr(6, 7));	// yy-mm-dd
-					n.lsnEdDt = (n.lsnEdDt == '') ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
+					n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ? '' : ('`' + n.lsnStDt.substr(2, 2) + '.' + n.lsnStDt.substr(4, 2) + '.' + n.lsnStDt.substr(6, 7));	// yy-mm-dd
+					n.lsnEdDt = (n.lsnEdDt == null || n.lsnEdDt == '') ? '' : ('`' + n.lsnEdDt.substr(2, 2) + '.' + n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
 					// n.lsnTm = Number(n.lsnTm).toFixed(1);
 					n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
+					memberNm = n.memberNm;
+					console.log(n.memberNm);
 				});
-				$('#userInfo').text(lsnData.memberNm);
+				$('#userInfo').text(memberNm);
 				let html = Mustache.render(newReservation, {list: res});
 				$('#new-reservation-container').html(html);
 				
@@ -217,13 +220,20 @@ fnObj.fn = {
 		  return false;
 		}
 		
+		var empNo = $("#teacher option:selected").val();
+		if (empNo == null || empNo == '') {
+			alert('선생님을 선택해 주세요.');
+			return false;
+		}
+		console.log(empNo);
+		
 		let item = $("#new-reservation-container tbody").find('tr').eq(selectedItem).data('id');
 		//requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
 		let data = [{
 			compCd: item.compCd,
 			storCd: item.storCd,
 			memberNo: item.memberNo,
-			empNo: item.empNo,
+			empNo: empNo,
 			lsnNo: item.lsnNo,
 			lsnCd: item.lsnCd,
 			rsvDt: $('#rsvDt').val(),
@@ -256,7 +266,7 @@ $(document).ready(function() {
 	fnObj.initEvent(user);
 	
 	//개인레슨 예약조회
-	fnObj.fn.getPrivateLesson(user);
+	//fnObj.fn.getPrivateLesson(user);
 	//선생님 목록은 예약현황 로드시 한번만 셋팅 
 	fnObj.fn.setTeacher(user);
 });
