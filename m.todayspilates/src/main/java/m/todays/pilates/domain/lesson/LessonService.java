@@ -24,11 +24,12 @@ public class LessonService extends BaseService {
 		return mapper.getLesson(parameter);
 	}
 
-	public List getRegisterLessons(String compCd, String storCd, String memberNm) {
+	public List getRegisterLessons(String compCd, String storCd, String memberNm, String memberNo) {
 		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
 		parameter.put(ParamNames.memberNm, memberNm);
 		return mapper.getRegisterLessons(parameter);
 	}
@@ -43,14 +44,15 @@ public class LessonService extends BaseService {
 			String lsnCd = (String) map.get(ParamNames.lsnCd);
 			String lsnTy = (String) map.get(ParamNames.lsnTy);
 			String lsnFg = (String) map.get(ParamNames.lsnFg);
-			String lsnAmt = (String) map.get(ParamNames.lsnAmt);
+			Integer lsnAmt = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnAmt)));
 			String payTp = (String) map.get(ParamNames.payTp);
-			String lsnCnt = (String) map.get(ParamNames.lsnCnt);
-			String lsnExpWk = (String) map.get(ParamNames.lsnExpWk);
+			Integer lsnCnt = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnCnt)));
+			Integer lsnExpWk = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnExpWk)));
 			String empNo = (String) map.get(ParamNames.empNo);
 			String remark = (String) map.get(ParamNames.remark);
 			String regDt = (String) map.get(ParamNames.regDt);
-			String clsFg = CommonData.CLS_FG.ING;
+			//String clsFg = CommonData.CLS_FG.ING;
+			String clsFg = (String) map.get(ParamNames.clsFg);
 			Map<String, Object> parameter = new HashMap<String, Object>();
 			System.out.println(parameter.toString());
 			parameter.put(ParamNames.compCd, compCd);

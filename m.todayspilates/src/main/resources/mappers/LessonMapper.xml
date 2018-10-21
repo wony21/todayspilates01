@@ -49,10 +49,17 @@
 		<if test="memberNm != '' and memberNm != null">
 		AND B.MEMBER_NM LIKE '%' + #{memberNm} + '%'
 		</if>
+		<if test="memberNo != '' and memberNo != null">
+		AND A.MEMBER_NO = #{memberNo}
+		</if>
     ORDER BY A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.REG_DT
     </select>
     <insert id="addMemberLesson" parameterType="hashmap">
     	INSERT INTO MEMBER_LSN_M (COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD, LSN_TY, LSN_FG, LSN_AMT, PAY_TP, LSN_CNT, LSN_EXP_WK, EMP_NO, REMARK, REG_DT, CLS_FG)
-		VALUES (#{compCd}, #{storCd}, #{memberNo}, #{lsnNo}, #{lsnCd}, #{lsnTy}, #{lsnFg}, #{lsnAmt}, #{payTp}, ${lsnCnt}, #{lsnExpWk}, #{empNo}, #{remark}, #{regDt}, #{clsFg})
+		VALUES (#{compCd}, #{storCd}, #{memberNo}, (SELECT ISNULL(REPLICATE('0', 3-LEN(CAST(MAX(LSN_NO)+1 AS CHAR)))+CAST(MAX(LSN_NO)+1 AS VARCHAR), '001') 
+													FROM MEMBER_LSN_M
+													WHERE COMP_CD = #{compCd}
+														AND STOR_CD = #{storCd}
+														AND MEMBER_NO = #{memberNo}), #{lsnCd}, #{lsnTy}, #{lsnFg}, #{lsnAmt}, #{payTp}, ${lsnCnt}, #{lsnExpWk}, #{empNo}, #{remark}, #{regDt}, #{clsFg})
     </insert>
 </mapper>

@@ -38,14 +38,16 @@ public class LessonController extends BaseController {
 	@RequestMapping(value = "/api/lesson/list", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getRegisterLessons(@RequestParam String storCd,
-							@RequestParam(required = false) String memberNm) {
+							@RequestParam(required = false) String memberNm,
+							@RequestParam(required = false) String memberNo) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return lessonService.getRegisterLessons(compCd, storCd, memberNm);
+		return lessonService.getRegisterLessons(compCd, storCd, memberNm, memberNo);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/api/lesson/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addLesson(@RequestBody List<HashMap> requestParams) {
+		System.out.println("controller --> put : api/lesson/add");
 		return lessonService.addMemberLesson(requestParams);
 	}
 }
