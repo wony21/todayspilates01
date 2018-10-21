@@ -96,10 +96,10 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
-                                <th width="12%">#순번</th>
-                                <th width="18%">회원명</th>
-                                <th width="12%">성별</th>
-                                <th width="18%">모바일(HP)</th>
+                                <%--<th width="12%">#순번</th>--%>
+                                <th width="15%">회원명</th>
+                                <th width="10%">성별</th>
+                                <th width="25%">모바일(HP)</th>
                                 <th width="*">메모</th>
                                 <th width="12%">상태</th>
                             </tr>
@@ -107,17 +107,17 @@
                             <tbody>
                             {{#list}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td style="height:40px;">{{idx}}</td>
-                                <td>{{memberNm}}</td>
+                                <%--<td style="height:40px;">{{idx}}</td>--%>
+                                <td style="height:40px;">{{memberNm}}</td>
                                 <td>{{sex}}</td>
-                                <td>{{mobile}}</td>
+                                <td>{{hp}}</td>
                                 <td>{{remark}}</td>
-                                <td>{{status}}</td>
+                                <td>{{useYnNm}}</td>
                             </tr>
                             {{/list}}
                             {{^list}}
                             <tr style="text-align: center;">
-                                <td colspan="6">등록정보가 없습니다.</td>
+                                <td style="height:40px;" colspan="6">등록정보가 없습니다.</td>
                             </tr>
                             {{/list}}
                             </tbody>
@@ -143,31 +143,34 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
-                                <th width="12%">#순번</th>
-                                <th width="18%">회원명</th>
+                                <%--<th width="12%">#순번</th>--%>
+                                <th width="15%">회원명</th>
                                 <th>종류</th>
                                 <th>등록</th>
                                 <th>사용</th>
                                 <th>조정</th>
                                 <th>잔여</th>
-                                <th>종료일</th>
-                                <th>선생님</th>
+                                <th width="20%">종료일</th>
+                                <th width="15%">선생님</th>
                             </tr>
                             </thead>
                             <tbody>
                             {{#list}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td style="height:40px;">{{idx}}</td>
-                                <td>{{memberNm}}</td>
-                                <td>{{sex}}</td>
-                                <td>{{mobile}}</td>
-                                <td>{{remark}}</td>
-                                <td>{{status}}</td>
+                                <%--<td style="height:40px;">{{idx}}</td>--%>
+                                <td style="height:40px;">{{memberNm}}</td>
+                                <td>{{lsnTyNm}}</td>
+                                <td>{{lsnCnt}}</td>
+                                <td>{{lsnUseCnt}}</td>
+                                <td>{{lsnModCnt}}</td>
+                                <td>{{lsnRestCnt}}</td>
+                                <td>{{lsnEdDt}}</td>
+                                <td>{{empNm}}</td>
                             </tr>
                             {{/list}}
                             {{^list}}
                             <tr style="text-align: center;">
-                                <td colspan="6">등록정보가 없습니다.</td>
+                                <td style="height:40px;" colspan="8">등록정보가 없습니다.</td>
                             </tr>
                             {{/list}}
                             </tbody>
@@ -218,7 +221,7 @@
                                             </td>
                                         </tr>
                                         <tr style="text-align: center;">
-                                            <td width="50%" style="height:40px;">모바일</td>
+                                            <td width="50%" style="height:40px;">모바일(HP)</td>
                                             <td width="50%">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" placeholder="010-1234-5678"
@@ -264,7 +267,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="add-member">등록</button>
+                    <button type="button" class="btn btn-primary" id="add-member">저장</button>
                 </div>
             </div>
         </div>
@@ -298,7 +301,7 @@
                                 </thead>
                                 <tbody>
                                     <%--{{#list}}--%>
-                                    <tr data-id="{{lsnData}}" style="text-align: center;">
+                                    <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">회원명</td>
                                         <td width="25%">
                                             <div class="input-group">
@@ -409,13 +412,13 @@
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">수업여부</td>
-                                        <td width="25%"><select class="custom-select" id="">
+                                        <td width="25%"><select class="custom-select" id="clsFg">
                                             <option value="1">수업</option>
-                                            <option value="2">중단</option>
+                                            <option value="2">미수업</option>
                                         </select></td>
                                         <td width="50%" style="height:40px;" colspan="2"></td>
                                     </tr>
-                                    <tr style="text-align: center;">lsnRestCnt
+                                    <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">메모</td>
                                         <td width="75%" colspan="3">
                                             <div class="input-group">
@@ -434,7 +437,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
+                    <button type="button" class="btn btn-primary" id="add-lesson">저장</button>
                 </div>
             </div>
         </div>
