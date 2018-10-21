@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import m.todays.pilates.common.BaseService;
@@ -33,6 +34,19 @@ public class LessonService extends BaseService {
 		parameter.put(ParamNames.memberNm, memberNm);
 		return mapper.getRegisterLessons(parameter);
 	}
+	
+	public Integer parseInteger(Object item) {
+		Integer returnValue;
+		if ( item == null ) {
+			return 0;
+		}
+		String strValue = item.toString();
+		if ( StringUtils.isEmpty(strValue) ) {
+			return 0;
+		}
+		returnValue = Integer.valueOf(strValue);
+		return returnValue;
+	}
 
 	public ApiResponse addMemberLesson(List<HashMap> requestParams) {
 		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
@@ -44,10 +58,10 @@ public class LessonService extends BaseService {
 			String lsnCd = (String) map.get(ParamNames.lsnCd);
 			String lsnTy = (String) map.get(ParamNames.lsnTy);
 			String lsnFg = (String) map.get(ParamNames.lsnFg);
-			Integer lsnAmt = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnAmt)));
+			Integer lsnAmt = parseInteger(map.get(ParamNames.lsnAmt));
 			String payTp = (String) map.get(ParamNames.payTp);
-			Integer lsnCnt = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnCnt)));
-			Integer lsnExpWk = Integer.valueOf(String.valueOf(map.get(ParamNames.lsnExpWk)));
+			Integer lsnCnt = parseInteger(map.get(ParamNames.lsnCnt));
+			Integer lsnExpWk = parseInteger(map.get(ParamNames.lsnExpWk));
 			String empNo = (String) map.get(ParamNames.empNo);
 			String remark = (String) map.get(ParamNames.remark);
 			String regDt = (String) map.get(ParamNames.regDt);
@@ -71,6 +85,47 @@ public class LessonService extends BaseService {
 			parameter.put(ParamNames.regDt, regDt);
 			parameter.put(ParamNames.clsFg, clsFg);
 			mapper.addMemberLesson(parameter);
+		}
+		return ApiResponse.success("ok");
+	}
+	
+	public ApiResponse modifyMemberLesson(List<HashMap> requestParams) {
+		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
+		for (HashMap map : requestParams) {
+			String compCd = (String) map.get(ParamNames.compCd);
+			String storCd = (String) map.get(ParamNames.storCd);
+			String memberNo = (String) map.get(ParamNames.memberNo);
+			String lsnNo = (String) map.get(ParamNames.lsnNo);
+			String lsnCd = (String) map.get(ParamNames.lsnCd);
+			String lsnTy = (String) map.get(ParamNames.lsnTy);
+			String lsnFg = (String) map.get(ParamNames.lsnFg);
+			Integer lsnAmt = parseInteger(map.get(ParamNames.lsnAmt));
+			String payTp = (String) map.get(ParamNames.payTp);
+			Integer lsnCnt = parseInteger(map.get(ParamNames.lsnCnt));
+			Integer lsnExpWk = parseInteger(map.get(ParamNames.lsnExpWk));
+			String empNo = (String) map.get(ParamNames.empNo);
+			String remark = (String) map.get(ParamNames.remark);
+			String regDt = (String) map.get(ParamNames.regDt);
+			//String clsFg = CommonData.CLS_FG.ING;
+			String clsFg = (String) map.get(ParamNames.clsFg);
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			System.out.println(parameter.toString());
+			parameter.put(ParamNames.compCd, compCd);
+			parameter.put(ParamNames.storCd, storCd);
+			parameter.put(ParamNames.memberNo, memberNo);
+			parameter.put(ParamNames.lsnNo, lsnNo);
+			parameter.put(ParamNames.lsnCd, lsnCd);
+			parameter.put(ParamNames.lsnTy, lsnTy);
+			parameter.put(ParamNames.lsnFg, lsnFg);
+			parameter.put(ParamNames.lsnAmt, lsnAmt);
+			parameter.put(ParamNames.payTp, payTp);
+			parameter.put(ParamNames.lsnCnt, lsnCnt);
+			parameter.put(ParamNames.lsnExpWk, lsnExpWk);
+			parameter.put(ParamNames.empNo, empNo);
+			parameter.put(ParamNames.remark, remark);
+			parameter.put(ParamNames.regDt, regDt);
+			parameter.put(ParamNames.clsFg, clsFg);
+			mapper.updateMemberLesson(parameter);
 		}
 		return ApiResponse.success("ok");
 	}

@@ -3,6 +3,7 @@ let fnObj = {};
 let reservationList = [];
 let reservationTmpl = $('#reservation-template').html();
 let newReservationTmpl = $('#new-reservation-template').html();
+let selectedItem;
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 //view 초기화 
@@ -115,11 +116,11 @@ fnObj.initEvent = function(user) {
     //검색된 그룹레슨 클릭 이벤트
     $('#new-reservation-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
+        selectedItem = lsnData;
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         $('#new-reservation-container tbody tr').
-            children('td').
-            removeClass('selected');
+            children('td').removeClass('selected');
         if (!selected) {
             $(this).children('td').addClass('selected');
         }
@@ -302,6 +303,9 @@ fnObj.fn = {
             url: '/api/teacher/reservation/group',
             data: {storCd: user.storCd, memberNm: memberNm},
             success: function(res) {
+            	res.forEach(function(n){
+            		n.lsnData = JSON.stringify(n);
+            	});
                 var html = Mustache.render(newReservationTmpl, {list: res});
                 $('#new-reservation-container').html(html);
             },
@@ -311,12 +315,14 @@ fnObj.fn = {
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
         let lsnData = $('#modal-caption').data('id');
+        
+        console.log(lsnData);
         let item = $('#new-reservation-container tbody tr .selected').
             data('id');
-
-        console.log(item);
+        
+        console.log(selectedItem);
         //선택된 레슨이 있는지 체크
-        if (typeof item === 'undefined') {
+        if (typeof selectedItem === 'undefined') {
             alert('먼저 예약할 레슨을 선택하세요.');
             return false;
         }
@@ -330,11 +336,11 @@ fnObj.fn = {
         //requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
         let data = [
             {
-                compCd: item.compCd,
-                storCd: item.storCd,
-                memberNo: item.memberNo,
-                lsnNo: item.lsnNo,
-                lsnCd: item.lsnCd,
+                compCd: selectedItem.compCd,
+                storCd: selectedItem.storCd,
+                memberNo: selectedItem.memberNo,
+                lsnNo: selectedItem.lsnNo,
+                lsnCd: selectedItem.lsnCd,
                 empNo: lsnData.empNo,
                 rsvDt: lsnData.rsvDt,
                 rsvTm: lsnData.stTm,

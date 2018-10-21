@@ -49,4 +49,10 @@ public class LessonController extends BaseController {
 	public ApiResponse addLesson(@RequestBody List<HashMap> requestParams) {
 		return lessonService.addMemberLesson(requestParams);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/lesson/modify", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse modifyLesson(@RequestBody List<HashMap> requestParams) {
+		return lessonService.modifyMemberLesson(requestParams);
+	}
 }
