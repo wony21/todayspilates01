@@ -58,7 +58,7 @@
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher/member_signup">회원등록/수업등록</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
-				href="#">내수업실적</a></li>
+				href="/teacher/my_lesson_report">내수업실적</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="#" id="logout">로그아웃</a></li>
 		</ul>

@@ -39,7 +39,7 @@ public class TeacherController extends BaseController {
 	 * @param empNo 선생님 코드(필수아님)
 	 * @return
 	 */
-	@RequestMapping(value = "/api/teacher/performonce", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@RequestMapping(value = "/api/teacher/performance", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getTeacher(@RequestParam(required = false) String storCd,
 							@RequestParam String schMonth,
