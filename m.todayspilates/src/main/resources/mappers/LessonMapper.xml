@@ -62,6 +62,7 @@
     <insert id="updateMemberLesson" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M 
     	SET LSN_CNT = ${lsnCnt},
+    		LSN_AMT = ${lsnAmt},
     		LSN_EXP_WK = ${lsnExpWk},
     		EMP_NO = #{empNo},
     		REG_DT = #{entDt},
