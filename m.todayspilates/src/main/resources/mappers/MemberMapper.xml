@@ -16,7 +16,7 @@
     <select id="getMemberList" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
 	    SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.MEMBER_NM, A.HP, 
 			B.STOR_NM, A.ENT_FG, C.NAME AS ENT_FG_NM,
-			CASE WHEN A.SEX = 'F' THEN '여' ELSE '남' END SEX, A.REMARK
+			CASE WHEN A.SEX = 'F' THEN '여' ELSE '남' END SEX, A.REMARK, A.USE_YN
 		FROM MEMBER_M A
 		INNER JOIN STOR_M B
 		ON A.COMP_CD = B.COMP_CD
