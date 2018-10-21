@@ -126,7 +126,19 @@ body {
 #new-reservation-container .selected {
   color: #fff;
   background-color: rgba(255, 0, 0, .5);
-  border-color: rgba(255, 0, 0, 1);
+  border-color: rgba(255, 0, 0, .5);
+}
+
+#member-container .selected {
+  color: #fff;
+  background-color: rgba(255, 0, 0, .5);
+  border-color: rgba(255, 0, 0, .5);
+}
+
+#lesson-container .selected {
+  color: #fff;
+  background-color: rgba(255, 0, 0, .5);
+  border-color: rgba(255, 0, 0, .5);
 }
 /*
  * Utilities
