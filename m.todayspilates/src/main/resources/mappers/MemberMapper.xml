@@ -60,6 +60,7 @@
 			#{sex, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{entDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{remark, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{useYn, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{userCd, mode=IN, jdbcType=VARCHAR, javaType=string}
 			)
 		}
