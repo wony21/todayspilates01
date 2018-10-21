@@ -68,6 +68,7 @@ public class MemberController extends BaseController {
 			String memberNm = (String)item.get(ParamNames.memberNm);
 			String sex = (String)item.get(ParamNames.sex);
 			String entDt = (String)item.get(ParamNames.entDt);
+			String useYn = (String)item.get(ParamNames.useYn);
 			String remark = (String)item.get(ParamNames.remark);
 			List existMembers = existMember(storCd, mobile);
 			if ( existMembers.size() > 0 ) {
