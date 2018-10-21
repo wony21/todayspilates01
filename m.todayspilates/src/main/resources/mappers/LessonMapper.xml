@@ -57,14 +57,14 @@
 													FROM MEMBER_LSN_M
 													WHERE COMP_CD = #{compCd}
 														AND STOR_CD = #{storCd}
-														AND MEMBER_NO = #{memberNo}), #{lsnCd}, #{lsnTy}, #{lsnFg}, #{lsnAmt}, #{payTp}, ${lsnCnt}, #{lsnExpWk}, #{empNo}, #{remark}, #{regDt}, #{clsFg})
+														AND MEMBER_NO = #{memberNo}), #{lsnCd}, #{lsnTy}, #{lsnFg}, #{lsnAmt}, #{payTp}, ${lsnCnt}, #{lsnExpWk}, #{empNo}, #{remark}, #{entDt}, #{clsFg})
     </insert>
     <insert id="updateMemberLesson" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M 
     	SET LSN_CNT = ${lsnCnt},
     		LSN_EXP_WK = ${lsnExpWk},
     		EMP_NO = #{empNo},
-    		REG_DT = #{regDt},
+    		REG_DT = #{entDt},
     		REMARK = #{remark},
     		CLS_FG = #{clsFg}
     	WHERE COMP_CD = #{compCd}

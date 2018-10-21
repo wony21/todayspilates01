@@ -64,7 +64,7 @@ public class LessonService extends BaseService {
 			Integer lsnExpWk = parseInteger(map.get(ParamNames.lsnExpWk));
 			String empNo = (String) map.get(ParamNames.empNo);
 			String remark = (String) map.get(ParamNames.remark);
-			String regDt = (String) map.get(ParamNames.regDt);
+			String entDt = (String) map.get(ParamNames.entDt);
 			//String clsFg = CommonData.CLS_FG.ING;
 			String clsFg = (String) map.get(ParamNames.clsFg);
 			Map<String, Object> parameter = new HashMap<String, Object>();
@@ -82,7 +82,7 @@ public class LessonService extends BaseService {
 			parameter.put(ParamNames.lsnExpWk, lsnExpWk);
 			parameter.put(ParamNames.empNo, empNo);
 			parameter.put(ParamNames.remark, remark);
-			parameter.put(ParamNames.regDt, regDt);
+			parameter.put(ParamNames.entDt, entDt);
 			parameter.put(ParamNames.clsFg, clsFg);
 			mapper.addMemberLesson(parameter);
 		}
@@ -105,7 +105,7 @@ public class LessonService extends BaseService {
 			Integer lsnExpWk = parseInteger(map.get(ParamNames.lsnExpWk));
 			String empNo = (String) map.get(ParamNames.empNo);
 			String remark = (String) map.get(ParamNames.remark);
-			String regDt = (String) map.get(ParamNames.regDt);
+			String entDt = (String) map.get(ParamNames.entDt);
 			//String clsFg = CommonData.CLS_FG.ING;
 			String clsFg = (String) map.get(ParamNames.clsFg);
 			Map<String, Object> parameter = new HashMap<String, Object>();
@@ -123,7 +123,7 @@ public class LessonService extends BaseService {
 			parameter.put(ParamNames.lsnExpWk, lsnExpWk);
 			parameter.put(ParamNames.empNo, empNo);
 			parameter.put(ParamNames.remark, remark);
-			parameter.put(ParamNames.regDt, regDt);
+			parameter.put(ParamNames.entDt, entDt);
 			parameter.put(ParamNames.clsFg, clsFg);
 			mapper.updateMemberLesson(parameter);
 		}

@@ -305,6 +305,16 @@ fnObj.fn = {
             success: function(res) {
             	res.forEach(function(n){
             		n.lsnData = JSON.stringify(n);
+            		n.lsnStDt = (isValidDate(n.lsnStDt) === false) ?
+                            '' :
+                            ('`' + n.lsnStDt.substr(2, 2) + '.' +
+                                n.lsnStDt.substr(4, 2) + '.' +
+                                n.lsnStDt.substr(6, 7));
+            		n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ?
+                            '' :
+                            ('`' + n.lsnEdDt.substr(2, 2) + '.' +
+                                n.lsnEdDt.substr(4, 2) + '.' +
+                                n.lsnEdDt.substr(6, 7));
             	});
                 var html = Mustache.render(newReservationTmpl, {list: res});
                 $('#new-reservation-container').html(html);
