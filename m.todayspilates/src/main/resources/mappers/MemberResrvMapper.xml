@@ -675,7 +675,22 @@
 		SELECT A.COMP_CD,
 		A.STOR_CD, A.MEMBER_NO, B.MEMBER_NM, A.LSN_NO, C.LSN_NM,
 		A.LSN_SEQ,
-		A.LSN_NUM, A.LSN_CD, A.LSN_TM, A.ATND_FG, A.GRP_SEQ,
+		A.LSN_NUM LSN_NUM2, 
+		(select
+			sum(lsn_tm)
+		from
+			atnd_t
+		where
+			comp_cd = a.comp_cd
+			and stor_cd = a.stor_cd
+			and member_no = a.member_no
+			and lsn_cd = a.lsn_cd
+			and lsn_no = a.lsn_no
+			and atnd_fg in ('0','1', '2')
+			<![CDATA[
+			and lsn_seq <= a.lsn_seq) as LSN_NUM,
+			]]>
+		A.LSN_CD, A.LSN_TM, A.ATND_FG, A.GRP_SEQ,
 		A.RSV_DT,
 		A.RSV_TM, A.ATND_DT, A.ATND_TM, E.LSN_USE_CNT, E.LSN_CD,
 		E.LSN_CNT,

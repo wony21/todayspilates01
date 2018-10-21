@@ -120,7 +120,7 @@
 								<tr data-id="{{lsnData}}" style="text-align: center;">
 								  <td style="height:40px;">{{idx}}</td>
 								  <td>{{memberNm}}</td>
-								  <td>{{lsnUseCnt}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+								  <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
 								  <td>{{lsnEdDt}}</td>
 								  <td class="select" data-id="{{atndFg}}"><select id="sel-attend" class="custom-select attend-process">
                                       <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
