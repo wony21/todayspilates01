@@ -47,7 +47,6 @@ public class LessonController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/api/lesson/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addLesson(@RequestBody List<HashMap> requestParams) {
-		System.out.println("controller --> put : api/lesson/add");
 		return lessonService.addMemberLesson(requestParams);
 	}
 }

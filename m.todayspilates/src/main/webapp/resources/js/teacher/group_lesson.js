@@ -314,6 +314,7 @@ fnObj.fn = {
         let item = $('#new-reservation-container tbody tr .selected').
             data('id');
 
+        console.log(item);
         //선택된 레슨이 있는지 체크
         if (typeof item === 'undefined') {
             alert('먼저 예약할 레슨을 선택하세요.');
