@@ -1,16 +1,29 @@
 var common = {};
 let fnObj = {};
-let reservationList = [];
-let reservationTmpl = $('#reservation-template').html();
-let newReservationTmpl = $('#new-reservation-template').html();
-const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+let memberTmpl = $('#member-template').html();
+let newMemberTmpl = $('#new-member-template').html();
+let lessonTmpl = $('#lesson-template').html();
+let newLessonTmpl = $('#new-lesson-template').html();
 
 //view 초기화
 fnObj.initView = function(user) {
+    let html;
     $('.username').text(user.username);
 
-    var html = Mustache.render(newReservationTmpl, {list: []});
-    $('#new-reservation-container').html(html);
+    html = Mustache.render(memberTmpl, {list: []});
+    $('#member-container').html(html);
+
+    html = Mustache.render(lessonTmpl, {list: []});
+    $('#lesson-container').html(html);
+
+    //가입경로조회
+    fnObj.fn.setSignUpPath(user);
+    //선생님조회
+    fnObj.fn.setTeacher(user);
+    //레슨코드조회(개인,그룹..)
+    fnObj.fn.setLessonCd(user);
+    //레슨종류조회 (정상,체험,쿠폰)
+    fnObj.fn.setLessonType(user);
 };
 
 //이벤트 초기화
@@ -33,102 +46,112 @@ fnObj.initEvent = function(user) {
 };
 
 fnObj.fn = {
-    //예약정보조회 (선택주, 선생님, 회원명, 일자)
-    getGroupLesson: function(user) {
-        let search = fnObj.fn.getData(user);
-        reservationList.length = 0;
-
-        //검색일자가 유효하지 않으면 현재일자로 조회
-        if (isValidDate(search.schDt) === false) {
-            search.schDt = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
-        }
+    //등록된 회원조회 (회원명으로 검색)
+    getMember: function(user) {
+        let filter = $.trim($('#filter').val());
 
         $.ajax({
             type: 'GET',
-            url: '/api/teacher/reservation/group/list',
-            data: search,
+            url: '/api/member/list',
+            data: {storCd: user.storCd, memberNm: filter},
             success: function(res) {
-                if (res.length) {
-                    res.forEach(function(m) {
-                        let obj = $.extend(true, {}, m);	//object deep copy
-                        delete obj.schedule;
-                        m.lsnData = JSON.stringify(obj);
-                        m.stTm = (isValidTime(m.stTm) === false) ?
-                            '' :
-                            m.stTm.substr(0, 2) + ':' + m.stTm.substr(2, 3);  // hh:mm
-                        m.lsnTm = m.lsnTm.toFixed(1);
-                        m.schedule.forEach(function(n, idx) {
-                            n.empNo = m.empNo;
-                            n.empNm = m.empNm;
-                            n.lsnLv = m.lsnLv;
-                            n.lsnLvNm = m.lsnLvNm;
-                            n.lsnData = JSON.stringify(n);
-
-                            n.idx = idx + 1;
-                            n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ?
-                                '' :
-                                ('`' + n.lsnEdDt.substr(2, 2) + '.' +
-                                    n.lsnEdDt.substr(4, 2) + '.' +
-                                    n.lsnEdDt.substr(6, 7));	// yy-mm-dd
-
-                            // 출/결처리가 된 항목은 '취소'불가 처리(렌더링 후 jquery를 위한 flag 처리)
-                            if (n.atndFg == '1') {
-                                n.sel1 = 'selected';
-                                n.sel3 = 'hidden';
-                                n.optFg3 = '0';
-                            } else if (n.atndFg == '2') {
-                                n.sel2 = 'selected';
-                                n.sel3 = 'hidden';
-                                n.optFg3 = '0';
-                            } else if (n.atndFg == '3') {
-                                n.sel3 = 'selected';
-                            }
-                        });
-                    });
-                }
-
-                var html = Mustache.render(reservationTmpl, {list: res});
-                $('#reservation-container').html(html);
-
-                if (res.length) {
-                    reservationList = res.slice(0); // res array deep copy
-                }
-                // 출/결처리가 된 항목은 '취소'는 불가하도록 처리
-                $('#sel-attend option[display-flag=\'0\']').each(function() {
-                    $(this).remove();
-                });
+                var html = Mustache.render(memberTmpl, {list: res});
+                $('#member-container').html(html);
             },
         });
         return false;
     },
-    // 출결처리
-    updateLessonAttendance: function(user, lsnData, val) {
-        let data = [].concat(lsnData);
-        let url = '/api/teacher/lesson/attend';
 
-        if (val == '2') {
-            url = '/api/teacher/lesson/absent';
-        } else if (val == '3') {
-            url = '/api/teacher/lesson/cancel';
-        }
+    //검색된 회원의 수업조회
+    getLesson: function(user) {
+        let search = fnObj.fn.getData(user);
 
         $.ajax({
-            type: 'PUT',
-            url: url,
-            data: JSON.stringify(data),
-            contentType: 'application/json; charset=UTF-8',
+            type: 'GET',
+            url: '/api/lesson/list',
+            data: search,
             success: function(res) {
-                console.log('update success....');
+                var html = Mustache.render(lessonTmpl, {list: res});
+                $('#lesson-container').html(html);
             },
         });
         return false;
+    },
+
+    //회원가입경로 코드 조회
+    setSignUpPath: function(user) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/common',
+            data: {groupCd: '006'},
+            success: function(res) {
+                let option;
+                res.forEach(function(n) {
+                    option += ' <option value="' + n.code + '">' + n.name +
+                        '</option> ';
+                });
+                $('#signup-path').html(option);
+            },
+        });
+        return false;
+    },
+
+    //수업등록 팝업 - 선생님리스트 조회
+    setTeacher: function(user) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/teacher',
+            data: {storCd: user.storCd},
+            success: function(res) {
+                let option = '<option value="">선생님(전체)</option>';
+                res.forEach(function(n) {
+                    option += ' <option value="' + n.empNo + '">' + n.empNm +
+                        '</option> ';
+                });
+                $('#teacher').html(option);
+                $('#teacher').val(user.empNo);	// 로그인한 선생님으로 선택
+            },
+        });
+    },
+
+    //수업코드 조회 (개인,그룹,....)
+    setLessonCd: function(user) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/lesson',
+            data: { storCd: user.storCd, lsnFg: '1'},
+            success: function(res) {
+                let option;
+                res.forEach(function(n) {
+                    option += ' <option value="' + n.lsnCd + '">' + n.lsnNm +
+                        '</option> ';
+                });
+                $('#lsnCd').html(option);
+            },
+        });
+    },
+
+    //레슨종류 조회 (정상,체험,쿠폰...)
+    setLessonType: function(user) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/common',
+            data: { groupCd: '003'},
+            success: function(res) {
+                let option;
+                res.forEach(function(n) {
+                    option += ' <option value="' + n.code + '">' + n.name +
+                        '</option> ';
+                });
+                $('#lsnFg').html(option);
+            },
+        });
     },
 
     // 조회조건
     getData: function(user) {
         return {
-            storCd: user.storCd,
-            schDt: $('#datepicker tbody tr .selected').data('id'),
+            memberId: user.storCd,
         };
     },
 
@@ -155,45 +178,32 @@ fnObj.fn = {
     },
 
     //그룹레슨 예약등록 처리
-    addGroupLesson: function() {
-        let lsnData = $('#modal-caption').data('id');
-        let item = $('#new-reservation-container tbody tr .selected').
-            data('id');
-
-        //선택된 레슨이 있는지 체크
-        if (typeof item === 'undefined') {
-            alert('먼저 예약할 레슨을 선택하세요.');
-            return false;
-        }
-
-        /* 예약 confirm */
-        var retReserv = confirm('예약하시겠습니까?');
-        if (retReserv != true) {
-            return false;
-        }
-
-        //requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
+    addLesson: function(user) {
         let data = [
             {
-                compCd: item.compCd,
-                storCd: item.storCd,
-                memberNo: item.memberNo,
-                lsnNo: item.lsnNo,
-                lsnCd: item.lsnCd,
-                empNo: lsnData.empNo,
-                rsvDt: lsnData.rsvDt,
-                rsvTm: lsnData.stTm,
-                lsnTm: lsnData.lsnTm,
+                "compCd": user.compCd,
+                "storCd": user.storCd,
+                "memberNo": $('#memberNo').data('id'),
+                "lsnNo": $('#lsnNo').val(),      //수업번호 : 3자리, 1씩 증가하도록 처리 (화면 표시가 되어야 하므로...)
+                "lsnCd": $('#lsnCd').val(),		    //수업코드: (/api/lesson?storCd=001&lsnFg=1)   여기서 사용되는 lsnFg는 (1:개인,2:그룹)
+                "lsnTy": $('#lsnTy').val(),		    //1:신규, 2:재등록
+                "lsnFg": $('#lsnFg').val(),		    //정상,체험, 쿠폰(CODE:003)
+                "lsnAmt": $('#lsnAmt').val(),	    //결제금액
+                "payTp": $('#payTp').val(),		    //결제방법코드
+                "lsnCnt": $('#lsnCnt').val(),		    //레슨등록시간
+                "lsnExpWk": $('#lsnExpWk').val(),		    //유효기간(주)
+                "empNo": $('#teacher').val(),	  //강사코드
+                "remark": $('#remark').val(),
+                "entDt": ax5.util.date((new Date()), {return: 'yyyyMMdd'}),
             }];
 
         $.ajax({
             type: 'PUT',
-            url: '/api/teacher/reservation/add',
+            url: '/api/lesson/add',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                alert('예약이 완료되었습니다.');
-                location.reload();
+                alert('수업등록이 완료되었습니다.');
             },
             error: function(error) {
                 alert(error);
@@ -204,7 +214,7 @@ fnObj.fn = {
 
 };
 
-$(document).ready(function() {
+$(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);

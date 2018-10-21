@@ -7,9 +7,11 @@
 	String empNo = SessionUtils.getCurrentUser().getEmpNo();
 	String storCd = SessionUtils.getCurrentUser().getStorCd();
 	String username2 = SessionUtils.getCurrentUser().getUsername2();
+	String compCd = SessionUtils.getCurrentUser().getCompCd();
 	request.setAttribute("userLv", userLv);
 	request.setAttribute("empNo", empNo);
 	request.setAttribute("storCd", storCd);
+	request.setAttribute("compCd", compCd);
 	request.setAttribute("username2", username2);
 %>
 <!DOCTYPE html>
@@ -276,8 +278,10 @@
 		let empNo = '<%=empNo%>';
 		let storCd = '<%=storCd%>';
 		let username2 = '<%=username2%>';
+		let compCd = '<%=compCd%>';
 		let user = {};
 		user.empNo = empNo;
+		user.compCd = compCd;
 		user.storCd = storCd;
 		user.lsnCd = '';
 		user.username = username2;
