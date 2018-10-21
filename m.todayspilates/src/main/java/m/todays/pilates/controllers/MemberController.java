@@ -57,6 +57,13 @@ public class MemberController extends BaseController {
 		return array;
 	}
 	
+	public boolean FNexistMember(@RequestParam String storCd, @RequestParam String mobile) {
+		
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		List memberList = memberService.getExistMember(compCd, storCd, mobile);
+		return !memberList.isEmpty();
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/api/member/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addMember(@RequestBody List<HashMap> requestParams) {
@@ -70,8 +77,7 @@ public class MemberController extends BaseController {
 			String entDt = (String)item.get(ParamNames.entDt);
 			String useYn = (String)item.get(ParamNames.useYn);
 			String remark = (String)item.get(ParamNames.remark);
-			List existMembers = existMember(storCd, mobile);
-			if ( existMembers.size() > 0 ) {
+			if ( FNexistMember(storCd, mobile) ) {
 				return ApiResponse.error("exist user");		
 			}
 			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entDt, remark, userCd);
