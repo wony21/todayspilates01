@@ -68,6 +68,11 @@ fnObj.initEvent = function(user) {
         fnObj.fn.showMemberModal(data);
     });
 
+    //회원중복체크 처리
+    $('#check-member').on('click', function(e) {
+        fnObj.fn.checkMember(user);
+    });
+
     // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
         let memberNo = $('#new-member-container #memberNm').data('id');
@@ -178,6 +183,24 @@ fnObj.fn = {
         });
         return false;
     },
+    //회원중복체크
+    checkMember: function(user) {
+        let filter = $.trim($('#filter').val());
+        $.ajax({
+            type: 'GET',
+            url: '/api/member/check',
+            data: {storCd: user.storCd, mobile: $('#hp').val()},
+            success: function(res) {
+                if (res[0].existMember === false) {
+                    alert('신규회원 입니다.');
+                } else {
+                    alert('이미 등록된 회원입니다. 변경하십시오');
+                }
+            },
+        });
+        return false;
+    },
+
     //신규회원등록 (팝업창에서 처리)
     addMember: function(user) {
         let gd = [].concat(this.getMemberData(user));

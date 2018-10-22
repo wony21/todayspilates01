@@ -219,10 +219,19 @@
                                     <tbody>
                                         <%--{{#list}}--%>
                                         <tr data-id="{{lsnData}}" style="text-align: center;">
-                                            <td width="50%" style="height:40px;">회원명</td>
-                                            <td width="50%">
+                                            <td width="40%" style="height:40px;">회원명</td>
+                                            <td width="60%">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="memberNm" data-id=""
+                                                           style="width: 80px;  margin-left: 0px;">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td width="40%" style="height:40px;">모바일(HP)</td>
+                                            <td width="60%">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="hp"
                                                            style="width: 80px;  margin-left: 0px;">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-primary" id="check-member">중복확인</button>
@@ -231,30 +240,21 @@
                                             </td>
                                         </tr>
                                         <tr style="text-align: center;">
-                                            <td width="50%" style="height:40px;">모바일(HP)</td>
-                                            <td width="50%">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="hp"
-                                                           style="width: 80px;  margin-left: 0px;">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr style="text-align: center;">
-                                            <td width="50%" style="height:40px;">성별</td>
-                                            <td width="50%"><select id="sex" class="custom-select">
+                                            <td width="40%" style="height:40px;">성별</td>
+                                            <td width="60%"><select id="sex" class="custom-select">
                                                 <option value="남">남성</option>
                                                 <option value="여">여성</option>
                                             </select></td>
                                         </tr>
                                         <tr style="text-align: center;">
-                                            <td width="50%" style="height:40px;">가입경로</td>
-                                            <td width="50%">
+                                            <td width="40%" style="height:40px;">가입경로</td>
+                                            <td width="60%">
                                                 <select id="entFg" class="custom-select"></select> <!--entFg -->
                                             </td>
                                         </tr>
                                         <tr style="text-align: center;">
-                                            <td width="50%" style="height:40px;">상태</td>
-                                            <td width="50%"><select id="useYn" class="custom-select">
+                                            <td width="40%" style="height:40px;">상태</td>
+                                            <td width="60%"><select id="useYn" class="custom-select">
                                                 <option value="Y">활동</option>
                                                 <option value="N">미활동</option>
                                             </select></td>
