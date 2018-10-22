@@ -74,13 +74,45 @@ public class MemberController extends BaseController {
 			String mobile = (String)item.get(ParamNames.mobile);
 			String memberNm = (String)item.get(ParamNames.memberNm);
 			String sex = (String)item.get(ParamNames.sex);
+			String entFg = (String) item.get(ParamNames.entFg);
 			String entDt = (String)item.get(ParamNames.entDt);
 			String useYn = (String)item.get(ParamNames.useYn);
 			String remark = (String)item.get(ParamNames.remark);
 			if ( FNexistMember(storCd, mobile) ) {
 				return ApiResponse.error("exist user");		
 			}
-			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entDt, remark, userCd);
+			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entFg, entDt, remark, userCd);
+		}
+		return ApiResponse.success("ok");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/member/modify", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse updateMember(@RequestBody List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd =  SessionUtils.getCurrentUser().getMemberNo();
+		for(HashMap<String, Object> item : requestParams) {
+			String storCd = (String)item.get(ParamNames.storCd);
+			String memberNo = (String)item.get(ParamNames.memberNo);
+			String sex = (String)item.get(ParamNames.sex);
+			String entFg = (String) item.get(ParamNames.entFg);
+			String entDt = (String)item.get(ParamNames.entDt);
+			String remark = (String)item.get(ParamNames.remark);
+			memberService.updateMember(compCd, storCd, memberNo, sex, entFg, entDt, remark);
+		}
+		return ApiResponse.success("ok");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/member/delete", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse deleteMember(@RequestBody List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd =  SessionUtils.getCurrentUser().getMemberNo();
+		for(HashMap<String, Object> item : requestParams) {
+			String storCd = (String)item.get(ParamNames.storCd);
+			String mobile = (String)item.get(ParamNames.mobile);
+			String memberNo = (String)item.get(ParamNames.memberNo);
+			memberService.deleteMember(compCd, storCd, mobile, memberNo);
 		}
 		return ApiResponse.success("ok");
 	}

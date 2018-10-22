@@ -58,6 +58,7 @@
 			#{memberNm, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{mobile, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{sex, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{entFg, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{entDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{remark, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{useYn, mode=IN, jdbcType=VARCHAR, javaType=string},
@@ -65,4 +66,30 @@
 			)
 		}
 	</insert>
+	<update id="updateMember" parameterType="hashmap" statementType="PREPARED">
+		UPDATE MEMBER_M
+		SET SEX = #{sex},
+			ENT_FG = #{entFg},
+			<if test="entDt != null and entDt != ''">
+			ENT_DT = #{entDt},
+			</if>
+			REMARK = #{remark}
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+	</update>
+	<delete id="deleteMember" parameterType="hashmap" statementType="PREPARED">
+		UPDATE MEMBER_M
+		SET USE_YN = 'N'
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+	</delete>
+	<delete id="deleteUser" parameterType="hashmap" statementType="PREPARED">
+		UPDATE USER_M
+		SET USE_YN = 'N'
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND USER_CD = REPLACE(#{mobile}, '-', '')
+	</delete>
 </mapper>

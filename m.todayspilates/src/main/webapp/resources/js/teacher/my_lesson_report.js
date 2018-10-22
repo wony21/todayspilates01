@@ -165,7 +165,7 @@ fnObj.fn = {
             data: search,
             success: function(res) {
                 res.forEach(function(n) {
-                    
+                    //결과값에서 화면 표시 및 통계처리 필요.
                 });
                 var html = Mustache.render(reservationTmpl, {list: res});
                 $('#reservation-container').html(html);

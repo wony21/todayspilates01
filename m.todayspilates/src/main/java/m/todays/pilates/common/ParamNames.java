@@ -37,6 +37,7 @@ public class ParamNames {
 	public final static String sex = "sex";
 	public final static String remark = "remark";
 	public final static String entDt = "entDt";
+	public final static String entFg = "entFg";
 	public final static String regDt = "regDt";
 	public final static String existMember = "existMember";
 	public final static String lsnAmt = "lsnAmt";

@@ -9,4 +9,6 @@ public interface MemberMapper {
 	List getMemberList(Map<String, Object> parameter);
 	List getExistMember(Map<String, Object> parameter);
 	void addMember(Map<String, Object> parameter);
+	void updateMember(Map<String, Object> parameter);
+	void deleteMember(Map<String, Object> parameter);
 }

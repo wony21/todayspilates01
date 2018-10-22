@@ -52,7 +52,7 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public ApiResponse addMember(String compCd, String storCd, String mobile, String memberNm, String sex, String entDt, String remark, String userCd) {
+	public ApiResponse addMember(String compCd, String storCd, String mobile, String memberNm, String sex, String entFg, String entDt, String remark, String userCd) {
 		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
@@ -66,6 +66,7 @@ public class MemberService {
 		Date today = new Date();
 		String entDt2 = DateFormatUtils.format(today, "yyyyMMdd");
 		parameter.put(ParamNames.entDt, entDt);
+		parameter.put(ParamNames.entFg, entFg);
 		parameter.put(ParamNames.sex, sexCode);
 		parameter.put(ParamNames.remark, remark);
 		parameter.put(ParamNames.userCd, userCd);
@@ -75,7 +76,48 @@ public class MemberService {
 		} catch (Exception e) {
 			return ApiResponse.error("exist user");
 		}
-		
-		
+	}
+	
+	@Transactional
+	public ApiResponse updateMember(String compCd, String storCd, String memberNo, 
+									String sex, String entFg, String entDt, String remark) {
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
+		String sexCode = "F";
+		if ( sex.equals("남")) {
+			sexCode = "M";
+		}
+		Date today = new Date();
+		String entDt2 = DateFormatUtils.format(today, "yyyyMMdd");
+		/* 수정항목대상 */
+		parameter.put(ParamNames.entDt, entDt);
+		parameter.put(ParamNames.entFg, entFg);
+		parameter.put(ParamNames.sex, sexCode);
+		parameter.put(ParamNames.remark, remark);
+		try {
+			memberMapper.updateMember(parameter);
+			return ApiResponse.success("ok");
+		} catch (Exception e) {
+			return ApiResponse.error("exist user");
+		}
+	}
+	
+	@Transactional
+	public ApiResponse deleteMember(String compCd, String storCd, String mobile, String memberNo) {
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.mobile, mobile);
+		parameter.put(ParamNames.memberNo, memberNo);
+		try {
+			memberMapper.deleteMember(parameter);
+			return ApiResponse.success("ok");
+		} catch (Exception e) {
+			return ApiResponse.error("exist user");
+		}
 	}
 }
