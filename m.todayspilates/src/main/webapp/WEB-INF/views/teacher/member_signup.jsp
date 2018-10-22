@@ -88,9 +88,20 @@
 
                                 </div>
                             </div>
+
                             <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
-                                <button type="button" id="call-add-member" class="btn btn-primary" for="tbl-caption"
+                                <button type="button" id="call-update-member" class="btn btn-primary"
+                                        style="margin-right: 3px;">정보수정</button>
+                                <button type="button" id="call-add-member" class="btn btn-primary"
                                         data-toggle="modal" data-target="#memberModalCenter" data-id="{{lsnData}}">회원등록</button>
+                                    <%--<div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" id="option1" autocomplete="off" checked> 정보수정
+                                        </label>
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="options" id="option2" autocomplete="off"> 회원등록
+                                        </label>
+                                    </div>--%>
                             </div>
                         </div>
                         <table class="table table-striped table-sm">
@@ -136,8 +147,8 @@
                                 <div class="input-group"></div>
                             </div>
                             <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
-                                <button type="button" id="call-add-lesson" class="btn btn-primary" for="tbl-caption"
-                                        data-toggle="modal" data-target="#lessonModalCenter" data-id="{{lsnData}}">수업등록</button>
+                                <button type="button" id="add-lesson" class="btn btn-primary" for="tbl-caption"
+                                        data-id="{{lsnData}}">수업등록</button>
                             </div>
                         </div>
                         <table class="table table-striped table-sm">
@@ -212,7 +223,7 @@
                                             <td width="50%" style="height:40px;">회원명</td>
                                             <td width="50%">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="memberNm" placeholder="회원명"
+                                                    <input type="text" class="form-control" id="memberNm" data-id=""
                                                            style="width: 80px;  margin-left: 0px;">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-primary" id="check-member">중복확인</button>
@@ -224,14 +235,14 @@
                                             <td width="50%" style="height:40px;">모바일(HP)</td>
                                             <td width="50%">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="010-1234-5678"
+                                                    <input type="text" class="form-control" id="hp"
                                                            style="width: 80px;  margin-left: 0px;">
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr style="text-align: center;">
                                             <td width="50%" style="height:40px;">성별</td>
-                                            <td width="50%"><select id="sel-sex" class="custom-select">
+                                            <td width="50%"><select id="sex" class="custom-select">
                                                 <option value="남">남성</option>
                                                 <option value="여">여성</option>
                                             </select></td>
@@ -239,20 +250,20 @@
                                         <tr style="text-align: center;">
                                             <td width="50%" style="height:40px;">가입경로</td>
                                             <td width="50%">
-                                                <select id="signup-path" class="custom-select"></select>
+                                                <select id="entFg" class="custom-select"></select> <!--entFg -->
                                             </td>
                                         </tr>
                                         <tr style="text-align: center;">
                                             <td width="50%" style="height:40px;">상태</td>
-                                            <td width="50%"><select id="member-status" class="custom-select">
+                                            <td width="50%"><select id="useYn" class="custom-select">
                                                 <option value="Y">활동</option>
-                                                <option value="N">비활동</option>
+                                                <option value="N">미활동</option>
                                             </select></td>
                                         </tr>
                                         <tr style="text-align: center;">
                                             <td width="100%" colspan="2">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="메모">
+                                                    <input type="text" class="form-control" id="member-remark" placeholder="메모">
                                                 </div>
                                             </td>
                                         </tr>
@@ -265,9 +276,8 @@
                 </div>
                 <!-- 회원등록 팝업body end -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="add-member">저장</button>
+                    <button type="button" class="btn btn-secondary" id="close-member-modal" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="save-member">저장</button>
                 </div>
             </div>
         </div>
@@ -437,7 +447,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="add-lesson">저장</button>
+                    <button type="button" class="btn btn-primary" id="save-lesson">저장</button>
                 </div>
             </div>
         </div>

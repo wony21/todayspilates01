@@ -11,7 +11,7 @@ fnObj.initView = function(user) {
 
     fnObj.fn.setTeacher(user);
     fnObj.fn.setDatePicker();
-    fnObj.fn.getPrivateLesson(user);
+
 };
 
 //이벤트 초기화 
@@ -105,13 +105,15 @@ fnObj.fn = {
             url: '/api/teacher',
             data: {storCd: user.storCd},
             success: function(res) {
-                let option = '<option value="">선생님(전체)</option>';
+                let option = '<option value="">전체보기</option>';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.empNo + '">' + n.empNm +
                         '</option> ';
                 });
                 $('#teacher').html(option);
                 $('#teacher').val(user.empNo);	// 로그인한 선생님으로 선택
+
+                fnObj.fn.getPrivateLesson(user);
             },
         });
     },
@@ -240,7 +242,7 @@ fnObj.fn = {
     },
 };
 
-$(document).ready(function() {
+$(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);

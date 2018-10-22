@@ -78,7 +78,6 @@ fnObj.initEvent = function(user) {
     });
 
     $(document.body).on('click', '#group-lesson-add-btn', function(e) {
-        console.log('add button click');
         //fnObj.fn.getGroupLessonByMember(user);
         //예약일자,
         let dy = WEEKS[$('#datepicker tbody tr .selected').index()];

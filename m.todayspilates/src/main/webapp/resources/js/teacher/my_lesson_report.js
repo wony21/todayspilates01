@@ -237,7 +237,7 @@ function initYear(limit) {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);
