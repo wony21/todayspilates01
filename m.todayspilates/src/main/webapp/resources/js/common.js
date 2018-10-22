@@ -76,7 +76,7 @@
 			var year = fdate[0];
 			var month = fdate[1];
 		    
-		    var sdate = new Date(year, month-1, 01);
+		    var sdate = new Date(year, month-1, 1);
 		    var lastDay = (new Date(sdate.getFullYear(), sdate.getMonth()+1, 0)).getDate();
 		    var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
 		    var week = sdate.getDay();

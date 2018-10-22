@@ -81,6 +81,13 @@ fnObj.initEvent = function(user) {
 
     // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
+        let hp = $.trim($('#hp').val());
+        if (!isValidMobileNumber(hp)) {
+            alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
+            $('#hp').trigger('focus');
+            return false;
+        }
+
         let memberNo = $('#new-member-container #memberNm').data('id');
         if (memberNo === '') {
             fnObj.fn.addMember(user);

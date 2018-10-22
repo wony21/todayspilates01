@@ -109,13 +109,8 @@
                             </tr>
                             {{/list}}
                             {{^list}}
-                            <tr>
-                                <td>2018/09/01</td>
-                                <td>1.5</td>
-                                <td>홍길동</td>
-                                <td>1회차</td>
-                                <td>강익수</td>
-                                <td>2018/12/31</td>
+                            <tr style="text-align: center;">
+                                <td style="height:40px;" colspan="6">예약정보가 없습니다.</td>
                             </tr>
                             {{/list}}
                             </tbody>

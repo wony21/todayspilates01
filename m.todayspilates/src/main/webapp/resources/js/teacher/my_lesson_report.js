@@ -32,6 +32,23 @@ fnObj.fn = {
         });
         return false;
     },
+
+    setSearchYear: function() {
+        let curDate = new Date();
+        let y = curDate.getFullYear();
+
+        let option;
+        for (var i = y - 10; i <= y; i++) {
+            option += ' <option value="' + i + '">' + i + '년' + '</option> ';
+        }
+        $('#report-year').html(option);
+        $('#report-year').val(y);
+    },
+
+    setSearchMonth: function() {
+
+    },
+
     // 조회조건
     getData: function(user) {
         let storCd = user.storCd;
@@ -58,8 +75,8 @@ $(function() {
     fnObj.initEvent(user);
 
     //console.log('max weeks:' + getWeekCountOfMonth('201810'));
-    var hp = "01040649971".replace( /(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
-    console.log('hp:' + hp);
+    //var hp = "01040649971".replace( /(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    //console.log('hp:' + hp);
     
 });
 
