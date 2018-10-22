@@ -38,14 +38,14 @@ fnObj.initEvent = function(user) {
     $(document.body).on('click', '#call-add-member', function(e) {
         let data = {
             __created__: true,
-            sex: "남",
+            sex: '남',
             entFg: '1',
             useYn: 'Y',
         };
 
         $('#delete-member').hide();
         fnObj.fn.setMemberData(data);
-        fnObj.fn.showMemberModal()
+        fnObj.fn.showMemberModal();
     });
 
     //정보수정버튼 처리
@@ -70,7 +70,13 @@ fnObj.initEvent = function(user) {
 
     //회원중복체크 처리
     $('#check-member').on('click', function(e) {
-        fnObj.fn.checkMember(user);
+        let hp = $.trim($('#hp').val());
+        if (isValidMobileNumber(hp)) {
+            fnObj.fn.checkMember(user);
+        } else {
+            alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 조회하세요');
+            $('#hp').trigger('focus');
+        }
     });
 
     // 회원정보저장(수정/등록)
@@ -95,7 +101,9 @@ fnObj.initEvent = function(user) {
 
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
-            $('#member-container tbody tr').children('td').removeClass('selected');
+            $('#member-container tbody tr').
+                children('td').
+                removeClass('selected');
             $(this).children('td').addClass('selected');
         }
         //선택된 회원의 등록된 수업조회
@@ -134,7 +142,9 @@ fnObj.initEvent = function(user) {
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
-            $('#lesson-container tbody tr').children('td').removeClass('selected');
+            $('#lesson-container tbody tr').
+                children('td').
+                removeClass('selected');
             $(this).children('td').addClass('selected');
         }
 
@@ -155,6 +165,16 @@ fnObj.initEvent = function(user) {
         }
 
         //todo: 팝업 닫을때 수업만 재조회 처리
+    });
+
+    // 휴대폰 형식 변경
+    $('#hp').on('change', function(e) {
+        let hp = $('#hp').val();
+        let valid = isValidMobileNumber(hp);
+        if (valid) {
+            let formattedHp = fnObj.fn.getMobileNumberFormat(hp);
+            $('#hp').val(formattedHp);
+        }
     });
 };
 
@@ -295,7 +315,7 @@ fnObj.fn = {
             entDt: date,
             useYn: $('#useYn').val(),
             remark: $('#member-remark').val(),
-        }
+        };
     },
 
     showMemberModal: function(user) {
@@ -377,7 +397,7 @@ fnObj.fn = {
                 //alert('수업등록이 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
                 //등록된 수업데이터를 재조회 처리
-                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo})
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
             },
             error: function(error) {
                 alert(error);
@@ -397,7 +417,7 @@ fnObj.fn = {
                 //alert('업데이트 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
                 //수정된 수업데이터를 재조회 처리
-                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo})
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
             },
             error: function(error) {
                 alert(error);
@@ -411,10 +431,10 @@ fnObj.fn = {
 
         //selected = $('#member-container tbody tr').find('td').hasClass('selected');
         $('#member-container tbody tr').each(function() {
-           let selected = $(this).find('td').hasClass('selected');
-           if (selected) {
-               index = $(this).index();
-           }
+            let selected = $(this).find('td').hasClass('selected');
+            if (selected) {
+                index = $(this).index();
+            }
         });
         return index;
     },
@@ -505,10 +525,16 @@ fnObj.fn = {
             },
         });
     },
-
+    // 회원상태값 초기화
     setLessonStatus: function() {
         $('#useYn').val('Y');
     },
+    //휴대폰형식 반환
+    getMobileNumberFormat: function(str) {
+        let digit = str.replace(/\D/g, '');
+        return digit.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    },
+
     // 조회조건
     getData: function(user) {
         return {

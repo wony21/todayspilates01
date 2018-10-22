@@ -81,25 +81,13 @@
                             </div>
                             <div class="input-group">
                                 <select class="custom-select" id="report-month"
-                                        style="width: 60px; margin-left: 5px;"></select>
-                            </div>
-                            <div class="input-group">
-                                <select class="custom-select" id="teacher"
-                                        style="width: 80px; margin-left: 5px;"></select>
+                                        style="width: 60px; margin-left: 5px; margin-right: 5px;"></select>
                             </div>
                             <div class="input-group">
                                 <button id="search-attend" class="btn btn-primary">검색</button>
                             </div>
-
-                            <!--<div class="btn-group mr-2" style="float: right; margin-left: 5px;">
-                              <button class="btn btn-outline-secondary">예약하기</button>
-                            </div> -->
                         </div>
                     </div>
-                    <table class="table table-striped table-sm" id="datepicker">
-                        <thead><!-- 동적생성 --></thead>
-                        <tbody><!-- 동적생성 --></tbody>
-                    </table>
                 </div><!-- end date-container -->
             </div>
             <div class="container">
@@ -107,8 +95,8 @@
                 <!--<a href="#"><button type="button" class="btn" style="width: 150px;">개인레슨 예약하기</button></a>-->
             </div>
             <div class="table-responsive" style="top-margin: 10px;">
-                <div id="reservation-container">
-                    <script type="text/html" id="reservation-template">
+                <div id="report-container">
+                    <script type="text/html" id="report-template">
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
