@@ -1,11 +1,6 @@
-var common = {};
 let fnObj = {};
 let memberTmpl = $('#member-template').html();
-let newMemberTmpl = $('#new-member-template').html();
 let lessonTmpl = $('#lesson-template').html();
-let newLessonTmpl = $('#new-lesson-template').html();
-let selectedItem = -1;  //lesson
-let selectedItem2 = -1; //member
 
 //view 초기화
 fnObj.initView = function(user) {
@@ -25,9 +20,11 @@ fnObj.initView = function(user) {
     //레슨코드조회(개인,그룹..)
     fnObj.fn.setLessonCd(user);
     //레슨종류조회 (정상,체험,쿠폰)
-    fnObj.fn.setLessonType(user);
+    fnObj.fn.setLessonType();
     //결제방법조회
-    fnObj.fn.setPayType(user);
+    fnObj.fn.setPayType();
+    //수업여부조회
+    fnObj.fn.setLessonStatus();
 };
 
 //이벤트 초기화
@@ -37,6 +34,21 @@ fnObj.initEvent = function(user) {
         fnObj.fn.getMember(user);
     });
 
+    //회원등록버튼 처리
+    $(document.body).on('click', '#call-add-member', function(e) {
+        let data = {
+            __created__: true,
+            sex: "남",
+            entFg: '1',
+            useYn: 'Y',
+        };
+
+        $('#delete-member').hide();
+        fnObj.fn.setMemberData(data);
+        fnObj.fn.showMemberModal()
+    });
+
+    //정보수정버튼 처리
     $(document.body).on('click', '#call-update-member', function(e) {
         let data;
         let selected = fnObj.fn.isSelectedMember();
@@ -45,19 +57,29 @@ fnObj.initEvent = function(user) {
             alert('회원을 선택해 주세요');
             return false;
         }
+
+        $('#delete-member').show();
         //선택된 회원의 정보를 조회
         data = $('#member-container tbody').find('tr').eq(selected).data('id');
         //팝업창 데이터 초기화
         fnObj.fn.setMemberData(data);
-        //팝업창 호출
-        $('#memberModalCenter').modal('toggle');
-
+        /*//팝업창 호출
+        $('#memberModalCenter').modal('toggle');*/
+        fnObj.fn.showMemberModal(data);
     });
 
-    // 회원등록(팝업창)
+    // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
-        console.log('add member...');
-        fnObj.fn.addMember(user);
+        let memberNo = $('#new-member-container #memberNm').data('id');
+        if (memberNo === '') {
+            fnObj.fn.addMember(user);
+        } else {
+            fnObj.fn.updateMember(user);
+        }
+    });
+    // 회원삭제처리
+    $('#delete-member').on('click', function(e) {
+        fnObj.fn.deleteMember(user);
     });
 
     $('#member-container').on('click', 'tbody tr', function(e) {
@@ -77,20 +99,18 @@ fnObj.initEvent = function(user) {
 
     // 수업신규등록
     $(document.body).on('click', '#add-lesson', function(e) {
-        // let lsnData = $(this).data('id');
-        let lsnData = {};
-        let selectedMember = $('#member-container tbody').
-            find('tr').eq(selectedItem).data('id');
-
-        if (typeof selectedMember === 'undefined' || selectedMember === '') {
+        let data;
+        let selected = fnObj.fn.isSelectedMember();
+        if (selected === -1) {
             alert('회원을 선택하신 후 수업을 등록해주세요');
             return false;
         }
 
-        lsnData = {
+        data = $('#member-container tbody').find('tr').eq(selected).data('id');
+        let lsnData = {
             __created__: true,
-            memberNo: selectedMember.memberNo,
-            memberNm: selectedMember.memberNm,
+            memberNo: data.memberNo,
+            memberNm: data.memberNm,
             lsnCd: '01',
             lsnRegTy: 1,
             lsnFg: 1,
@@ -103,14 +123,13 @@ fnObj.initEvent = function(user) {
 
     $('#lesson-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        //selectedItem = $(this).index(); //selectedItem => 전역변수
-
+        if (typeof lsnData === 'undefined') {
+            return false;
+        }
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
-        $('#lesson-container tbody tr').
-            children('td').
-            removeClass('selected');
         if (!selected) {
+            $('#lesson-container tbody tr').children('td').removeClass('selected');
             $(this).children('td').addClass('selected');
         }
 
@@ -159,7 +178,6 @@ fnObj.fn = {
         });
         return false;
     },
-
     //신규회원등록 (팝업창에서 처리)
     addMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
@@ -182,16 +200,44 @@ fnObj.fn = {
         });
         return false;
     },
-
+    //회원정보수정
     updateMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
+
         $.ajax({
             type: 'PUT',
             url: '/api/member/modify',
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                alert('회원수정이 완료되었습니다.');
+                //alert('회원수정이 완료되었습니다.');
+                $('#memberModalCenter').modal('toggle');
+                //회원 재조회 처리
+                $('#filter').val(gd[0].memberNm);
+                fnObj.fn.getMember(user);
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //회원삭제
+    deleteMember: function(user) {
+        let gd = [].concat(this.getMemberData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/member/delete',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('회원삭제가 완료되었습니다.');
+                $('#memberModalCenter').modal('toggle');
+                //회원 재조회 처리
+                $('#filter').val(gd[0].memberNm);
+                fnObj.fn.getMember(user);
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
             },
             error: function(error) {
                 alert(error);
@@ -200,6 +246,7 @@ fnObj.fn = {
         return false;
     },
 
+    //화면에 회원데이터 셋팅
     setMemberData: function(lsnData) {
         $('#memberNm').val(lsnData.memberNm);
         $('#memberNm').data('id', lsnData.memberNo);
@@ -210,16 +257,26 @@ fnObj.fn = {
         $('#useYn').val(lsnData.useYn);
     },
 
+    //화면의 회원데이터 조회
     getMemberData: function(user) {
         let date = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
         return {
-            storCd: user.storCd,
-            mobile: $('#hp').val(),
+            compCd: user.compCd,                    //key3
+            storCd: user.storCd,                    //key1
+            memberNo: $('#memberNm').data('id'),    //key2
             memberNm: $('#memberNm').val(),
+            mobile: $('#hp').val(),
+            hp: $('#hp').val(),
             sex: $('#sex').val(),
+            entFg: $('#entFg').val(),
             entDt: date,
+            useYn: $('#useYn').val(),
             remark: $('#member-remark').val(),
         }
+    },
+
+    showMemberModal: function(user) {
+        $('#memberModalCenter').modal('toggle');
     },
 
     //검색된 회원의 수업조회
@@ -265,7 +322,7 @@ fnObj.fn = {
         $('#clsFg').val(lsnData.clsFg);
         $('#remark').val(lsnData.remark);
     },
-
+    //팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
         return {
             compCd: user.compCd,
@@ -285,7 +342,59 @@ fnObj.fn = {
             remark: $('#remark').val(),
         };
     },
+    //수업신규등록
+    addLesson: function(user) {
+        let gd = [].concat(this.getLessonData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/lesson/add',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('수업등록이 완료되었습니다.');
+                $('#lessonModalCenter').modal('toggle');
+                //등록된 수업데이터를 재조회 처리
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo})
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //기존수업수정
+    updateLesson: function(user) {
+        let gd = [].concat(this.getLessonData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/lesson/modify',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('업데이트 완료되었습니다.');
+                $('#lessonModalCenter').modal('toggle');
+                //수정된 수업데이터를 재조회 처리
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo})
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //회원리스트에서 선택된 회원이 있는지 체크. (true/false 반환)
+    isSelectedMember: function() {
+        let index = -1;
 
+        //selected = $('#member-container tbody tr').find('td').hasClass('selected');
+        $('#member-container tbody tr').each(function() {
+           let selected = $(this).find('td').hasClass('selected');
+           if (selected) {
+               index = $(this).index();
+           }
+        });
+        return index;
+    },
     //회원가입경로 코드 조회
     setSignUpPath: function(user) {
         $.ajax({
@@ -304,7 +413,6 @@ fnObj.fn = {
         });
         return false;
     },
-
     //수업등록 팝업 - 선생님리스트 조회
     setTeacher: function(user) {
         $.ajax({
@@ -322,7 +430,6 @@ fnObj.fn = {
             },
         });
     },
-
     //수업코드 조회 (개인,그룹,....)
     setLessonCd: function(user) {
         $.ajax({
@@ -342,7 +449,7 @@ fnObj.fn = {
     },
 
     //레슨종류 조회 (정상,체험,쿠폰...)
-    setLessonType: function(user) {
+    setLessonType: function() {
         $.ajax({
             type: 'GET',
             url: '/api/common',
@@ -360,7 +467,7 @@ fnObj.fn = {
     },
 
     //결제방법 조회
-    setPayType: function(user) {
+    setPayType: function() {
         $.ajax({
             type: 'GET',
             url: '/api/common',
@@ -376,85 +483,15 @@ fnObj.fn = {
         });
     },
 
+    setLessonStatus: function() {
+        $('#useYn').val('Y');
+    },
     // 조회조건
     getData: function(user) {
         return {
             memberId: user.storCd,
         };
     },
-
-    /**
-     * 검색된 회원의 레슨목록 조회
-     * @param storCd store code
-     * @param memberNm member name
-     */
-    getGroupLessonByMember: function(user) {
-        let memberNm = $.trim($('#filter').val());
-        if (memberNm.length === 0) {
-            alert('회원명을 입력해주세요 ');
-            return false;
-        }
-        $.ajax({
-            type: 'GET',
-            url: '/api/teacher/reservation/group',
-            data: {storCd: user.storCd, memberNm: memberNm},
-            success: function(res) {
-                var html = Mustache.render(newReservationTmpl, {list: res});
-                $('#new-reservation-container').html(html);
-            },
-        });
-    },
-
-    //수업수정
-    updateLesson: function(user) {
-        let gd = [].concat(this.getLessonData(user));
-        $.ajax({
-            type: 'PUT',
-            url: '/api/lesson/modify',
-            data: JSON.stringify(gd),
-            contentType: 'application/json; charset=UTF-8',
-            success: function(res) {
-                alert('업데이트 완료되었습니다.');
-            },
-            error: function(error) {
-                alert(error);
-            },
-        });
-        return false;
-    },
-
-    //수업신규등록
-    addLesson: function(user) {
-        let gd = [].concat(this.getLessonData(user));
-        $.ajax({
-            type: 'PUT',
-            url: '/api/lesson/add',
-            data: JSON.stringify(gd),
-            contentType: 'application/json; charset=UTF-8',
-            success: function(res) {
-                alert('수업등록이 완료되었습니다.');
-            },
-            error: function(error) {
-                alert(error);
-            },
-        });
-        return false;
-    },
-
-    //회원리스트에서 선택된 회원이 있는지 체크. (true/false 반환)
-    isSelectedMember: function() {
-        let index = -1;
-
-        //selected = $('#member-container tbody tr').find('td').hasClass('selected');
-        $('#member-container tbody tr').each(function() {
-           let selected = $(this).find('td').hasClass('selected');
-           if (selected) {
-               index = $(this).index();
-           }
-        });
-        return index;
-    },
-
 };
 
 $(function() {

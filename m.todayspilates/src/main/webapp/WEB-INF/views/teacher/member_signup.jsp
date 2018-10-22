@@ -92,8 +92,7 @@
                             <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 5px;">
                                 <button type="button" id="call-update-member" class="btn btn-primary"
                                         style="margin-right: 3px;">정보수정</button>
-                                <button type="button" id="call-add-member" class="btn btn-primary"
-                                        data-toggle="modal" data-target="#memberModalCenter" data-id="{{lsnData}}">회원등록</button>
+                                <button type="button" id="call-add-member" class="btn btn-primary">회원등록</button>
                                     <%--<div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-primary">
                                             <input type="radio" name="options" id="option1" autocomplete="off" checked> 정보수정
@@ -192,11 +191,11 @@
         </div><!-- row -->
     </div><!-- container -->
     <!-- member modal start -->
-    <div class="modal fade" id="memberModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="memberModalCenter" tabindex="-1" role="dialog" aria-labelledby="memberModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                    <h5 class="modal-title" id="memberModalCenterTitle">
                         회원등록
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -276,7 +275,8 @@
                 </div>
                 <!-- 회원등록 팝업body end -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="close-member-modal" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="delete-member" style="display: none;">삭제</button>
                     <button type="button" class="btn btn-primary" id="save-member">저장</button>
                 </div>
             </div>
