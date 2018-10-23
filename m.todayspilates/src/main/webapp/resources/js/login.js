@@ -19,7 +19,7 @@ fnObj.initEvent = function(user) {
     //로그인 처리
     $('#btn_login').on('click', function() {
         let formData = fnObj.fn.getData();
-
+        
         if (!formData.storCd) {
             alert('스튜디오를 선택하세요.');
             $('#studio').trigger('focus');
