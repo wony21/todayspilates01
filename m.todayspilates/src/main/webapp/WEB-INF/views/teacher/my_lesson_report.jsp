@@ -100,50 +100,47 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
-                                <th>예약일시</th>
-                                <th>시간</th>
-                                <th>회원</th>
-                                <th>선생님</th>
-                                <th>회차</th>
-                                <th>종료일</th>
-                                <th>출결처리</th>
+                                <th>성명</th>
+                                <th>개인</th>
+                                <th>그룹</th>
+                                <th>듀엣</th>
+                                <th>키즈P</th>
+                                <th>키즈</th>
+                                <th>합계</th>
                             </tr>
                             </thead>
                             <tbody>
+							{{#sums}}
+							<tr style="text-align: center; background-color:skyblue;">
+                                <td><strong>합계</strong></td>
+                                <td><strong>{{lsnCntPrivate}}</strong></td>
+                                <td><strong>{{lsnCntGroup}}</strong></td>
+                                <td><strong>{{lsnCntDuet}}</strong></td>
+                                <td><strong>{{lsnCntKidP}}</strong></td>
+								<td><strong>{{lsnCntKidD}}</strong></td>
+								<td><strong>{{lsnCntSum}}</strong></td>
+                            </tr>
+							{{/sums}}
+							{{^sums}}
+							<tr style="text-align: center;">
+								<td colspan="7"></td>
+							</tr>
+							{{/sums}}
                             {{#list}}
-                            <tr data-id="{{lsnCd}}" style="text-align: center;">
-                                <td style="height:40px;">{{rsvDt}}({{dy}})<br>{{rsvTm}}</td>
-                                <td>{{lsnTm}}</td>
-                                <td>{{memberNm}}</td>
+                            <tr style="text-align: center;">
                                 <td>{{empNm}}</td>
-                                <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
-                                <td>{{lsnEdDt}}</td>
-                                <td class="select"><select id="sel-attend" class="custom-select attend-process"
-                                                           style="width: 70px;">
-                                    <option value="0" display-flag="{{optFg0}}" {{sel0}}>선택</option>
-                                    <option value="1" display-flag="{{optFg1}}" {{sel1}}>출석</option>
-                                    <option value="2" display-flag="{{optFg2}}" {{sel2}}>결석</option>
-                                    <option value="3" display-flag="{{optFg3}}" {{sel3}}>취소</option>
-                                </select></td>
+                                <td>{{lsnCntPrivate}}</td>
+                                <td>{{lsnCntGroup}}</td>
+                                <td>{{lsnCntDuet}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnCntKidP}}</td>
+								<td>{{lsnCntKidD}}</td>
+								<td>{{lsnCntSum}}</td>
                             </tr>
                             {{/list}}
                             {{^list}}
-                            <!--
-                                            <tr data-id="" style="text-align: center;">
-                                              <td></td>
-                                              <td></td>
-                                              <td></td>
-                                              <td></td>
-                                              <td></td>
-                                              <td></td>
-                                                <td><select class="attend-process">
-                                                    <option value="0" selected>선택</option>
-                                                    <option value="2">출석</option>
-                                                    <option value="1">결석</option>
-                                                    <option value="3">취소</option>
-                                                </select></td>
-                                            </tr>
-                            -->
+                            <tr style="text-align: center;">
+								<td colspan="7">조회된 결과가 존재하지 않습니다.</td>
+							</tr>
                             {{/list}}
                             </tbody>
                         </table>
