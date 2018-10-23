@@ -10,7 +10,6 @@ const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 fnObj.initView = function(user) {
     $('.username').text(user.username);
 
-    fnObj.fn.setTeacher(user);
     fnObj.fn.setDatePicker();
     fnObj.fn.getGroupLesson(user);
 };
@@ -26,8 +25,8 @@ fnObj.initEvent = function(user) {
     // 선택한 일자의 그룹레슨을 조회
     $('#datepicker').on('click', ' tbody td', function(e) {
         let selected = $(this).hasClass('selected');
-        $('#datepicker tbody td').removeClass('selected');
         if (!selected) {
+            $('#datepicker tbody td').removeClass('selected');
             $(this).addClass('selected');
         }
         fnObj.fn.getGroupLesson(user);
@@ -118,9 +117,9 @@ fnObj.initEvent = function(user) {
         selectedItem = lsnData;
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
-        $('#new-reservation-container tbody tr').
-            children('td').removeClass('selected');
         if (!selected) {
+            $('#new-reservation-container tbody tr').
+                children('td').removeClass('selected');
             $(this).children('td').addClass('selected');
         }
     });
@@ -131,23 +130,6 @@ fnObj.initEvent = function(user) {
 };
 
 fnObj.fn = {
-    // 강사목록 조회
-    setTeacher: function(user) {
-        $.ajax({
-            type: 'GET',
-            url: '/api/teacher',
-            data: {storCd: user.storCd},
-            success: function(res) {
-                let option = '<option value="">선생님(전체)</option>';
-                res.forEach(function(n) {
-                    option += ' <option value="' + n.empNo + '">' + n.empNm +
-                        '</option> ';
-                });
-                $('#teacher').html(option);
-                $('#teacher').val(user.empNo);	// 로그인한 선생님으로 선택
-            },
-        });
-    },
     //주간 Datepicker 초기화
     setDatePicker: function(dateString) {
         let curr = new Date(); // get current date
@@ -175,7 +157,7 @@ fnObj.fn = {
                 tbody += '<td data-id="' + date + '">' + day + '</td>';
             } else {
                 thead += '<th class="today">' + WEEKS[i] + '</th>';
-                tbody += '<td class="today" data-id="' + date + '">' + day +
+                tbody += '<td class="today selected" data-id="' + date + '">' + day +
                     '</td>';
             }
         }
@@ -326,8 +308,7 @@ fnObj.fn = {
         let lsnData = $('#modal-caption').data('id');
         
         console.log(lsnData);
-        let item = $('#new-reservation-container tbody tr .selected').
-            data('id');
+        let item = $('#new-reservation-container tbody tr .selected').data('id');
         
         console.log(selectedItem);
         //선택된 레슨이 있는지 체크
@@ -374,7 +355,7 @@ fnObj.fn = {
 
 };
 
-$(document).ready(function() {
+$(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);
