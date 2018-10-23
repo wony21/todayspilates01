@@ -3,7 +3,6 @@ let fnObj = {};
 let reservationList = [];
 let reservationTmpl = $('#reservation-template').html();
 let newReservationTmpl = $('#new-reservation-template').html();
-let selectedItem;
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 //view 초기화 
@@ -114,7 +113,10 @@ fnObj.initEvent = function(user) {
     //검색된 그룹레슨 클릭 이벤트
     $('#new-reservation-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        selectedItem = lsnData;
+
+        if (typeof lsnData === 'undefined') {
+            return false;
+        }
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
@@ -305,12 +307,16 @@ fnObj.fn = {
 
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
+        let selectedItem;
         let lsnData = $('#modal-caption').data('id');
+
+        $('#new-reservation-container tbody tr').each(function() {
+            let selected = $(this).find('td').hasClass('selected');
+            if (selected) {
+                selectedItem = $(this).data('id');
+            }
+        });
         
-        console.log(lsnData);
-        let item = $('#new-reservation-container tbody tr .selected').data('id');
-        
-        console.log(selectedItem);
         //선택된 레슨이 있는지 체크
         if (typeof selectedItem === 'undefined') {
             alert('먼저 예약할 레슨을 선택하세요.');
@@ -318,12 +324,11 @@ fnObj.fn = {
         }
 
         /* 예약 confirm */
-        var retReserv = confirm('예약하시겠습니까?');
+        var retReserv = confirm('선택한 등록정보로 예약하시겠습니까?');
         if (retReserv != true) {
             return false;
         }
 
-        //requestParams = compCd, storCd, memberNo, lsnCd, lsnNo, empNo, rsvDt, rsvTm, lsnTm;
         let data = [
             {
                 compCd: selectedItem.compCd,
