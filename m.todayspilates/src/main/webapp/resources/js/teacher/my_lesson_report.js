@@ -73,6 +73,22 @@ $(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     fnObj.initView(user);
     fnObj.initEvent(user);
+    
+    fnObj.fn.setSearchYear();
+    
+    $("#report-year").on('change', function(){
+    	let selectedYear = $(this).val();
+    	let curDate = new Date();
+    	let startYear = selectedYear - 10;
+    	let endYear = curDate.getFullYear();
+    	$("#report-year").children().remove();
+    	let option;
+    	for(var year=startYear; year<=endYear; year++) {
+    		option += ' <option value="' + year + '">' + year + '년' + '</option> ';
+    	}
+    	$('#report-year').html(option);
+        $('#report-year').val(selectedYear);
+    });
 
     //console.log('max weeks:' + getWeekCountOfMonth('201810'));
     //var hp = "01040649971".replace( /(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
