@@ -84,7 +84,7 @@
                                         style="width: 60px; margin-left: 5px; margin-right: 5px;"></select>
                             </div>
                             <div class="input-group">
-                                <button id="search-attend" class="btn btn-primary">검색</button>
+                                <button id="get-report" class="btn btn-primary">확인</button>
                             </div>
                         </div>
                     </div>
@@ -100,19 +100,19 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr style="text-align: center">
-                                <th>성명</th>
+                                <th>선생님</th>
                                 <th>개인</th>
                                 <th>그룹</th>
                                 <th>듀엣</th>
                                 <th>키즈P</th>
-                                <th>키즈</th>
+                                <th>키즈D</th>
                                 <th>합계</th>
                             </tr>
                             </thead>
                             <tbody>
 							{{#sums}}
 							<tr style="text-align: center; background-color:skyblue;">
-                                <td><strong>합계</strong></td>
+                                <td style="height: 30px;"><strong>합계</strong></td>
                                 <td><strong>{{lsnCntPrivate}}</strong></td>
                                 <td><strong>{{lsnCntGroup}}</strong></td>
                                 <td><strong>{{lsnCntDuet}}</strong></td>
@@ -128,7 +128,7 @@
 							{{/sums}}
                             {{#list}}
                             <tr style="text-align: center;">
-                                <td>{{empNm}}</td>
+                                <td style="height: 30px;">{{empNm}}</td>
                                 <td>{{lsnCntPrivate}}</td>
                                 <td>{{lsnCntGroup}}</td>
                                 <td>{{lsnCntDuet}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
@@ -138,7 +138,7 @@
                             </tr>
                             {{/list}}
                             {{^list}}
-                            <tr style="text-align: center;">
+                            <tr style="text-align: center; height: 30px;">
 								<td colspan="7">조회된 결과가 존재하지 않습니다.</td>
 							</tr>
                             {{/list}}
