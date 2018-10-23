@@ -1,6 +1,5 @@
 var common = {};
 let fnObj = {};
-let reservationList = [];
 let reservationTmpl = $('#reservation-template').html();
 let newReservationTmpl = $('#new-reservation-template').html();
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -174,7 +173,6 @@ fnObj.fn = {
     //예약정보조회 (선택주, 선생님, 회원명, 일자)
     getGroupLesson: function(user) {
         let search = fnObj.fn.getData(user);
-        reservationList.length = 0;
 
         //검색일자가 유효하지 않으면 현재일자로 조회
         if (isValidDate(search.schDt) === false) {
@@ -228,9 +226,6 @@ fnObj.fn = {
                 var html = Mustache.render(reservationTmpl, {list: res});
                 $('#reservation-container').html(html);
 
-                if (res.length) {
-                    reservationList = res.slice(0); // res array deep copy
-                }
                 // 출/결처리가 된 항목은 '취소'는 불가하도록 처리
                 $('#sel-attend option[display-flag=\'0\']').each(function() {
                     $(this).remove();
