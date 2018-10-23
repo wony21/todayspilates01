@@ -30,7 +30,7 @@ public class LessonController extends BaseController {
 	@RequestMapping(value = "/api/lesson", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getLesson(@RequestParam String storCd,
-						  @RequestParam String lsnFg) {
+						  @RequestParam(required = false) String lsnFg) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return lessonService.getLesson(compCd, storCd, lsnFg);
 	}

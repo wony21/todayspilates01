@@ -485,7 +485,7 @@ fnObj.fn = {
         $.ajax({
             type: 'GET',
             url: '/api/lesson',
-            data: {storCd: user.storCd, lsnFg: '1'},
+            data: {storCd: user.storCd},
             success: function(res) {
                 let option;
                 res.forEach(function(n) {
