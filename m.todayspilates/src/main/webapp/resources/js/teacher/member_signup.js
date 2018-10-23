@@ -1,9 +1,6 @@
-var common = {};
 let fnObj = {};
 let memberTmpl = $('#member-template').html();
-let newMemberTmpl = $('#new-member-template').html();
 let lessonTmpl = $('#lesson-template').html();
-let newLessonTmpl = $('#new-lesson-template').html();
 
 //view 초기화
 fnObj.initView = function(user) {
@@ -23,9 +20,11 @@ fnObj.initView = function(user) {
     //레슨코드조회(개인,그룹..)
     fnObj.fn.setLessonCd(user);
     //레슨종류조회 (정상,체험,쿠폰)
-    fnObj.fn.setLessonType(user);
+    fnObj.fn.setLessonType();
     //결제방법조회
-    fnObj.fn.setPayType(user);
+    fnObj.fn.setPayType();
+    //수업여부조회
+    fnObj.fn.setLessonStatus();
 };
 
 //이벤트 초기화
@@ -35,43 +34,124 @@ fnObj.initEvent = function(user) {
         fnObj.fn.getMember(user);
     });
 
-    // 회원등록(팝업창)
-    $('#add-member').on('click', function(e) {
-        console.log('add member...');
+    //회원등록버튼 처리
+    $(document.body).on('click', '#call-add-member', function(e) {
+        let data = {
+            __created__: true,
+            sex: '남',
+            entFg: '1',
+            useYn: 'Y',
+        };
+
+        $('#delete-member').hide();
+        fnObj.fn.setMemberData(data);
+        fnObj.fn.showMemberModal();
     });
 
-    // 수업등록
-    $('#add-lesson').on('click', function(e) {
-        fnObj.fn.addLesson(user);
+    //정보수정버튼 처리
+    $(document.body).on('click', '#call-update-member', function(e) {
+        let data;
+        let selected = fnObj.fn.isSelectedMember();
+
+        if (selected === -1) {
+            alert('회원을 선택해 주세요');
+            return false;
+        }
+
+        $('#delete-member').show();
+        //선택된 회원의 정보를 조회
+        data = $('#member-container tbody').find('tr').eq(selected).data('id');
+        //팝업창 데이터 초기화
+        fnObj.fn.setMemberData(data);
+        /*//팝업창 호출
+        $('#memberModalCenter').modal('toggle');*/
+        fnObj.fn.showMemberModal(data);
+    });
+
+    //회원중복체크 처리
+    $('#check-member').on('click', function(e) {
+        let hp = $.trim($('#hp').val());
+        if (isValidMobileNumber(hp)) {
+            fnObj.fn.checkMember(user);
+        } else {
+            alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 조회하세요');
+            $('#hp').trigger('focus');
+        }
+    });
+
+    // 회원정보저장(수정/등록)
+    $('#save-member').on('click', function(e) {
+        let hp = $.trim($('#hp').val());
+        if (!isValidMobileNumber(hp)) {
+            alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
+            $('#hp').trigger('focus');
+            return false;
+        }
+
+        let memberNo = $('#new-member-container #memberNm').data('id');
+        if (memberNo === '') {
+            fnObj.fn.addMember(user);
+        } else {
+            fnObj.fn.updateMember(user);
+        }
+    });
+    // 회원삭제처리
+    $('#delete-member').on('click', function(e) {
+        fnObj.fn.deleteMember(user);
     });
 
     $('#member-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        selectedItem = $(this).index(); //selectedItem => 전역변수
-
-        //선택한 일자의 개인레슨을 조회
-        let selected = $(this).children('td').hasClass('selected');
-        $('#member-container tbody tr').
-            children('td').
-            removeClass('selected');
-        if (!selected) {
-            $(this).children('td').addClass('selected');
+        if (typeof lsnData === 'undefined') {
+            return false;
         }
 
+        let selected = $(this).children('td').hasClass('selected');
+        if (!selected) {
+            $('#member-container tbody tr').
+                children('td').
+                removeClass('selected');
+            $(this).children('td').addClass('selected');
+        }
         //선택된 회원의 등록된 수업조회
         fnObj.fn.getLesson(user, lsnData);
     });
 
+    // 수업신규등록
+    $(document.body).on('click', '#add-lesson', function(e) {
+        let data;
+        let selected = fnObj.fn.isSelectedMember();
+        if (selected === -1) {
+            alert('회원을 선택하신 후 수업을 등록해주세요');
+            return false;
+        }
+
+        data = $('#member-container tbody').find('tr').eq(selected).data('id');
+        let lsnData = {
+            __created__: true,
+            memberNo: data.memberNo,
+            memberNm: data.memberNm,
+            lsnCd: '01',
+            lsnRegTy: 1,
+            lsnFg: 1,
+        };
+
+        fnObj.fn.setLessonData(lsnData);
+        $('#lessonModalCenter').modal('toggle');
+
+    });
+
     $('#lesson-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        selectedItem = $(this).index(); //selectedItem => 전역변수
-
+        if (typeof lsnData === 'undefined') {
+            return false;
+        }
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
-        $('#lesson-container tbody tr').
-            children('td').
-            removeClass('selected');
         if (!selected) {
+            $('#lesson-container tbody tr').
+                children('td').
+                removeClass('selected');
             $(this).children('td').addClass('selected');
         }
 
@@ -79,6 +159,29 @@ fnObj.initEvent = function(user) {
         fnObj.fn.setLessonData(lsnData);
         //수업등록 팝업 띄우기
         $('#lessonModalCenter').modal('toggle');
+    });
+
+    // 수업저장 이벤트
+    $('#save-lesson').on('click', function(e) {
+        let lsnNo = $('#lsnNo').val();
+
+        if (lsnNo === '') {                 //신규등록
+            fnObj.fn.addLesson(user);
+        } else {                            //수정
+            fnObj.fn.updateLesson(user);
+        }
+
+        //todo: 팝업 닫을때 수업만 재조회 처리
+    });
+
+    // 휴대폰 형식 변경
+    $('#hp').on('change', function(e) {
+        let hp = $('#hp').val();
+        let valid = isValidMobileNumber(hp);
+        if (valid) {
+            let formattedHp = fnObj.fn.getMobileNumberFormat(hp);
+            $('#hp').val(formattedHp);
+        }
     });
 };
 
@@ -106,6 +209,124 @@ fnObj.fn = {
             },
         });
         return false;
+    },
+    //회원중복체크
+    checkMember: function(user) {
+        let filter = $.trim($('#filter').val());
+        $.ajax({
+            type: 'GET',
+            url: '/api/member/check',
+            data: {storCd: user.storCd, mobile: $('#hp').val()},
+            success: function(res) {
+                if (res[0].existMember === false) {
+                    alert('신규회원 입니다.');
+                } else {
+                    alert('이미 등록된 회원입니다. 변경하십시오');
+                }
+            },
+        });
+        return false;
+    },
+
+    //신규회원등록 (팝업창에서 처리)
+    addMember: function(user) {
+        let gd = [].concat(this.getMemberData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/member/add',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('회원등록이 완료되었습니다.');
+                $('#memberModalCenter').modal('toggle');
+                //회원 재조회 처리
+                $('#filter').val(gd[0].memberNm);
+                fnObj.fn.getMember(user);
+                fnObj.fn.getLesson(user, {memberNo: '-99999'});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //회원정보수정
+    updateMember: function(user) {
+        let gd = [].concat(this.getMemberData(user));
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/member/modify',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('회원수정이 완료되었습니다.');
+                $('#memberModalCenter').modal('toggle');
+                //회원 재조회 처리
+                $('#filter').val(gd[0].memberNm);
+                fnObj.fn.getMember(user);
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //회원삭제
+    deleteMember: function(user) {
+        let gd = [].concat(this.getMemberData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/member/delete',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('회원삭제가 완료되었습니다.');
+                $('#memberModalCenter').modal('toggle');
+                //회원 재조회 처리
+                $('#filter').val(gd[0].memberNm);
+                fnObj.fn.getMember(user);
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+
+    //화면에 회원데이터 셋팅
+    setMemberData: function(lsnData) {
+        $('#memberNm').val(lsnData.memberNm);
+        $('#memberNm').data('id', lsnData.memberNo);
+        $('#hp').val(lsnData.hp);
+        $('#sex').val(lsnData.sex);
+        $('#entFg').val(lsnData.entFg);
+        $('#member-remark').val(lsnData.remark);
+        $('#useYn').val(lsnData.useYn);
+    },
+
+    //화면의 회원데이터 조회
+    getMemberData: function(user) {
+        let date = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
+        return {
+            compCd: user.compCd,                    //key3
+            storCd: user.storCd,                    //key1
+            memberNo: $('#memberNm').data('id'),    //key2
+            memberNm: $('#memberNm').val(),
+            mobile: $('#hp').val(),
+            hp: $('#hp').val(),
+            sex: $('#sex').val(),
+            entFg: $('#entFg').val(),
+            entDt: date,
+            useYn: $('#useYn').val(),
+            remark: $('#member-remark').val(),
+        };
+    },
+
+    showMemberModal: function(user) {
+        $('#memberModalCenter').modal('toggle');
     },
 
     //검색된 회원의 수업조회
@@ -151,27 +372,79 @@ fnObj.fn = {
         $('#clsFg').val(lsnData.clsFg);
         $('#remark').val(lsnData.remark);
     },
-
+    //팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
         return {
             compCd: user.compCd,
             storCd: user.storCd,
             memberNo: $('#memberNo').data('id'),
             empNo: $('#teacher').val(),
-            //lsnNo: $('#lsnNo').val(), //자동생성
+            lsnNo: $('#lsnNo').val(),
             lsnCd: $('#lsnCd').val(),
             lsnTy: $('#lsnTy').val(),
             lsnFg: $('#lsnFg').val(),
-            lsnAmt: $('#lsnAmt').val().replace(/[^0-9]/g, ''), //str.replace(/[^d.,]+/,'')
+            lsnAmt: parseInt($('#lsnAmt').val().replace(/[^0-9]/g, '')), //str.replace(/[^d.,]+/,'')
             payTp: $('#payTp').val(),
-            lsnCd: $('#lsnCnt').val(),
-            lsnExpWk: $('#lsnExpWk').val(),
+            lsnCnt: parseInt($('#lsnCnt').val()),
+            lsnExpWk: parseInt($('#lsnExpWk').val()),
             entDt: ax5.util.date($('#regDt').val(), {return: 'yyyyMMdd'}),
             clsFg: $('#clsFg').val(),
             remark: $('#remark').val(),
-        }
+        };
     },
+    //수업신규등록
+    addLesson: function(user) {
+        let gd = [].concat(this.getLessonData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/lesson/add',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('수업등록이 완료되었습니다.');
+                $('#lessonModalCenter').modal('toggle');
+                //등록된 수업데이터를 재조회 처리
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //기존수업수정
+    updateLesson: function(user) {
+        let gd = [].concat(this.getLessonData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/lesson/modify',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                //alert('업데이트 완료되었습니다.');
+                $('#lessonModalCenter').modal('toggle');
+                //수정된 수업데이터를 재조회 처리
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    //회원리스트에서 선택된 회원이 있는지 체크. (true/false 반환)
+    isSelectedMember: function() {
+        let index = -1;
 
+        //selected = $('#member-container tbody tr').find('td').hasClass('selected');
+        $('#member-container tbody tr').each(function() {
+            let selected = $(this).find('td').hasClass('selected');
+            if (selected) {
+                index = $(this).index();
+            }
+        });
+        return index;
+    },
     //회원가입경로 코드 조회
     setSignUpPath: function(user) {
         $.ajax({
@@ -184,12 +457,12 @@ fnObj.fn = {
                     option += ' <option value="' + n.code + '">' + n.name +
                         '</option> ';
                 });
-                $('#signup-path').html(option);
+                $('#entFg').html(option);
+                $('#entFg').val(1);
             },
         });
         return false;
     },
-
     //수업등록 팝업 - 선생님리스트 조회
     setTeacher: function(user) {
         $.ajax({
@@ -197,7 +470,7 @@ fnObj.fn = {
             url: '/api/teacher',
             data: {storCd: user.storCd},
             success: function(res) {
-                let option = '<option value="">선생님(전체)</option>';
+                let option = '<option value="">선택</option>';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.empNo + '">' + n.empNm +
                         '</option> ';
@@ -207,13 +480,12 @@ fnObj.fn = {
             },
         });
     },
-
     //수업코드 조회 (개인,그룹,....)
     setLessonCd: function(user) {
         $.ajax({
             type: 'GET',
             url: '/api/lesson',
-            data: { storCd: user.storCd, lsnFg: '1'},
+            data: {storCd: user.storCd, lsnFg: '1'},
             success: function(res) {
                 let option;
                 res.forEach(function(n) {
@@ -221,16 +493,17 @@ fnObj.fn = {
                         '</option> ';
                 });
                 $('#lsnCd').html(option);
+                $('#lsnCd').val('01');
             },
         });
     },
 
     //레슨종류 조회 (정상,체험,쿠폰...)
-    setLessonType: function(user) {
+    setLessonType: function() {
         $.ajax({
             type: 'GET',
             url: '/api/common',
-            data: { groupCd: '003'},
+            data: {groupCd: '003'},
             success: function(res) {
                 let option;
                 res.forEach(function(n) {
@@ -238,18 +511,19 @@ fnObj.fn = {
                         '</option> ';
                 });
                 $('#lsnFg').html(option);
+                //$('#lsnFg').html('1');
             },
         });
     },
 
     //결제방법 조회
-    setPayType: function(user) {
+    setPayType: function() {
         $.ajax({
             type: 'GET',
             url: '/api/common',
-            data: { groupCd: '008'},
+            data: {groupCd: '008'},
             success: function(res) {
-                let option;
+                let option = '<option value="">선택</option>';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.code + '">' + n.name +
                         '</option> ';
@@ -258,6 +532,15 @@ fnObj.fn = {
             },
         });
     },
+    // 회원상태값 초기화
+    setLessonStatus: function() {
+        $('#useYn').val('Y');
+    },
+    //휴대폰형식 반환
+    getMobileNumberFormat: function(str) {
+        let digit = str.replace(/\D/g, '');
+        return digit.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    },
 
     // 조회조건
     getData: function(user) {
@@ -265,47 +548,6 @@ fnObj.fn = {
             memberId: user.storCd,
         };
     },
-
-    /**
-     * 검색된 회원의 레슨목록 조회
-     * @param storCd store code
-     * @param memberNm member name
-     */
-    getGroupLessonByMember: function(user) {
-        let memberNm = $.trim($('#filter').val());
-        if (memberNm.length === 0) {
-            alert('회원명을 입력해주세요 ');
-            return false;
-        }
-        $.ajax({
-            type: 'GET',
-            url: '/api/teacher/reservation/group',
-            data: {storCd: user.storCd, memberNm: memberNm},
-            success: function(res) {
-                var html = Mustache.render(newReservationTmpl, {list: res});
-                $('#new-reservation-container').html(html);
-            },
-        });
-    },
-
-    //그룹레슨 예약등록 처리
-    addLesson: function(user) {
-        let gd = [].concat(this.getLessonData(user));
-        $.ajax({
-            type: 'PUT',
-            url: '/api/lesson/add',
-            data: JSON.stringify(gd),
-            contentType: 'application/json; charset=UTF-8',
-            success: function(res) {
-                alert('수업등록이 완료되었습니다.');
-            },
-            error: function(error) {
-                alert(error);
-            },
-        });
-        return false;
-    },
-
 };
 
 $(function() {

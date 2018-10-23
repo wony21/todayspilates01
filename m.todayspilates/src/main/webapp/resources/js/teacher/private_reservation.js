@@ -6,22 +6,26 @@ let selectedItem = -1;
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
 fnObj.initView = function() {
-    console.log('initView');
+    let html;
+
+    html = Mustache.render(reservation, {});
+    $('#reservation-container').html(html);
     //예약등록 팝업창 렌더링 초기화 필요
-    let html = Mustache.render(newReservation, {list: []});
+    html = Mustache.render(newReservation, {});
     $('#new-reservation-container').html(html);
 };
 
 fnObj.initEvent = function(user) {
-    console.log('init Event');
-
     $('#search-member').on('click', function() {
         fnObj.fn.getPrivateLesson(user);
     });
 
     $('#reservation-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        console.log(lsnData);
+
+        if (typeof lsnData === 'undefined') {
+            return false;
+        }
 
         // request data
         var r = {};
@@ -76,10 +80,10 @@ fnObj.initEvent = function(user) {
 
         //선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
-        $('#new-reservation-container tbody tr').
-            children('td').
-            removeClass('selected');
         if (!selected) {
+            $('#new-reservation-container tbody tr').
+                children('td').
+                removeClass('selected');
             $(this).children('td').addClass('selected');
         }
     });
@@ -222,7 +226,7 @@ fnObj.fn = {
             url: '/api/teacher',
             data: {storCd: user.storCd},
             success: function(res) {
-                let option = '<option value="">선생님 선택</option>';
+                let option = '<option value="">선택</option>';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.empNo + '">' + n.empNm +
                         '</option> ';
@@ -289,7 +293,7 @@ fnObj.fn = {
     },
 };
 
-$(document).ready(function() {
+$(function() {
     let user = JSON.parse(window.localStorage.getItem('todays'));
     $('.username').text(user.username);
 

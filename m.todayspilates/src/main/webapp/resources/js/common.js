@@ -29,6 +29,19 @@
 		}
 		return true;
 	}
+
+	/**
+	 * 핸드폰 번호형식이 올바른지 유효성 체크 (11자리)
+	 * @param mobileString 01012345678
+	 */
+	isValidMobileNumber = function(mobileString) {
+	    let digit = mobileString.replace(/\D/g, "");
+			var regEx = /^\d{3}\d{4}\d{4}$/;
+			if (!regEx.test(digit)) {
+					return false; // Invalid format
+			}
+			return true;
+	}
 	
 	/**
 	 * 해당월의 주의 최대값
@@ -63,7 +76,7 @@
 			var year = fdate[0];
 			var month = fdate[1];
 		    
-		    var sdate = new Date(year, month-1, 01);
+		    var sdate = new Date(year, month-1, 1);
 		    var lastDay = (new Date(sdate.getFullYear(), sdate.getMonth()+1, 0)).getDate();
 		    var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
 		    var week = sdate.getDay();
