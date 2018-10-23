@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.microsoft.sqlserver.jdbc.StringUtils;
+
 import m.todays.pilates.common.ParamNames;
 import m.todays.pilates.common.api.ApiResponse;
 
@@ -66,6 +68,9 @@ public class MemberService {
 		Date today = new Date();
 		String entDt2 = DateFormatUtils.format(today, "yyyyMMdd");
 		parameter.put(ParamNames.entDt, entDt);
+		if (StringUtils.isEmpty(entFg)) {
+			entFg = "1"; // 활동.
+		}
 		parameter.put(ParamNames.entFg, entFg);
 		parameter.put(ParamNames.sex, sexCode);
 		parameter.put(ParamNames.remark, remark);

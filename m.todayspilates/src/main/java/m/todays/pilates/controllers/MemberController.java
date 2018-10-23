@@ -68,7 +68,7 @@ public class MemberController extends BaseController {
 	@RequestMapping(value = "/api/member/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse addMember(@RequestBody List<HashMap> requestParams) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		String userCd =  SessionUtils.getCurrentUser().getMemberNo();
+		String userCd =  SessionUtils.getCurrentUser().getUserCd();
 		for(HashMap<String, Object> item : requestParams) {
 			String storCd = (String)item.get(ParamNames.storCd);
 			String mobile = (String)item.get(ParamNames.mobile);

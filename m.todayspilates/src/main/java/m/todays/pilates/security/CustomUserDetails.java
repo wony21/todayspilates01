@@ -14,6 +14,7 @@ import m.todays.pilates.domain.user.User;
 public class CustomUserDetails implements UserDetails {
 	 
     private static final long serialVersionUID = -4450269958885980297L;
+    private String userCd;
     private String username;
     private String username2;
     private String password;
@@ -25,6 +26,14 @@ public class CustomUserDetails implements UserDetails {
     private String memberNo;
     private String empNo;
     private String hpNo;
+    
+    public String getUserCd() {
+    	return this.userCd;
+    }
+    
+    public void setUserCd(String userCd) {
+    	this.userCd = userCd;
+    }
     
     public String getCompCd() {
 		return compCd;
@@ -78,6 +87,7 @@ public class CustomUserDetails implements UserDetails {
     
     public CustomUserDetails(User user) {
     	this.compCd = user.compCd;
+    	this.userCd = user.userCd;
     	this.storCd = user.storCd;
     	this.userLv = user.userLv;
     	this.username = user.userCd;

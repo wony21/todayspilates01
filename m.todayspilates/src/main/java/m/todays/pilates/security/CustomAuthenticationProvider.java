@@ -35,16 +35,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-		String user_id = (String) authentication.getPrincipal();
-		
-//		if ( user_id.length() < 4) {
-//			throw new InternalAuthenticationServiceException("아이디는 4자리 이상이어야 합니다.");
-//		}
-		
+		String user_id = (String) authentication.getPrincipal();		
+		if ( user_id.length() < 4) {
+			throw new InternalAuthenticationServiceException("아이디는 4자리 이상이어야 합니다.");
+		}
 		String user_pw = user_id.substring(user_id.length() - 4, user_id.length());
-
 		User userInfo = userService.getUserInfo(user_id, user_pw);
-
 		if (userInfo != null) {
 			List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 			if ( userInfo.userLv.equals(CommonData.UserLv.SYSTEM)) { // 관리자는 모든 권한부여
