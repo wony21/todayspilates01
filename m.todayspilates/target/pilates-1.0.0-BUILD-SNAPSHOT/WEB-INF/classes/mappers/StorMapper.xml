@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="m.todays.pilates.domain.stor.StorMapper">
-    <select id="getStor" resultType="camelmap" statementType="PREPARED">
-        SELECT *
-        FROM STOR_M
-        ORDER BY STOR_CD
-    </select>
-</mapper>

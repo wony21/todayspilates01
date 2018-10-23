@@ -57,9 +57,9 @@ fnObj.initEvent = function(user) {
                     // n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
                     memberNm = n.memberNm;
-                    console.log(n.memberNm);
                 });
                 $('#userInfo').text(memberNm);
+
                 let html = Mustache.render(newReservation, {list: res});
                 $('#new-reservation-container').html(html);
 
