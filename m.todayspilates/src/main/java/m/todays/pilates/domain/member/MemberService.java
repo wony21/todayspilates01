@@ -120,6 +120,7 @@ public class MemberService {
 		parameter.put(ParamNames.memberNo, memberNo);
 		try {
 			memberMapper.deleteMember(parameter);
+			memberMapper.deleteUser(parameter);
 			return ApiResponse.success("ok");
 		} catch (Exception e) {
 			return ApiResponse.error("exist user");

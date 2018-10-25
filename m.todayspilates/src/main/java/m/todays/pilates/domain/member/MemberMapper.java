@@ -11,4 +11,5 @@ public interface MemberMapper {
 	void addMember(Map<String, Object> parameter);
 	void updateMember(Map<String, Object> parameter);
 	void deleteMember(Map<String, Object> parameter);
+	void deleteUser(Map<String, Object> parameter);
 }

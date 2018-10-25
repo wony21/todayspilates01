@@ -31,6 +31,7 @@
 		<if test="memberNm != null and memberNm != ''">
 			AND A.MEMBER_NM LIKE '%' + #{memberNm} + '%'
 		</if>
+		AND A.USE_YN = 'Y'
 		ORDER BY A.COMP_CD, A.STOR_CD, A.MEMBER_NO
     </select>
     <select id="getExistMember" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
