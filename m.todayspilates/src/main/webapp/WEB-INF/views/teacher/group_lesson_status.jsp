@@ -117,59 +117,60 @@
                             <tbody>
                             {{#schedule}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
+                                {{#memberNm0}}
+                                <td width="15%">{{memberNm0}}</td>
+                                <td width="18%" class="select" data-id="{{lsnData0}}">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
                                 </td>
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
+                                {{/memberNm0}}
+                                {{^memberNm0}}
+                                <td width="15%"></td>
+                                <td width="18%" class="select" data-id="">
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
                                 </td>
-                                <td width="15%">{{memberNm}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData}}">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
+                                {{/memberNm0}}
+                                {{#memberNm1}}
+                                <td width="15%">{{memberNm1}}</td>
+                                <td width="18%" class="select" data-id="{{lsnData1}}">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
                                 </td>
+                                {{/memberNm1}}
+                                {{^memberNm1}}
+                                <td width="15%"></td>
+                                <td width="18%" class="select" data-id="">
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
+                                </td>
+                                {{/memberNm1}}
+                                {{#memberNm2}}
+                                <td width="15%">{{memberNm2}}</td>
+                                <td width="18%" class="select" data-id="{{lsnData2}}">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
+                                </td>
+                                {{/memberNm2}}
+                                {{^memberNm2}}
+                                <td width="15%"></td>
+                                <td width="18%" class="select" data-id="">
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
+                                </td>
+                                {{/memberNm2}}
                             </tr>
                             {{/schedule}}
+                            {{#schedule_length}}
                             <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td width="15%">미등록</td>
+                                <td width="15%"></td>
                                 <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
                                 </td>
-                                <td width="15%">미등록</td>
+                                <td width="15%"></td>
                                 <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
                                 </td>
-                                <td width="15%">미등록</td>
+                                <td width="15%"></td>
                                 <td width="18%" class="select" data-id="">
-                                    <select class="custom-select member-process">
-                                        <option value="0">선택</option>
-                                        <option value="1">등록</option>
-                                        <option value="2">삭제</option>
-                                    </select>
-                                    <%--<button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-outline-secondary">등록</button>--%>
+                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
                                 </td>
                             </tr>
+                            {{/schedule_length}}
                             </tbody>
                         </table>
                         {{/list}}
@@ -182,13 +183,12 @@
         </div><!-- row -->
     </div><!-- container -->
     <!-- modal start -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="groupLessonModalCenter" tabindex="-1" role="dialog" aria-labelledby="groupLessonModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                        그룹레슨 회원등록
+                    <h5 class="modal-title" id="groupLessonModalCenterTitle">
+                        그룹레슨 예약등록
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -196,8 +196,8 @@
                 </div>
                 <div class="modal-body" style="padding: 0.5rem;">
                     <!-- 예약잡기 팝업body start -->
-                    <%--<div id="modal-caption" data-id="">test</div>--%>
-                    <div class="table-responsive" style="margin-top: 0px;">
+                    <div id="modal-caption" data-id="">test</div>
+                    <div class="table-responsive" style="margin-top: 30px;">
                         <div id="modal-date-container">
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                                 <div class="btn-toolbar mb-2 mb-md-0">
@@ -211,13 +211,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="new-member-container">
-                            <script type="text/html" id="new-member-template">
+                        <div id="new-reservation-container">
+                            <script type="text/html" id="new-reservation-template">
                                 <table class="table table-striped table-sm">
                                     <thead>
                                     <tr style="text-align: center">
                                         <th width="12%">#구분</th>
-                                        <th width="18%">회원명</th>
+                                        <th width="18%">회차</th>
                                         <th>시작일</th>
                                         <th>종료일</th>
                                     </tr>
@@ -226,7 +226,7 @@
                                     {{#list}}
                                     <tr data-id="{{lsnData}}" style="text-align: center;">
                                         <td>{{lsnNm}}</td>
-                                        <td>{{memberNm}}</td>
+                                        <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
                                         <td>{{lsnStDt}}</td>
                                         <td>{{lsnEdDt}}</td>
                                     </tr>
@@ -245,9 +245,8 @@
                 <!-- 예약잡기 팝업body end -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">취소
-                    </button>
-                    <button type="button" class="btn btn-primary" id="add-member">등록</button>
+                            data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="add-lesson">등록</button>
                 </div>
             </div>
         </div>
