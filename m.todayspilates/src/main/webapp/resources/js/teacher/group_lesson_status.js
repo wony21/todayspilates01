@@ -202,6 +202,7 @@ fnObj.fn = {
                             m.schedule_length = 3;
                         }
 
+                        arr.length = 0;
                         m.schedule.forEach(function(n, idx) {
                             n.empNo = m.empNo;
                             n.empNm = m.empNm;
@@ -224,7 +225,6 @@ fnObj.fn = {
                                 //let tmpObj = {};
                                 tmpObj['memberNm' + rem] = n.memberNm;
                                 tmpObj['lsnData' + rem] = n.lsnData;
-                                arr.push(tmpObj);
                                 arr.push(tmpObj);
                             } else {
                                 let curIdx = parseInt(idx / 3);
