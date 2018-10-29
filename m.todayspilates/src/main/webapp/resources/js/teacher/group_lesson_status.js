@@ -23,8 +23,8 @@ fnObj.initEvent = function(user) {
     // 선택한 일자의 그룹레슨을 조회
     $('#datepicker').on('click', ' tbody td', function(e) {
         let selected = $(this).hasClass('selected');
-        $('#datepicker tbody td').removeClass('selected');
         if (!selected) {
+            $('#datepicker tbody td').removeClass('selected');
             $(this).addClass('selected');
         }
         fnObj.fn.getGroupLesson(user);
@@ -161,7 +161,7 @@ fnObj.fn = {
                 tbody += '<td data-id="' + date + '">' + day + '</td>';
             } else {
                 thead += '<th class="today">' + WEEKS[i] + '</th>';
-                tbody += '<td class="today" data-id="' + date + '">' + day +
+                tbody += '<td class="today selected" data-id="' + date + '">' + day +
                     '</td>';
             }
         }
