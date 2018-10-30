@@ -224,6 +224,9 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="memberNm" data-id=""
                                                            style="width: 80px;  margin-left: 0px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" id="check-member">중복확인</button>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -233,9 +236,6 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="hp"
                                                            style="width: 80px;  margin-left: 0px;">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary" id="check-member">중복확인</button>
-                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -319,10 +319,6 @@
                                                        style="width: 80px;  margin-left: 0px;">
                                             </div>
                                         </td>
-                                        <td width="25%" style="height:40px;">선생님</td>
-                                        <td width="25%"><select class="custom-select" id="teacher"></select></td>
-                                    </tr>
-                                    <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">수업번호</td>  <!--3자리 +1씩 증가 -->
                                         <td width="25%">
                                             <div class="input-group">
@@ -330,8 +326,12 @@
                                                        style="width: 80px;  margin-left: 0px;" readonly>
                                             </div>
                                         </td>
+                                    </tr>
+                                    <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">수업종류</td>
                                         <td width="25%"><select class="custom-select" id="lsnCd"></select></td> <!--조회시 lsnTy -->
+                                        <td width="25%" style="height:40px;">선생님</td>
+                                        <td width="25%"><select class="custom-select" id="teacher"></select></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">등록구분</td>
@@ -389,11 +389,14 @@
                                         </td>
                                     </tr>
                                     <tr style="text-align: center;">
-                                        <td width="25%" style="height:40px;">유효기간</td>
+                                        <td width="25%" style="height:40px;">유효기간(주)</td>
                                         <td width="25%">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="lsnExpWk"
-                                                       style="width: 80px;  margin-left: 0px;">
+                                                       style="width: 40px;  margin-left: 0px;">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-info" disabled>W</button>
+                                                </div>
                                             </div>
                                         </td>
                                         <td width="25%" style="height:40px;">등록일자</td>
@@ -424,7 +427,8 @@
                                         <td width="25%" style="height:40px;">수업여부</td>
                                         <td width="25%"><select class="custom-select" id="clsFg">
                                             <option value="1">수업</option>
-                                            <option value="2">미수업</option>
+                                            <option value="2">종료</option>
+                                            <option value="3">보류</option>
                                         </select></td>
                                         <td width="50%" style="height:40px;" colspan="2"></td>
                                     </tr>

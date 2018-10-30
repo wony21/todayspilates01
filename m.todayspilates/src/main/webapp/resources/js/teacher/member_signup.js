@@ -70,12 +70,12 @@ fnObj.initEvent = function(user) {
 
     //회원중복체크 처리
     $('#check-member').on('click', function(e) {
-        let hp = $.trim($('#hp').val());
-        if (isValidMobileNumber(hp)) {
-            fnObj.fn.checkMember(user);
+        let filter = $.trim($('#memberNm').val());
+        if (filter.length) {
+            fnObj.fn.isDupMemberByName(user, filter);
         } else {
-            alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 조회하세요');
-            $('#hp').trigger('focus');
+            alert('입력된 회원명이 올바르지 않습니다. 수정 후 조회하세요');
+            $('#memberNm').trigger('focus');
         }
     });
 
@@ -134,6 +134,7 @@ fnObj.initEvent = function(user) {
             lsnCd: '01',
             lsnRegTy: 1,
             lsnFg: 1,
+            clsFg: 1,
         };
 
         fnObj.fn.setLessonData(lsnData);
@@ -152,11 +153,18 @@ fnObj.initEvent = function(user) {
             $('#lesson-container tbody tr').
                 children('td').
                 removeClass('selected');
+
             $(this).children('td').addClass('selected');
         }
 
         //선택된 회원의 등록된 수업조회
         fnObj.fn.setLessonData(lsnData);
+        //그룹레슨의 경우 선생님 선택 비활성황
+        if (lsnData.lsnTy === '2') {
+            $('#teacher').prop('disabled', 'disabled');
+        } else {
+            $('#teacher').prop('disabled', false);
+        }
         //수업등록 팝업 띄우기
         $('#lessonModalCenter').modal('toggle');
     });
@@ -181,6 +189,17 @@ fnObj.initEvent = function(user) {
         if (valid) {
             let formattedHp = fnObj.fn.getMobileNumberFormat(hp);
             $('#hp').val(formattedHp);
+        }
+    });
+
+    $('#lsnCd').on('change', function(e) {
+       //console.log('lsnCd:' + $(this).val());
+        let lsnCd = $(this).val();
+        //개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
+        if (lsnCd == '01') {
+            $('#teacher').prop('disabled', false);
+        } else {
+            $('#teacher').prop('disabled', 'disabled');
         }
     });
 };
@@ -210,7 +229,7 @@ fnObj.fn = {
         });
         return false;
     },
-    //회원중복체크
+    /*//회원 모바일번호 중복체크
     checkMember: function(user) {
         let filter = $.trim($('#filter').val());
         $.ajax({
@@ -226,8 +245,24 @@ fnObj.fn = {
             },
         });
         return false;
+    },*/
+    //
+    isDupMemberByName: function(user, filter) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/member/list',
+            data: {storCd: user.storCd, memberNm: filter},
+            success: function(res) {
+                let list = res.filter(n => (n.memberNm === filter));
+                if (list.length) {
+                    alert('이미 등록된 회원명입니다. 변경하십시요');
+                    $('#memberNm').trigger('focus');
+                } else {
+                    alert('신규회원 입니다.');
+                }
+            },
+        });
     },
-
     //신규회원등록 (팝업창에서 처리)
     addMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
@@ -238,8 +273,11 @@ fnObj.fn = {
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
                 //alert('회원등록이 완료되었습니다.');
+                if (res.status === 500) {
+                    alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
+                    return false;
+                }
                 $('#memberModalCenter').modal('toggle');
-                //회원 재조회 처리
                 $('#filter').val(gd[0].memberNm);
                 fnObj.fn.getMember(user);
                 fnObj.fn.getLesson(user, {memberNo: '-99999'});
@@ -337,6 +375,14 @@ fnObj.fn = {
             data: {storCd: user.storCd, memberNo: lsnData.memberNo},
             success: function(res) {
                 res.forEach(function(n) {
+                    if (isValidDate(n.lsnStDt)) {
+                        n.lsnStDt = ax5.util.date(n.lsnStDt,
+                            {return: 'yyyy-MM-dd'});
+                    }
+                    if (isValidDate(n.lsnEdDt)) {
+                        n.lsnEdDt = ax5.util.date(n.lsnEdDt,
+                            {return: 'yyyy-MM-dd'});
+                    }
                     n['lsnData'] = JSON.stringify(n);
                 });
 
