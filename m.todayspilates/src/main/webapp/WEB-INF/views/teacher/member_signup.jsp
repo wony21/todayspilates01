@@ -28,7 +28,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/css/boot4/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <!-- Custom Fonts -->
     <link href="/css/boot4/vendor/font-awesome.min.css" rel="stylesheet"
           type="text/css">
@@ -340,7 +340,7 @@
                                             <option value="2">재등록</option>
                                         </select></td>
                                         <td width="25%" style="height:40px;">등록종류</td>
-                                        <td width="25%"><select class="custom-select" id="lsnFg"></select></td>
+                                        <td width="25%"><select class="custom-select" id="lsnFg"></select></td> <!--정상/체험/쿠폰 -->
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">등록금액</td>
@@ -401,7 +401,8 @@
                                         </td>
                                         <td width="25%" style="height:40px;">등록일자</td>
                                         <td width="25%">
-                                            <div class="input-group">
+                                            <div class="input-group" id="sandbox-container">
+                                                <%--<select class="custom-select" id="regDt" style="width: 80px;  margin-right: 0px; margin-left: 0px; padding-left: 2px; padding-right: 0px"></select>--%>
                                                 <input type="text" class="form-control" id="regDt"
                                                        style="width: 80px;  margin-left: 0px; padding-left: 5px; padding-right: 5px" readonly>
                                             </div>
@@ -489,12 +490,14 @@
 
 <!-- Plugin JavaScript -->
 <script src="/js/boot4/jquery.easing.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- Custom scripts for this template -->
 <script src="/js/boot4/vendor/mustache.js"></script>
 <script src="/js/boot4/vendor/ax5core.min.js"></script>
 <script src="/js/boot4/vendor/ax5formatter.js"></script>
 <script src="/js/boot4/stylish-portfolio.js"></script>
+<%--<script src="/js/boot4/js/bootstrap-datepicker.min.js"></script>--%>
 <script src="/js/common.js"></script>
 <script src="/js/teacher/member_signup.js"></script>
 </body>

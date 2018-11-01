@@ -2,6 +2,7 @@ var common = {};
 let fnObj = {};
 let reservation = $('#reservation-template').html();
 let newReservation = $('#new-reservation-template').html();
+let updateReservation = $('#update-reservation-template').html();
 let selectedItem = -1;
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -13,6 +14,9 @@ fnObj.initView = function() {
     //예약등록 팝업창 렌더링 초기화 필요
     html = Mustache.render(newReservation, {});
     $('#new-reservation-container').html(html);
+    //예약수정 팝업창
+    html = Mustache.render(updateReservation, {});
+    $('#update-reservation-container').html(html);
 };
 
 fnObj.initEvent = function(user) {
@@ -20,7 +24,16 @@ fnObj.initEvent = function(user) {
         fnObj.fn.getPrivateLesson(user);
     });
 
+    $('#call-new-reservation').on('click', function() {
+        //fnObj.fn.getPrivateLesson(user);
+        fnObj.fn.setRsvDate();
+        fnObj.fn.setRsvTime();
+        fnObj.fn.setLsnTime();
+        $('#exampleModalCenter').modal('toggle');
+    });
+
     $('#reservation-container').on('click', 'tbody tr', function(e) {
+        let mode = 'update';
         let lsnData = $(this).data('id');
 
         if (typeof lsnData === 'undefined') {
@@ -58,18 +71,19 @@ fnObj.initEvent = function(user) {
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
                     memberNm = n.memberNm;
                 });
-                $('#userInfo').text(memberNm);
+                $('#up-userInfo').text(memberNm);
 
-                let html = Mustache.render(newReservation, {list: res});
-                $('#new-reservation-container').html(html);
+                let html = Mustache.render(updateReservation, {list: res});
+                $('#update-reservation-container').html(html);
 
                 //레슨 등록정보 셋팅
                 //fnObj.fn.setReservationList(n);
-                fnObj.fn.setLsnCd(lsnData.lsnCd);
-                fnObj.fn.setRsvDate();
-                fnObj.fn.setRsvTime();
-                fnObj.fn.setLsnTime();
-                $('#teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정
+                fnObj.fn.setLsnCd(mode, lsnData.lsnCd);
+                fnObj.fn.setRsvDate(mode);
+                fnObj.fn.setRsvTime(mode);
+                $('#update-teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정
+                //팝업창 띄우기
+                $('#updateModalCenter').modal('toggle');
             },
         });
     });
@@ -87,17 +101,6 @@ fnObj.initEvent = function(user) {
             $(this).children('td').addClass('selected');
         }
     });
-
-    //날짜선택시 선택일자 toggle 이벤트
-//	$("#date-container").on('click', 'td', function(e) {
-//		let searchDate = $(this).text();
-//		
-//		let selected = $(this).hasClass("selected");
-//	    $("#date-container td").removeClass("selected");
-//	    if(!selected) {
-//	    	$(this).addClass("selected");
-//	    }
-//	});
 
     //예약등록 버튼 이벤트
     $('#add-lesson').on('click', function(e) {
@@ -161,7 +164,7 @@ fnObj.fn = {
         $('#new-reservation-container').html(html);
     },
 
-    setLsnCd: function(val) {
+    setLsnCd: function(mode, val) {
 //		let option = '';
 //		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
 //		option += '<option value="01">' + '개인' + '</option> ';
@@ -169,10 +172,14 @@ fnObj.fn = {
 //		
 //		$('#lsnCd').html(option);
 //		$('#lsnCd').val(val);
+        let target = $('#lsnCd');
+        if (mode === 'update') {
+            target = $('#update-lsnCd');
+        }
     },
 
     //예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
-    setRsvDate: function() {
+    setRsvDate: function(mode) {
         let option = '';
         for (var i = 0; i <= 90; i++) {
             var date = ax5.util.date(new Date(), {add: {d: i}});
@@ -185,10 +192,15 @@ fnObj.fn = {
             option += '<option value="' + formattedDate + '">' + d + ' (' +
                 day + ')' + '</option> ';
         }
-        $('#rsvDt').html(option);
+
+        let target = $('#rsvDt');
+        if (mode === 'update') {
+            target = $('#update-rsvDt');
+        }
+        target.html(option);
     },
     //예약시간 셋팅 (00 ~ 24)
-    setRsvTime: function(val) {
+    setRsvTime: function(mode, val) {
         let option = '';
         for (var i = 1; i < 24; i++) {
             //let prefix = (i < 12) ? 'am ' : 'pm ';
@@ -200,16 +212,21 @@ fnObj.fn = {
         }
 
         let now = new Date($.now());
-        $('#rsvTm').html(option);
+        let target = $('#rsvTm');
+        if (mode === 'update') {
+            target = $('#update-rsvTm');
+        }
+
+        target.html(option);
         if (typeof val === 'undefined' || val === '' || val === null) {
             //기본값이 없으면 현재시각을 기본값으로 설정
-            $('#rsvTm').val(('0' + now.getHours()).slice(-2) + '00');
+            target.val(('0' + now.getHours()).slice(-2) + '00');
         } else {
-            $('#rsvTm').val(val);	//기존예약 시간을 기본값으로 설정
+            target.val(val);	//기존예약 시간을 기본값으로 설정
         }
     },
     //레슨시간 셋팅 (0.5 ~ 6.0)
-    setLsnTime: function() {
+    /*setLsnTime: function() {
 //		let option = '';
 //		for (var i = 0.5; i <= 4; i+= 0.5) {
 //			option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
@@ -217,7 +234,7 @@ fnObj.fn = {
 //		}
 //		$('#lsnTm').html(option);
 //		$('#lsnTm').val('1.0');	//default 값 
-    },
+    },*/
     //선생님 셋팅
     setTeacher: function(user) {
         //강사목록 조회

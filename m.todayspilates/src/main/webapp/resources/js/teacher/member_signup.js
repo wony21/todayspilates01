@@ -1,7 +1,7 @@
 let fnObj = {};
 let memberTmpl = $('#member-template').html();
 let lessonTmpl = $('#lesson-template').html();
-
+const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 //view 초기화
 fnObj.initView = function(user) {
     let html;
@@ -202,6 +202,9 @@ fnObj.initEvent = function(user) {
             $('#teacher').prop('disabled', 'disabled');
         }
     });
+
+
+    $('#regDt').datepicker();
 };
 
 fnObj.fn = {
@@ -395,6 +398,7 @@ fnObj.fn = {
 
     //선택된 수업의 상세정보를 조회 (수업등록 팝업)
     setLessonData: function(lsnData) {
+        let today = new Date().getTime();
         let regDt = (isValidDate(lsnData.regDt) === false) ? '' :
             ax5.util.date(lsnData.regDt, {return: 'yyyy-MM-dd'});
 
@@ -417,6 +421,16 @@ fnObj.fn = {
         $('#regDt').val(regDt);
         $('#clsFg').val(lsnData.clsFg);
         $('#remark').val(lsnData.remark);
+
+        fnObj.fn.setRsvDate();
+
+        let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
+        //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리
+        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
+            lsnData.lsnUseCnt == lsnData.lsnCnt) {
+            console.log('Lesson is expired...');
+            $('#clsFg').val(2);
+        }
     },
     //팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
@@ -577,6 +591,21 @@ fnObj.fn = {
                 $('#payTp').html(option);
             },
         });
+    },
+
+    setRsvDate: function() {
+        let option = '';
+        for (var i = 0; i <= 90; i++) {
+            var date = ax5.util.date(new Date(), {add: {d: i}});
+            var formattedDate = ax5.util.date(new Date(),
+                {add: {d: i}, return: 'yyyyMMdd'});
+            var day = WEEKS[date.getDay()];
+
+            var d = formattedDate.substr(0, 4) + '-' + formattedDate.substr(
+                4, 2) + '-' + formattedDate.substr(6, 7);
+            option += '<option value="' + formattedDate + '">' + d + '</option> ';
+        }
+        $('#regDt').html(option);
     },
     // 회원상태값 초기화
     setLessonStatus: function() {
