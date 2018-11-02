@@ -26,12 +26,17 @@ fnObj.initEvent = function(user) {
 
     $('#call-new-reservation').on('click', function() {
         //fnObj.fn.getPrivateLesson(user);
+        let mode = '';
+        let empNo = ''
+        $('#userInfo').text($('#filter').val());
         fnObj.fn.setRsvDate();
         fnObj.fn.setRsvTime();
+        fnObj.fn.setTeacher(mode, user, empNo);
         //fnObj.fn.setLsnTime();
         $('#exampleModalCenter').modal('toggle');
     });
 
+    //예약수정 모드
     $('#reservation-container').on('click', 'tbody tr', function(e) {
         let mode = 'update';
         let lsnData = $(this).data('id');
@@ -54,8 +59,6 @@ fnObj.initEvent = function(user) {
 //					location.refresh();
 //					return false;
 //				}
-                let memberNm = '';
-                let empNo = res[0].empNo;
                 res.forEach(function(n) {
                     n.lsnData = JSON.stringify(n);
                     n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ?
@@ -70,9 +73,9 @@ fnObj.initEvent = function(user) {
                             n.lsnEdDt.substr(6, 7));	// yy-mm-dd
                     // n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
-                    memberNm = n.memberNm;
                 });
-                $('#up-userInfo').text(memberNm);
+
+                $('#up-userInfo').text(lsnData.memberNm);
 
                 let html = Mustache.render(updateReservation, {list: res});
                 $('#update-reservation-container').html(html);
@@ -156,7 +159,7 @@ fnObj.fn = {
         };
     },
 
-    //선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
+    /*//선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
     setReservationList: function(items) {
         item.lsnData = JSON.stringify(item);
         item.lsnStDt = (isValidDate(item.lsnStDt) === false) ?
@@ -169,7 +172,7 @@ fnObj.fn = {
                 '.' + item.lsnEdDt.substr(6, 7));
         let html = Mustache.render(newReservation, {list: [item]});
         $('#new-reservation-container').html(html);
-    },
+    },*/
 
     setLsnCd: function(mode, val) {
 //		let option = '';
