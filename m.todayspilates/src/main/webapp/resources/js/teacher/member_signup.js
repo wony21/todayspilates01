@@ -203,8 +203,17 @@ fnObj.initEvent = function(user) {
         }
     });
 
+    $('#datepicker input').datepicker({
+        isRTL: false,
+        language: 'ko',
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        clearBtn: true,
+        todayBtn: true,
+        todayHighlight: true,
+        setDate: new Date(),
+    });
 
-    $('#regDt').datepicker();
 };
 
 fnObj.fn = {
@@ -422,7 +431,8 @@ fnObj.fn = {
         $('#clsFg').val(lsnData.clsFg);
         $('#remark').val(lsnData.remark);
 
-        fnObj.fn.setRsvDate();
+        //fnObj.fn.setRsvDate();
+
 
         let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
         //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리
@@ -593,7 +603,7 @@ fnObj.fn = {
         });
     },
 
-    setRsvDate: function() {
+    /*setRsvDate: function() {
         let option = '';
         for (var i = 0; i <= 90; i++) {
             var date = ax5.util.date(new Date(), {add: {d: i}});
@@ -606,7 +616,7 @@ fnObj.fn = {
             option += '<option value="' + formattedDate + '">' + d + '</option> ';
         }
         $('#regDt').html(option);
-    },
+    },*/
     // 회원상태값 초기화
     setLessonStatus: function() {
         $('#useYn').val('Y');

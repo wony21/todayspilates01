@@ -54,7 +54,8 @@ fnObj.initEvent = function(user) {
 //					location.refresh();
 //					return false;
 //				}
-                var memberNm = '';
+                let memberNm = '';
+                let empNo = res[0].empNo;
                 res.forEach(function(n) {
                     n.lsnData = JSON.stringify(n);
                     n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ?
@@ -81,7 +82,9 @@ fnObj.initEvent = function(user) {
                 fnObj.fn.setLsnCd(mode, lsnData.lsnCd);
                 fnObj.fn.setRsvDate(mode);
                 fnObj.fn.setRsvTime(mode);
-                $('#update-teacher').val(lsnData.empNo);	//현재 레슨선생님을 기본값으로 설정
+                fnObj.fn.setTeacher(mode, user, res[0].empNo);
+
+                //$('#update-teacher').val(res[0].empNo);	//현재 레슨선생님을 기본값으로 설정
                 //팝업창 띄우기
                 $('#updateModalCenter').modal('toggle');
             },
@@ -105,6 +108,10 @@ fnObj.initEvent = function(user) {
     //예약등록 버튼 이벤트
     $('#add-lesson').on('click', function(e) {
         fnObj.fn.addPrivateLesson();
+    });
+
+    $('#update-lesson').on('click', function(e) {
+        fnObj.fn.updatePrivateLesson();
     });
 };
 
@@ -236,7 +243,7 @@ fnObj.fn = {
 //		$('#lsnTm').val('1.0');	//default 값 
     },*/
     //선생님 셋팅
-    setTeacher: function(user) {
+    setTeacher: function(mode, user, empNo) {
         //강사목록 조회
         $.ajax({
             type: 'GET',
@@ -248,7 +255,12 @@ fnObj.fn = {
                     option += ' <option value="' + n.empNo + '">' + n.empNm +
                         '</option> ';
                 });
-                $('#teacher').html(option);
+                let target = $('#teacher');
+                if (mode === 'update') {
+                    target = $('#update-teacher');
+                }
+                target.html(option);
+                target.val(empNo);
             },
         });
         return false;
@@ -263,17 +275,16 @@ fnObj.fn = {
         }
 
         /* 예약 confirm */
-        var retReserv = confirm('예약하시겠습니까?');
+        let retReserv = confirm('예약하시겠습니까?');
         if (retReserv != true) {
             return false;
         }
 
-        var empNo = $('#teacher option:selected').val();
+        let empNo = $('#teacher').val();
         if (empNo == null || empNo == '') {
             alert('선생님을 선택해 주세요.');
             return false;
         }
-        console.log(empNo);
 
         let item = $('#new-reservation-container tbody').
             find('tr').
@@ -308,6 +319,67 @@ fnObj.fn = {
         });
         return false;
     },
+
+    updatePrivateLesson: function() {
+
+        let item = $('#update-reservation-container tbody').
+            find('tr').eq(0).data('id');
+
+        let lsnEndDate = new Date(lsnEdDt).getTime();
+        let today = new Date().getTime();
+
+        if (lsnEndDate !== 0 && (lsnEndDate < today)) {
+            alert('이미 종료일이 지난')
+        }
+
+        return false;
+
+        let data = [
+            {
+                compCd: item.compCd,
+                storCd: item.storCd,
+                memberNo: item.memberNo,
+                empNo: item.empNo,
+                lsnNo: item.lsnNo,
+                lsnCd: item.lsnCd,
+                rsvDt: $('#rsvDt').val(),
+                rsvTm: $('#rsvTm').val(),
+                lsnTm: $('#lsnTm').val(),
+            }];
+        /*if (selectedItem == -1) {
+            alert('먼저 예약할 레슨을 선택하세요.');
+            return false;
+        }*/
+
+        /* 예약 confirm */
+        let retReserv = confirm('예약하시겠습니까?');
+        if (retReserv != true) {
+            return false;
+        }
+
+        let empNo = $('#teacher option:selected').val();
+        if (empNo == null || empNo == '') {
+            alert('선생님을 선택해 주세요.');
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/teacher/reservation/add',
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                alert('예약이 완료되었습니다.');
+                location.reload();
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
 };
 
 $(function() {
@@ -320,6 +392,7 @@ $(function() {
     //개인레슨 예약조회
     //fnObj.fn.getPrivateLesson(user);
     //선생님 목록은 예약현황 로드시 한번만 셋팅
-    fnObj.fn.setTeacher(user);
+    let mode = '';
+    fnObj.fn.setTeacher(mode, user);
 });
 
