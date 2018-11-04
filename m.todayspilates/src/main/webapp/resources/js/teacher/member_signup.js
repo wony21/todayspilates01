@@ -125,21 +125,44 @@ fnObj.initEvent = function(user) {
             alert('회원을 선택하신 후 수업을 등록해주세요');
             return false;
         }
-
         data = $('#member-container tbody').find('tr').eq(selected).data('id');
-        let lsnData = {
-            __created__: true,
-            memberNo: data.memberNo,
-            memberNm: data.memberNm,
-            lsnCd: '01',
-            lsnRegTy: 1,
-            lsnFg: 1,
-            clsFg: 1,
-        };
-
-        fnObj.fn.setLessonData(lsnData);
-        $('#lessonModalCenter').modal('toggle');
-
+        
+        // 신규/재등록
+        let lsnCd = '01';
+    	let memberNo = data.memberNo;
+    	let retLsnTy = 1;
+    	let param = {};
+    	param.storCd = user.storCd;
+    	param.lsnCd = lsnCd;
+    	param.memberNo = memberNo;
+    	$.ajax({
+             type: 'GET',
+             url: '/api/lesson/relsn',
+             data: param,	
+             success: function(res) {
+                 res.forEach(function(n) {
+                	 console.log(n);
+                    if (n.lsnCd == '99') {
+                    	retLsnTy = "1";
+                    } else {
+                    	retLsnTy = "2";
+                    }
+                 });
+                 
+                 let lsnData = {
+                         __created__: true,
+                         memberNo: data.memberNo,
+                         memberNm: data.memberNm,
+                         lsnCd: '01',
+                         lsnRegTy: retLsnTy,
+                         lsnFg: 1,
+                         clsFg: 1,
+                     };
+                     //console.log($('#lsnTy').val(1));
+                     fnObj.fn.setLessonData(lsnData);
+                     $('#lessonModalCenter').modal('toggle');
+             },
+         });
     });
 
     $('#lesson-container').on('click', 'tbody tr', function(e) {
@@ -167,10 +190,13 @@ fnObj.initEvent = function(user) {
         }
         //수업등록 팝업 띄우기
         $('#lessonModalCenter').modal('toggle');
+        
+        
     });
 
     // 수업저장 이벤트
     $('#save-lesson').on('click', function(e) {
+    	    	
         let lsnNo = $('#lsnNo').val();
 
         if (lsnNo === '') {                 //신규등록
@@ -195,12 +221,32 @@ fnObj.initEvent = function(user) {
     $('#lsnCd').on('change', function(e) {
        //console.log('lsnCd:' + $(this).val());
         let lsnCd = $(this).val();
+        let memberNo = $('#memberNo').data('id');
         //개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
         if (lsnCd == '01') {
             $('#teacher').prop('disabled', false);
         } else {
             $('#teacher').prop('disabled', 'disabled');
         }
+    	
+    	let param = {};
+    	param.storCd = user.storCd;
+    	param.lsnCd = lsnCd;
+    	param.memberNo = memberNo;
+    	$.ajax({
+             type: 'GET',
+             url: '/api/lesson/relsn',
+             data: param,
+             success: function(res) {
+                 res.forEach(function(n) {
+                    if (n.lsnCd == '99') {
+                    	$('#lsnTy').val("1");
+                    } else {
+                    	$('#lsnTy').val("2");
+                    }
+                 });
+             },
+         });
     });
 
     $('#datepicker input').datepicker({
@@ -213,30 +259,6 @@ fnObj.initEvent = function(user) {
         todayHighlight: true,
         setDate: new Date(),
     });
-    
-    $('#lsnCd').on('change', function(){
-    	let lsnCd = $(this).val();
-    	let memberNo = $('#memberNo').data('id');
-    	let param = {};
-    	param.storCd = user.storCd;
-    	param.lsnCd = lsnCd;
-    	param.memberNo = memberNo;
-    	$.ajax({
-             type: 'GET',
-             url: '/api/lesson/relsn',
-             data: param,
-             success: function(res) {
-                 res.forEach(function(n) {
-                	 console.log(n);
-                    if (n.lsnCd == '99') {
-                    	$('#lsnTy').val("1");
-                    } else {
-                    	$('#lsnTy').val("2");
-                    }
-                 });
-             },
-         });
-    })
 
 };
 
@@ -457,14 +479,21 @@ fnObj.fn = {
         $('#remark').val(lsnData.remark);
 
         //fnObj.fn.setRsvDate();
+        
+        console.log(lsnData.lsnRegTy);
+        console.log( $('#lsnTy').val());
 
 
         let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
         //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리
-        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
-            lsnData.lsnUseCnt == lsnData.lsnCnt) {
-            console.log('Lesson is expired...');
-            $('#clsFg').val(2);
+        if (lsnEndDate) {
+	        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
+	            lsnData.lsnUseCnt == lsnData.lsnCnt) {
+	            console.log('Lesson is expired...');
+	            $('#clsFg').val(2);
+	        } else {
+	        	$('#clsFg').val(1);
+	        }
         }
     },
     //팝업화면의 수업 데이터 조회
@@ -583,6 +612,7 @@ fnObj.fn = {
             data: {storCd: user.storCd},
             success: function(res) {
                 let option;
+                //option += ' <option value="-99">선택하세요</option> ';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.lsnCd + '">' + n.lsnNm +
                         '</option> ';
@@ -601,7 +631,7 @@ fnObj.fn = {
                      data: param,	
                      success: function(res) {
                          res.forEach(function(n) {
-                        	 console.log(n);
+                        	 console.log(n);	
                             if (n.lsnCd == '99') {
                             	$('#lsnTy').val("1");
                             } else {
