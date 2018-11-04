@@ -778,5 +778,12 @@
 	  AND A.USE_YN = 'Y' 
 	 ORDER BY A.ST_TM, A.SEQ, C.INS_DATE 
 	</select>
-	
+	<select id="isEndLesson" parameterType="hashmap" resultType="String">
+		SELECT ISNULL(MAX(CASE WHEN '20181001' >= CONVERT(CHAR, GETDATE(), 112) THEN 'T' ELSE 'F' END), 'T') COMP
+		FROM MEMBER_LSN_M
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+			AND LSN_NO = #{lsnNo}
+	</select>
 </mapper>

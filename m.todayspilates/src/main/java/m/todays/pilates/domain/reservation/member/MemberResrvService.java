@@ -173,6 +173,7 @@ public class MemberResrvService extends BaseService {
 		return mapper.getGroupLessonView(parameter);
 	}
 	
+	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
@@ -189,7 +190,7 @@ public class MemberResrvService extends BaseService {
 			String rsvTm = (String) map.getOrDefault(ParamNames.rsvTm, "");
 			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
 			
-			System.out.println("empNo : " + empNo);
+			System.out.println("empNo : " + empNo);	
 
 			if (StringUtils.isEmpty(storCd)) {
 				return ApiResponse.error("KEY : [storCd] 가 존재하지 않습니다.");
@@ -208,7 +209,9 @@ public class MemberResrvService extends BaseService {
 			} else if (StringUtils.isEmpty(lsnTm)) {
 				return ApiResponse.error("KEY : [lsnTm] 가 존재하지 않습니다.");
 			} 
-
+			
+			
+			
 			MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
 			Map<String, Object> parameter = new HashMap<String, Object>();
 			parameter.put(ParamNames.compCd, compCd);
@@ -222,6 +225,14 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.rsvTm, rsvTm);
 			parameter.put(ParamNames.atndFg, atndFg);
 			parameter.put(ParamNames.empNo, empNo);
+			
+			// 종료일자가 지난 레슨 확인
+//			String tf = mapper.isEndLesson(parameter);
+//			if ( !tf.equals("T")) {
+//				return ApiResponse.error("종료일자가 지난 등록정보입니다. 예약이 불가합니다");
+//			}
+			
+			
 			mapper.insertAttend(parameter);
 			mapper.recalculatorLessonNum(parameter);
 			mapper.updateLessonUseCount(parameter);
