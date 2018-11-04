@@ -598,7 +598,7 @@ fnObj.fn = {
             	$.ajax({
                      type: 'GET',
                      url: '/api/lesson/relsn',
-                     data: param,
+                     data: param,	
                      success: function(res) {
                          res.forEach(function(n) {
                         	 console.log(n);
