@@ -213,6 +213,30 @@ fnObj.initEvent = function(user) {
         todayHighlight: true,
         setDate: new Date(),
     });
+    
+    $('#lsnCd').on('change', function(){
+    	let lsnCd = $(this).val();
+    	let memberNo = $('#memberNo').data('id');
+    	let param = {};
+    	param.storCd = user.storCd;
+    	param.lsnCd = lsnCd;
+    	param.memberNo = memberNo;
+    	$.ajax({
+             type: 'GET',
+             url: '/api/lesson/relsn',
+             data: param,
+             success: function(res) {
+                 res.forEach(function(n) {
+                	 console.log(n);
+                    if (n.lsnCd == '99') {
+                    	$('#lsnTy').val("1");
+                    } else {
+                    	$('#lsnTy').val("2");
+                    }
+                 });
+             },
+         });
+    })
 
 };
 
@@ -411,6 +435,7 @@ fnObj.fn = {
         let regDt = (isValidDate(lsnData.regDt) === false) ? '' :
             ax5.util.date(lsnData.regDt, {return: 'yyyy-MM-dd'});
 
+        console.log(lsnData.memberNo);
         $('#memberNo').val(lsnData.memberNm);
         $('#memberNo').data('id', lsnData.memberNo);
         $('#teacher').val(lsnData.empNo);
@@ -564,6 +589,27 @@ fnObj.fn = {
                 });
                 $('#lsnCd').html(option);
                 $('#lsnCd').val('01');
+                let lsnCd = '01';
+            	let memberNo = $('#memberNo').data('id');
+            	let param = {};
+            	param.storCd = user.storCd;
+            	param.lsnCd = lsnCd;
+            	param.memberNo = memberNo;
+            	$.ajax({
+                     type: 'GET',
+                     url: '/api/lesson/relsn',
+                     data: param,
+                     success: function(res) {
+                         res.forEach(function(n) {
+                        	 console.log(n);
+                            if (n.lsnCd == '99') {
+                            	$('#lsnTy').val("1");
+                            } else {
+                            	$('#lsnTy').val("2");
+                            }
+                         });
+                     },
+                 });
             },
         });
     },

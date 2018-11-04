@@ -55,4 +55,13 @@ public class LessonController extends BaseController {
 	public ApiResponse modifyLesson(@RequestBody List<HashMap> requestParams) {
 		return lessonService.modifyMemberLesson(requestParams);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/lesson/relsn", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	public List reLesson(@RequestParam String storCd,
+								@RequestParam String lsnCd,
+								@RequestParam String memberNo) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return lessonService.relesson(compCd, storCd, memberNo, lsnCd);
+	}
 }

@@ -129,5 +129,15 @@ public class LessonService extends BaseService {
 		}
 		return ApiResponse.success("ok");
 	}
+	
+	public List relesson(String compCd, String storCd, String memberNo, String lsnCd) {
+		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
+		parameter.put(ParamNames.lsnCd, lsnCd);
+		return mapper.checkReLesson(parameter);
+	}
 
 }

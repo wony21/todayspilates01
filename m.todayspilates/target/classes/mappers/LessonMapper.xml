@@ -73,4 +73,12 @@
     		AND MEMBER_NO = #{memberNo}
     		AND LSN_NO = #{lsnNo}
     </insert>
+    <select id="checkReLesson" parameterType="hashmap" resultType="camelmap">
+	SELECT ISNULL(MAX(LSN_CD), '99') LSN_CD 
+	FROM MEMBER_LSN_M
+	WHERE COMP_CD = #{compCd}
+		AND STOR_CD = #{storCd}
+		AND MEMBER_NO = #{memberNo}
+		AND LSN_CD = #{lsnCd}
+	</select>
 </mapper>
