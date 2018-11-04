@@ -786,4 +786,18 @@
 			AND MEMBER_NO = #{memberNo}
 			AND LSN_NO = #{lsnNo}
 	</select>
+	<update id="updateEndDate">
+		MERGE INTO MEMBER_LSN_M A
+		USING(SELECT COMP_CD, STOR_CD, LSN_NO, MEMBER_NO,
+				CASE WHEN CONVERT(CHAR, GETDATE(), 112) > LSN_ED_DT THEN '1'
+				ELSE '2' END CLS_FG
+			FROM MEMBER_LSN_M) B
+		ON (A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND A.LSN_NO = B.LSN_NO
+			AND A.MEMBER_NO = B.MEMBER_NO)
+		WHEN MATCHED THEN 
+			UPDATE SET
+				CLS_FG = B.CLS_FG;
+	</update>
 </mapper>

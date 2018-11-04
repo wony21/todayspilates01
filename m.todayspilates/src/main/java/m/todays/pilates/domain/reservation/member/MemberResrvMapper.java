@@ -21,5 +21,6 @@ public interface MemberResrvMapper {
 	void recalculatorLessonNum(Map<String, Object> parameter);
 	void deleteAttend(Map<String, Object> parameter);
 	String isEndLesson(Map<String, Object> parameter);
+	void updateEndDate(Map<String, Object> parameter);
 	
 }

@@ -308,5 +308,10 @@ public class MemberResrvService extends BaseService {
 	public ApiResponse cancel(List<HashMap> requestParams) {
 		return UpdateAttend(requestParams, CommonData.ATND_FG.CANCEL);
 	}
-
+	@Transactional
+	public void updateEndLesson() {
+		MemberResrvMapper mapper = sqlSession.getMapper(MemberResrvMapper.class);
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		mapper.updateEndDate(parameter);
+	}
 }
