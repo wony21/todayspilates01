@@ -63,6 +63,8 @@
     	UPDATE MEMBER_LSN_M 
     	SET LSN_CNT = ${lsnCnt},
     		LSN_AMT = ${lsnAmt},
+    		LSN_FG = #{lsnFg},
+    		PAY_TP = #{payTp},
     		LSN_EXP_WK = ${lsnExpWk},
     		EMP_NO = #{empNo},
     		REG_DT = #{entDt},
@@ -79,6 +81,8 @@
 	WHERE COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
+		<!-- 
 		AND LSN_CD = #{lsnCd}
+		-->
 	</select>
 </mapper>

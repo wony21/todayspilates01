@@ -121,7 +121,9 @@ fnObj.initEvent = function(user) {
 fnObj.fn = {
     getPrivateLesson: function(user) {
         let search = fnObj.fn.getData(user);
-        console.log(search);
+        // 예약일자가 있는 것만 조회
+        // 없는 경우를 조회하고 싶은 경우에는 opt1의 값을 할당하지 않는다.
+        search.opt1 = '1';
         $.ajax({
             type: 'GET',
             url: '/api/teacher/reservation/list',

@@ -101,7 +101,7 @@ public class MemberResrvService extends BaseService {
 	}
 
 	public List getWeeklyDetail(String compCd, String storCd, String memberNm, String empNo, String sttDt,
-			String endDt) {
+			String endDt, String opt1) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
@@ -114,6 +114,7 @@ public class MemberResrvService extends BaseService {
 		atndFgs.add(CommonData.ATND_FG.RESERVATION);
 		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
 		parameter.put(ParamNames.atndFg, atndFg);
+		parameter.put(ParamNames.opt1, opt1);
 		return memberResrvMapper.getRervation(parameter);
 	}
 	

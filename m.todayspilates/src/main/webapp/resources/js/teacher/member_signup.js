@@ -173,6 +173,10 @@ fnObj.initEvent = function(user) {
                      $('#lessonModalCenter').modal('toggle');
              },
          });
+    	
+    	// 신규등록인 경우, "수업종류","등록구분" 활성화
+        $('#lsnCd').prop('disabled', false);
+        $('#lsnTy').prop('disabled', false);
     });
 
     $('#lesson-container').on('click', 'tbody tr', function(e) {
@@ -198,6 +202,10 @@ fnObj.initEvent = function(user) {
         } else {
             $('#teacher').prop('disabled', false);
         }
+        // 수정인 경우, "수업종류","등록구분" 비활성화
+        $('#lsnCd').prop('disabled', 'disabled');
+        $('#lsnTy').prop('disabled', 'disabled');
+        
         //수업등록 팝업 띄우기
         $('#lessonModalCenter').modal('toggle');
         
@@ -208,7 +216,37 @@ fnObj.initEvent = function(user) {
     $('#save-lesson').on('click', function(e) {
     	    	
         let lsnNo = $('#lsnNo').val();
-
+        let teacherNo = $('#teacher').val();
+        let lsnCd = $('#lsnCd').val();
+        // 선생님(그룹이 아닌 경우에만 체크)
+        if ( lsnCd != '03' ) {
+        	if (!teacherNo) {
+        		alert('선생님을 선택하세요.');
+        		$('#lsnCd').trigger('focus');
+        		return false;
+        	}
+        }
+        // 결제방법
+        let payTp = $('#payTp').val();
+        if (!payTp) {
+        	alert('결제방법을 선택하세요.');
+        	$('#payTp').trigger('focus');
+        }
+        // 등록횟수
+        let lsnCnt = $('#lsnCnt').val();
+        if(!lsnCnt){
+        	alert('등록횟수를 입력하세요.');
+        	$('#lsnCnt').trigger('focus');
+        	return false;
+        }
+        // 유효기간
+        let lsnExpWk = $('#lsnExpWk').val();
+        if(!lsnExpWk) {
+        	alert('유효기간(주)를 입력하세요.')
+        	$('#lsnExpWk').trigger('focus');
+        	return false;
+        }
+        
         if (lsnNo === '') {                 //신규등록
             fnObj.fn.addLesson(user);
         } else {                            //수정
@@ -233,10 +271,10 @@ fnObj.initEvent = function(user) {
         let lsnCd = $(this).val();
         let memberNo = $('#memberNo').data('id');
         //개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
-        if (lsnCd == '01') {
-            $('#teacher').prop('disabled', false);
+        if (lsnCd == '03') {
+        	$('#teacher').prop('disabled', 'disabled');
         } else {
-            $('#teacher').prop('disabled', 'disabled');
+        	$('#teacher').prop('disabled', false);
         }
     	
     	let param = {};

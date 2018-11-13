@@ -170,9 +170,10 @@ public class ReservationController extends BaseController {
 			@RequestParam(defaultValue="") String memberNm,
 			@RequestParam(defaultValue="") String empNo,
 			@RequestParam String sttDt,
-			@RequestParam String endDt) {
+			@RequestParam String endDt,
+			@RequestParam(required=false) String opt1) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNm, empNo, sttDt, endDt);
+		return memberResrvService.getWeeklyDetail(compCd, storCd, memberNm, empNo, sttDt, endDt, opt1);
 	}
 	/**
 	 * 선생님 - 개인레슨예약(레슨목록)
