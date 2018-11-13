@@ -81,13 +81,22 @@ fnObj.initEvent = function(user) {
 
     // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
+    	// 회원명 중복 체크
+    	let dataMemberNm = $('#memberNm').attr('data-value');
+    	let memberNm = $('#memberNm').val();
+    	if ( dataMemberNm != memberNm ) {
+    		alert('회원명 중복확인을 하시기 바랍니다.');
+    		$('#check-member').trigger('focus');
+    		return false;
+    	}
+    	// 휴대폰번호 유효성 체크
         let hp = $.trim($('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val());
         if (!isValidMobileNumber(hp)) {
             alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
             $('#hp').trigger('focus');
             return false;
         }
-
+        
         let memberNo = $('#new-member-container #memberNm').data('id');
         console.log('memberNo : ' + memberNo);
         if (memberNo === '') {
@@ -309,16 +318,28 @@ fnObj.fn = {
     isDupMemberByName: function(user, filter) {
         $.ajax({
             type: 'GET',
-            url: '/api/member/list',
+            //url: '/api/member/list',
+            url: '/api/member/createMemberName',
             data: {storCd: user.storCd, memberNm: filter},
             success: function(res) {
-                let list = res.filter(n => (n.memberNm === filter));
-                if (list.length) {
-                    alert('이미 등록된 회원명입니다. 변경하십시요');
-                    $('#memberNm').trigger('focus');
-                } else {
-                    alert('신규회원 입니다.');
-                }
+            	let retMemberNm = res[0].crdMemberNm;
+            	if ( retMemberNm != filter ) {
+            		alert('이미 등록된 회원명이므로 [' + retMemberNm + '] 으로 자동 변경합니다.');
+            		$('#memberNm').val(retMemberNm);
+            		//$('#memberNm').attr('data-value', retMemberNm);
+            	} else {
+            		alert('신규회원 입니다.');
+            	}
+            	//중복체크확인여부를 위해 'data-value'에 결과값을 같이 저장.
+            	$('#memberNm').attr('data-value', retMemberNm);
+            	
+//                let list = res.filter(n => (n.memberNm === filter));
+//                if (list.length) {
+//                    alert('이미 등록된 회원명입니다. 변경하십시요');
+//                    $('#memberNm').trigger('focus');
+//                } else {
+//                    alert('신규회원 입니다.');
+//                }
             },
         });
     },
@@ -340,7 +361,8 @@ fnObj.fn = {
             success: function(res) {
                 //alert('회원등록이 완료되었습니다.');
                 if (res.status === 500) {
-                    alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
+                    //alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
+                	alert(res.message);
                     return false;
                 }
                 $('#memberModalCenter').modal('toggle');
@@ -414,8 +436,8 @@ fnObj.fn = {
     //화면의 회원데이터 조회
     getMemberData: function(user) {
         let date = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
-        
         let hpNumber = $('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val();
+        console.log(hpNumber);
         return {
             compCd: user.compCd,                    //key3
             storCd: user.storCd,                    //key1

@@ -99,4 +99,20 @@
 			AND STOR_CD = #{storCd}
 			AND USER_CD = REPLACE(#{mobile}, '-', '')
 	</delete>
+	<select id="createMemberNm" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		select 
+			case 
+			when max(member_nm) is NULL then
+				#{memberNm}
+			when substring(max(member_nm), len(max(member_nm)), 1) is null then
+				#{memberNm} + 'A'
+			else
+				#{memberNm} + char(ascii(substring(max(member_nm), len(max(member_nm)), 1))+1)
+			end crd_member_nm 
+		from member_m 
+		where (
+			(member_nm like #{memberNm} + '_' 
+			and ascii(substring(member_nm, len(member_nm), 1)) BETWEEN 65 and 90)
+			or member_nm = #{memberNm})
+	</select>
 </mapper>

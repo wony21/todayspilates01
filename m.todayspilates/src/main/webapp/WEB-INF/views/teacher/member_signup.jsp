@@ -222,7 +222,7 @@
                                             <td width="40%" style="height:40px;">회원명</td>
                                             <td width="60%">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="memberNm" data-id=""
+                                                    <input type="text" class="form-control" id="memberNm" data-id="" data-value=""
                                                            style="width: 80px;  margin-left: 0px;">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-primary" id="check-member">중복확인</button>

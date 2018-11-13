@@ -57,6 +57,13 @@ public class MemberController extends BaseController {
 		return array;
 	}
 	
+	@RequestMapping(value = "/api/member/createMemberName", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List createMemberName(@RequestParam String storCd, @RequestParam String memberNm) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberService.createMemberName(compCd, storCd, memberNm);
+	}
+	
 	public boolean FNexistMember(@RequestParam String storCd, @RequestParam String mobile) {
 		
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
@@ -71,7 +78,7 @@ public class MemberController extends BaseController {
 		String userCd =  SessionUtils.getCurrentUser().getUserCd();
 		for(HashMap<String, Object> item : requestParams) {
 			String storCd = (String)item.get(ParamNames.storCd);
-			String mobile = (String)item.get(ParamNames.mobile);
+			String mobile = (String)item.get(ParamNames.hp);
 			String memberNm = (String)item.get(ParamNames.memberNm);
 			String sex = (String)item.get(ParamNames.sex);
 			String entFg = (String) item.get(ParamNames.entFg);
@@ -110,7 +117,7 @@ public class MemberController extends BaseController {
 		String userCd =  SessionUtils.getCurrentUser().getMemberNo();
 		for(HashMap<String, Object> item : requestParams) {
 			String storCd = (String)item.get(ParamNames.storCd);
-			String mobile = (String)item.get(ParamNames.mobile);
+			String mobile = (String)item.get(ParamNames.hp);
 			String memberNo = (String)item.get(ParamNames.memberNo);
 			memberService.deleteMember(compCd, storCd, mobile, memberNo);
 		}

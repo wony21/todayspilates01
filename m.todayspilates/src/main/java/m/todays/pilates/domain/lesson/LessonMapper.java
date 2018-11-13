@@ -13,4 +13,5 @@ public interface LessonMapper {
 	void addMemberLesson(Map<String, Object> parameter);
 	void updateMemberLesson(Map<String, Object> parameter);
 	List checkReLesson(Map<String, Object> parameter);
+	
 }

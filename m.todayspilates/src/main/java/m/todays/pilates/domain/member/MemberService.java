@@ -136,4 +136,13 @@ public class MemberService {
 			return ApiResponse.error("exist user");
 		}
 	}
+	
+	public List createMemberName(String compCd, String storCd, String memberNm) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNm, memberNm);
+		return memberMapper.createMemberNm(parameter);
+	}
+	
 }
