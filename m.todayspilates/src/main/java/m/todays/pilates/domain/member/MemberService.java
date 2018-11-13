@@ -25,8 +25,10 @@ public class MemberService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Autowired 
+	private MemberMapper memberMapper;
+	
 	public List getMember(String compCd, String storCd, String memberNo, String memberNm) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
@@ -36,7 +38,6 @@ public class MemberService {
 	}
 	
 	public List getMemberList(String compCd, String storCd, String memberNm) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
@@ -45,7 +46,6 @@ public class MemberService {
 	}
 	
 	public List getExistMember(String compCd, String storCd, String mobile) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd,  storCd);
@@ -55,12 +55,24 @@ public class MemberService {
 	
 	@Transactional
 	public ApiResponse addMember(String compCd, String storCd, String mobile, String memberNm, String sex, String entFg, String entDt, String remark, String userCd) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.mobile, mobile);
 		parameter.put(ParamNames.memberNm, memberNm);
+		
+		// 기존에 존재하는 휴대폰 번호는 등록하면 안된다.
+		List existMobileList = memberMapper.getExistMember(parameter);
+		if ( existMobileList.size() > 0 ) {
+			return ApiResponse.error("이미 존재하는 휴대폰번호[" + mobile + "] 입니다.");
+		}
+		
+		// 기존 존재하는 회원명인지 확인.
+		List existList = memberMapper.existMemberName(parameter);
+		if ( existList.size() > 0) {
+			return ApiResponse.error("이미 존재하는 회원명[" + memberNm + "] 입니다.");
+		}
+		
 		String sexCode = "F";
 		if ( sex.equals("남")) {
 			sexCode = "M";
@@ -69,7 +81,7 @@ public class MemberService {
 		String entDt2 = DateFormatUtils.format(today, "yyyyMMdd");
 		parameter.put(ParamNames.entDt, entDt);
 		if (StringUtils.isEmpty(entFg)) {
-			entFg = "1"; // 활동.
+			entFg = "1"; //등록경로.
 		}
 		parameter.put(ParamNames.entFg, entFg);
 		parameter.put(ParamNames.sex, sexCode);
@@ -86,7 +98,6 @@ public class MemberService {
 	@Transactional
 	public ApiResponse updateMember(String compCd, String storCd, String memberNo, 
 									String sex, String entFg, String entDt, String remark) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
@@ -112,7 +123,6 @@ public class MemberService {
 	
 	@Transactional
 	public ApiResponse deleteMember(String compCd, String storCd, String mobile, String memberNo) {
-		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);

@@ -16,8 +16,10 @@ public class StorService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Autowired
+	private StorMapper storMapper;
+	
 	public List getStor() {
-		StorMapper storMapper = sqlSession.getMapper(StorMapper.class);
 		return storMapper.getStor();
 	}
 	

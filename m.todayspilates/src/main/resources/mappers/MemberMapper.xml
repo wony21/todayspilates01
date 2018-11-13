@@ -13,6 +13,13 @@
         	AND MEMBER_NO = #{memberNo}
         </if>
     </select>
+    <select id="existMemberName" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+    	SELECT *
+    	FROM MEMBER_M
+    	WHERE COMP_CD = #{compCd}
+    		AND STOR_CD = #{storCd}
+    		AND MEMBER_NM = #{memberNm}
+    </select>
     <select id="getMemberList" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
 	    SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.MEMBER_NM, A.HP, 
 			B.STOR_NM, A.ENT_FG, C.NAME AS ENT_FG_NM,
@@ -31,7 +38,7 @@
 		<if test="memberNm != null and memberNm != ''">
 			AND A.MEMBER_NM LIKE '%' + #{memberNm} + '%'
 		</if>
-		AND A.USE_YN = 'Y'
+		<!-- AND A.USE_YN = 'Y'  -->
 		ORDER BY A.COMP_CD, A.STOR_CD, A.MEMBER_NO
     </select>
     <select id="getExistMember" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">

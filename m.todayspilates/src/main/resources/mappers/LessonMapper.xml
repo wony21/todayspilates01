@@ -13,7 +13,7 @@
     </select>
     <select id="getRegisterLessons" resultType="camelmap" statementType="PREPARED">
     /* 레슨목록가져오기 */
-    SELECT A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, 
+    SELECT A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD,F.LSN_NM, 
 			F.CODE AS LSN_TY, F.NAME AS LSN_TY_NM,
 			A.LSN_TY AS LSN_REG_TY, 
 			CASE WHEN A.LSN_TY = '1' THEN '신규' ELSE '재등록' END AS LSN_REG_NM, 

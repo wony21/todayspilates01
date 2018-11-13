@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import m.todays.pilates.common.BaseService;
@@ -15,24 +16,25 @@ import m.todays.pilates.common.api.ApiResponse;
 
 @Service
 public class LessonService extends BaseService {
+	
+	@Autowired
+	private LessonMapper lessonMapper;
 
 	public List getLesson(String compCd, String storCd, String lsnFg) {
-		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.lsnFg, lsnFg);
-		return mapper.getLesson(parameter);
+		return lessonMapper.getLesson(parameter);
 	}
 
 	public List getRegisterLessons(String compCd, String storCd, String memberNm, String memberNo) {
-		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNo, memberNo);
 		parameter.put(ParamNames.memberNm, memberNm);
-		return mapper.getRegisterLessons(parameter);
+		return lessonMapper.getRegisterLessons(parameter);
 	}
 	
 	public Integer parseInteger(Object item) {
@@ -49,7 +51,6 @@ public class LessonService extends BaseService {
 	}
 
 	public ApiResponse addMemberLesson(List<HashMap> requestParams) {
-		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		for (HashMap map : requestParams) {
 			String compCd = (String) map.get(ParamNames.compCd);
 			String storCd = (String) map.get(ParamNames.storCd);
@@ -84,13 +85,12 @@ public class LessonService extends BaseService {
 			parameter.put(ParamNames.remark, remark);
 			parameter.put(ParamNames.entDt, entDt);
 			parameter.put(ParamNames.clsFg, clsFg);
-			mapper.addMemberLesson(parameter);
+			lessonMapper.addMemberLesson(parameter);
 		}
 		return ApiResponse.success("ok");
 	}
 	
 	public ApiResponse modifyMemberLesson(List<HashMap> requestParams) {
-		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		for (HashMap map : requestParams) {
 			String compCd = (String) map.get(ParamNames.compCd);
 			String storCd = (String) map.get(ParamNames.storCd);
@@ -125,19 +125,18 @@ public class LessonService extends BaseService {
 			parameter.put(ParamNames.remark, remark);
 			parameter.put(ParamNames.entDt, entDt);
 			parameter.put(ParamNames.clsFg, clsFg);
-			mapper.updateMemberLesson(parameter);
+			lessonMapper.updateMemberLesson(parameter);
 		}
 		return ApiResponse.success("ok");
 	}
 	
 	public List relesson(String compCd, String storCd, String memberNo, String lsnCd) {
-		LessonMapper mapper = sqlSession.getMapper(LessonMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNo, memberNo);
 		parameter.put(ParamNames.lsnCd, lsnCd);
-		return mapper.checkReLesson(parameter);
+		return lessonMapper.checkReLesson(parameter);
 	}
 
 }

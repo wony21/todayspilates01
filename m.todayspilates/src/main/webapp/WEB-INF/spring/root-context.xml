@@ -38,4 +38,8 @@
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>	
 	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="m.todays.pilates.domain" />
+	</bean>
+	
 </beans>

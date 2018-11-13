@@ -169,7 +169,7 @@
                             <tr data-id="{{lsnData}}" style="text-align: center;">
                                 <%--<td style="height:40px;">{{idx}}</td>--%>
                                 <td style="height:40px;">{{memberNm}}</td>
-                                <td>{{lsnTyNm}}</td>
+                                <td>{{lsnNm}}</td>
                                 <td>{{lsnCnt}}</td>
                                 <td>{{lsnUseCnt}}</td>
                                 <td>{{lsnModCnt}}</td>
@@ -234,8 +234,19 @@
                                             <td width="40%" style="height:40px;">모바일(HP)</td>
                                             <td width="60%">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="hp"
-                                                           style="width: 80px;  margin-left: 0px;">
+                                                    <select id="hp1" class="custom-select">
+														<option value="010" selected>010</option>
+														<option value="011">011</option>
+														<option value="017">017</option>
+														<option value="018">018</option>
+														<option value="019">019</option>
+													</select>
+													&nbsp;
+                                                     <input type="text" class="form-control" id="hp2"
+                                                           style="width: 40px;  margin-left: 0px;">
+                                                     &nbsp;
+                                                     <input type="text" class="form-control" id="hp3"
+                                                           style="width: 40px;  margin-left: 0px;">
                                                 </div>
                                             </td>
                                         </tr>

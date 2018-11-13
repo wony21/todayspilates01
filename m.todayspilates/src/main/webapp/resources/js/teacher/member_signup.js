@@ -81,7 +81,7 @@ fnObj.initEvent = function(user) {
 
     // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
-        let hp = $.trim($('#hp').val());
+        let hp = $.trim($('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val());
         if (!isValidMobileNumber(hp)) {
             alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
             $('#hp').trigger('focus');
@@ -89,6 +89,7 @@ fnObj.initEvent = function(user) {
         }
 
         let memberNo = $('#new-member-container #memberNm').data('id');
+        console.log('memberNo : ' + memberNo);
         if (memberNo === '') {
             fnObj.fn.addMember(user);
         } else {
@@ -323,6 +324,13 @@ fnObj.fn = {
     },
     //신규회원등록 (팝업창에서 처리)
     addMember: function(user) {
+    	let hp1 = $('#hp1').val();
+        let hp2 = $('#hp2').val();
+        let hp3 = $('#hp3').val();
+        if (hp1.length == 0 || hp2.length == 0 || hp3.length == 0) {
+        	alert('휴대폰 번호를 입력하세요.');
+        	return;
+        }
         let gd = [].concat(this.getMemberData(user));
         $.ajax({
             type: 'PUT',
@@ -406,13 +414,15 @@ fnObj.fn = {
     //화면의 회원데이터 조회
     getMemberData: function(user) {
         let date = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
+        
+        let hpNumber = $('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val();
         return {
             compCd: user.compCd,                    //key3
             storCd: user.storCd,                    //key1
             memberNo: $('#memberNm').data('id'),    //key2
             memberNm: $('#memberNm').val(),
             mobile: $('#hp').val(),
-            hp: $('#hp').val(),
+            hp: hpNumber,
             sex: $('#sex').val(),
             entFg: $('#entFg').val(),
             entDt: date,

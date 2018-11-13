@@ -78,12 +78,12 @@ public class MemberController extends BaseController {
 			String entDt = (String)item.get(ParamNames.entDt);
 			String useYn = (String)item.get(ParamNames.useYn);
 			String remark = (String)item.get(ParamNames.remark);
-			if ( FNexistMember(storCd, mobile) ) {
-				return ApiResponse.error("exist user");		
-			}
-			memberService.addMember(compCd, storCd, mobile, memberNm, sex, entFg, entDt, remark, userCd);
+//			if ( FNexistMember(storCd, mobile) ) {
+//				return ApiResponse.error("exist user");		
+//			}
+			return memberService.addMember(compCd, storCd, mobile, memberNm, sex, entFg, entDt, remark, userCd);
 		}
-		return ApiResponse.success("ok");
+		return ApiResponse.error("");
 	}
 	
 	@ResponseBody

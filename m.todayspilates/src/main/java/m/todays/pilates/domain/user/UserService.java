@@ -15,14 +15,15 @@ public class UserService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Autowired
+	private UserMapper userMapper;
+	
 	public List getUser() {
-		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 		return userMapper.getUser();
 		
 	}
 	
 	public Boolean loginUser(String userCd, String userPs) {
-		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.userCd, userCd);
 		parameter.put(ParamNames.userPs, userPs);
@@ -31,7 +32,6 @@ public class UserService {
 	}
 	
 	public User getUserInfo(String userCd, String userPs) {
-		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.userCd, userCd);
 		parameter.put(ParamNames.userPs, userPs);
@@ -40,7 +40,6 @@ public class UserService {
 	}
 	
 	public List exitUserInStor(String storCd, String userCd) {
-		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.userCd, userCd);
 		parameter.put(ParamNames.storCd, storCd);
