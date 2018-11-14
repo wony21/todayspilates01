@@ -354,6 +354,7 @@ fnObj.fn = {
         }
 
         let empNo = $('#teacher option:selected').val();
+        empNo = $('#update-teacher').val();
         if (empNo == null || empNo == '') {
             alert('선생님을 선택해 주세요.');
             return false;
