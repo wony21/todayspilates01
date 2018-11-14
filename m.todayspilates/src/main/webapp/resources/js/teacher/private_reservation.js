@@ -5,6 +5,7 @@ let newReservation = $('#new-reservation-template').html();
 let updateReservation = $('#update-reservation-template').html();
 let selectedItem = -1;
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+const OPT_NO_RSVDT = '1';
 
 fnObj.initView = function() {
     let html;
@@ -21,23 +22,25 @@ fnObj.initView = function() {
 
 fnObj.initEvent = function(user) {
     $('#search-member').on('click', function() {
-        fnObj.fn.getPrivateLesson(user);
+        fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
     });
 
     $('#call-new-reservation').on('click', function() {
-        //fnObj.fn.getPrivateLesson(user);
+        
         let mode = '';
-        let empNo = ''
+        let empNo = '';
         $('#userInfo').text($('#filter').val());
         fnObj.fn.setRsvDate();
         fnObj.fn.setRsvTime();
         fnObj.fn.setTeacher(mode, user, empNo);
         //fnObj.fn.setLsnTime();
-        $('#exampleModalCenter').modal('toggle');
+        fnObj.fn.getPrivateLesson(user, null);
+        //$('#exampleModalCenter').modal('toggle');
     });
 
     //예약수정 모드
     $('#reservation-container').on('click', 'tbody tr', function(e) {
+    	
         let mode = 'update';
         let lsnData = $(this).data('id');
 
@@ -119,11 +122,12 @@ fnObj.initEvent = function(user) {
 };
 
 fnObj.fn = {
-    getPrivateLesson: function(user) {
+    getPrivateLesson: function(user, opt1) {
         let search = fnObj.fn.getData(user);
         // 예약일자가 있는 것만 조회
         // 없는 경우를 조회하고 싶은 경우에는 opt1의 값을 할당하지 않는다.
-        search.opt1 = '1';
+        search.opt1 = opt1;
+        search.empNo = '';
         $.ajax({
             type: 'GET',
             url: '/api/teacher/reservation/list',
@@ -137,7 +141,12 @@ fnObj.fn = {
                     n.rsvTm = (n.rsvTm == null) ?
                         '' :
                         n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);  // hh:mm
-                    n.lsnEdDt = (n.lsnEdDt == null) ?
+                    n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ?
+                            '' :
+                            ('`' + n.lsnStDt.substr(2, 2) + '.' +
+                                n.lsnStDt.substr(4, 2) + '.' +
+                                n.lsnStDt.substr(6, 7));	// yy-mm-dd
+                    n.lsnEdDt = (n.lsnEdDt == null || n.lsnEdDt == '') ?
                         '' :
                         ('`' + n.lsnEdDt.substr(2, 2) + '.' +
                             n.lsnEdDt.substr(4, 2) + '.' +
@@ -145,8 +154,16 @@ fnObj.fn = {
                     n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
                 });
-                let html = Mustache.render(reservation, {list: res});
-                $('#reservation-container').html(html);
+                if ( opt1 == OPT_NO_RSVDT) {
+                	let html = Mustache.render(reservation, {list: res});
+                    $('#reservation-container').html(html);
+                } else {
+                	let html = Mustache.render(newReservation, {list: res});
+                    $('#new-reservation-container').html(html);
+                    // 정보가 불러지면 팝업을 띄울것
+                    $('#exampleModalCenter').modal('toggle');
+                }
+                
             },
         });
     },
@@ -315,7 +332,7 @@ fnObj.fn = {
             success: function(res) {
                 alert('예약이 완료되었습니다.');
                 //location.reload();
-                fnObj.fn.getPrivateLesson(user);
+                fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
             },
             error: function(error) {
                 alert(error);
@@ -327,7 +344,7 @@ fnObj.fn = {
     updatePrivateLesson: function(user) {
         let item = $('#update-reservation-container tbody').
             find('tr').eq(0).data('id');
-
+        let lsnEdDt = item.lsnEdDt;
         let lsnEndDate = new Date(lsnEdDt).getTime();
         let today = new Date().getTime();
 
@@ -369,7 +386,7 @@ fnObj.fn = {
             success: function(res) {
                 alert('예약수정이 완료되었습니다.');
                 //location.reload();
-                fnObj.fn.getPrivateLesson(user);
+                fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
             },
             error: function(error) {
                 alert(error);

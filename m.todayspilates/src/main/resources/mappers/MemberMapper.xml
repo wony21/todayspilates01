@@ -104,10 +104,10 @@
 			case 
 			when max(member_nm) is NULL then
 				#{memberNm}
-			when substring(max(member_nm), len(max(member_nm)), 1) is null then
-				#{memberNm} + 'A'
-			else
+			when ascii(substring(max(member_nm), len(max(member_nm)), 1)) between 65 and 90 then
 				#{memberNm} + char(ascii(substring(max(member_nm), len(max(member_nm)), 1))+1)
+			else
+				#{memberNm} + 'A'
 			end crd_member_nm 
 		from member_m 
 		where (

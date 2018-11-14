@@ -171,11 +171,7 @@
                                             {{/list}}
                                             {{^list}}
                                             <tr>
-                                                <td>개인</td>
-                                                <td>정상</td>
-                                                <td>00/10</td>
-                                                <td>2018/08/01</td>
-                                                <td>2018/12/31</td>
+                                                <td colspan="5">조회된 예약이 존재하지 않습니다.</td>
                                             </tr>
                                             {{/list}}
                                             </tbody>
@@ -262,11 +258,11 @@
                                             {{/list}}
                                             {{^list}}
                                             <tr>
-                                                <td>개인</td>
-                                                <td>정상</td>
-                                                <td>00/10</td>
-                                                <td>2018/08/01</td>
-                                                <td>2018/12/31</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                             {{/list}}
                                             </tbody>

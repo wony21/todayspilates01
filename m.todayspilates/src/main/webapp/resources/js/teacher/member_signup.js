@@ -249,8 +249,10 @@ fnObj.initEvent = function(user) {
         
         if (lsnNo === '') {                 //신규등록
             fnObj.fn.addLesson(user);
+            alert('수업이 등록되었습니다.');
         } else {                            //수정
             fnObj.fn.updateLesson(user);
+            alert('수업이 수정되었습니다.');
         }
 
         //todo: 팝업 닫을때 수업만 재조회 처리
@@ -402,6 +404,8 @@ fnObj.fn = {
                     //alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
                 	alert(res.message);
                     return false;
+                } else {
+                	alert('회원등록이 처리되었습니다.');
                 }
                 $('#memberModalCenter').modal('toggle');
                 $('#filter').val(gd[0].memberNm);
