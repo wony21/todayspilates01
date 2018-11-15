@@ -318,10 +318,18 @@ public class ReservationController extends BaseController {
 		return memberResrvService.reservation(requestParams);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/reservation/modify", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse modifyReservation(@RequestBody List<HashMap> requestParams) {
+		return memberResrvService.updateRservation(requestParams);
+	}
+	
 	@RequestMapping(value = "/api/common", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getCommon(
 			@RequestParam String groupCd) {
 		return commonService.getCommon(groupCd);
 	}
+	
+	
 }

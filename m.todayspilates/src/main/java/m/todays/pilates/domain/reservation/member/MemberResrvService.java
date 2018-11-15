@@ -186,8 +186,6 @@ public class MemberResrvService extends BaseService {
 			String rsvDt = (String) map.getOrDefault(ParamNames.rsvDt, "");
 			String rsvTm = (String) map.getOrDefault(ParamNames.rsvTm, "");
 			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
-			
-			System.out.println("empNo : " + empNo);
 
 			if (StringUtils.isEmpty(storCd)) {
 				return ApiResponse.error("KEY : [storCd] 가 존재하지 않습니다.");
@@ -282,8 +280,61 @@ public class MemberResrvService extends BaseService {
 		return ApiResponse.success("ok");
 	}
 	
+	@Transactional
+	private ApiResponse updateReservation(List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd = SessionUtils.getCurrentUser().getUsername();
+
+		for (HashMap map : requestParams) {
+
+			String storCd = (String) map.getOrDefault(ParamNames.storCd, "");
+			String memberNo = (String) map.getOrDefault(ParamNames.memberNo, "");
+			String lsnCd = (String) map.getOrDefault(ParamNames.lsnCd, "");
+			String lsnNo = (String) map.getOrDefault(ParamNames.lsnNo, "");
+			String lsnTm = map.getOrDefault(ParamNames.lsnTm, "").toString();
+			String lsnSeq = map.getOrDefault(ParamNames.lsnSeq, "").toString();
+			String rsvDt = (String) map.getOrDefault(ParamNames.rsvDt, "");;
+			String rsvTm = (String) map.getOrDefault(ParamNames.rsvTm, "");;
+			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
+
+			if (StringUtils.isEmpty(storCd)) {
+				return ApiResponse.error("KEY : [storCd] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(memberNo)) {
+				return ApiResponse.error("KEY : [memberNo] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(lsnCd)) {
+				return ApiResponse.error("KEY : [lsnCd] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(lsnNo)) {
+				return ApiResponse.error("KEY : [lsnNo] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(empNo)) {
+				return ApiResponse.error("KEY : [empNo] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(lsnTm)) {
+				return ApiResponse.error("KEY : [lsnTm] 가 존재하지 않습니다.");
+			} else if (StringUtils.isEmpty(lsnSeq)) {
+				return ApiResponse.error("KEY : [lsnSeq] 가 존재하지 않습니다.");
+			} 
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			parameter.put(ParamNames.compCd, compCd);
+			parameter.put(ParamNames.storCd, storCd);
+			parameter.put(ParamNames.userCd, userCd);
+			parameter.put(ParamNames.memberNo, memberNo);
+			parameter.put(ParamNames.lsnCd, lsnCd);
+			parameter.put(ParamNames.lsnNo, lsnNo);
+			parameter.put(ParamNames.lsnTm, lsnTm);
+			parameter.put(ParamNames.lsnSeq, lsnSeq);
+			parameter.put(ParamNames.empNo, empNo);
+			parameter.put(ParamNames.rsvDt, rsvDt);
+			parameter.put(ParamNames.rsvTm, rsvTm);
+			
+			//System.out.println("updateAttend mybatis called!");
+			memberResrvMapper.updateReservation(parameter);
+		}
+		return ApiResponse.success("ok");
+	}
 	
-	
+	@Transactional
+	public ApiResponse updateRservation(List<HashMap> requestParams) {
+		return updateReservation(requestParams);
+	}
 	@Transactional
 	public ApiResponse reservation(List<HashMap> requestParams) {
 		return SaveAttend(requestParams, CommonData.ATND_FG.RESERVATION);

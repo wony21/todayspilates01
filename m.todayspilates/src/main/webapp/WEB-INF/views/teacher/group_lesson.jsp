@@ -182,6 +182,7 @@
 										<tr style="text-align: center">
 											<th width="12%">#구분</th>
 											<th width="18%">회차</th>
+											<th width="10%">종류</th>
 											<th>시작일</th>
 											<th>종료일</th>
 										</tr>
@@ -191,13 +192,14 @@
 										<tr data-id="{{lsnData}}" style="text-align: center;">
 											<td>{{lsnNm}}</td>
 											<td>{{lsnUseCnt}}/{{lsnCnt}}</td>
+											<td>{{lsnFgNm}}</td>
 											<td>{{lsnStDt}}</td>
 											<td>{{lsnEdDt}}</td>
 										</tr>
 									{{/list}}
 									{{^list}}
 										<tr>
-											<td colspan="4">등록정보가 없습니다.</td>
+											<td colspan="5">등록정보가 없습니다.</td>
 										</tr>
 									{{/list}}
 									</tbody>

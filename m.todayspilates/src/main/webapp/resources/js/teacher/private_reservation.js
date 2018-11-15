@@ -77,18 +77,31 @@ fnObj.initEvent = function(user) {
                     // n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
                 });
-
+                lsnData.lsnStDt2 = (lsnData.lsnStDt == null || lsnData.lsnStDt == '') ?
+	                        '' :
+	                        ('`' + lsnData.lsnStDt.substr(2, 2) + '.' +
+	                        		lsnData.lsnStDt.substr(4, 2) + '.' +
+	                        		lsnData.lsnStDt.substr(6, 7));	// yy-mm-dd
+                lsnData.lsnEdDt2 = (lsnData.lsnEdDt == null || lsnData.lsnEdDt == '') ?
+		                    '' :
+		                    ('`' + lsnData.lsnEdDt.substr(2, 2) + '.' +
+		                    		lsnData.lsnEdDt.substr(4, 2) + '.' +
+		                    		lsnData.lsnEdDt.substr(6, 7));	// yy-mm-dd
                 $('#up-userInfo').text(lsnData.memberNm);
+                $('#update-data').val(JSON.stringify(lsnData));
+                $('#update-lsnTm').attr('disabled', true);
+                $('#update-lsnTm').attr('disabled', true);
 
-                let html = Mustache.render(updateReservation, {list: res});
+                let html = Mustache.render(updateReservation, {list: lsnData});
                 $('#update-reservation-container').html(html);
 
                 //레슨 등록정보 셋팅
                 //fnObj.fn.setReservationList(n);
                 fnObj.fn.setLsnCd(mode, lsnData.lsnCd);
-                fnObj.fn.setRsvDate(mode);
-                fnObj.fn.setRsvTime(mode);
-                fnObj.fn.setTeacher(mode, user, res[0].empNo);
+                fnObj.fn.setRsvDate(mode, lsnData.rsvDt);
+                fnObj.fn.setRsvTime(mode, lsnData.rsvTm);
+                fnObj.fn.setLsnTime(mode, lsnData.lsnTm);
+                fnObj.fn.setTeacher(mode, user, lsnData.empNo);
 
                 //$('#update-teacher').val(res[0].empNo);	//현재 레슨선생님을 기본값으로 설정
                 //팝업창 띄우기
@@ -208,17 +221,22 @@ fnObj.fn = {
     },
 
     //예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
-    setRsvDate: function(mode) {
+    setRsvDate: function(mode, val) {
         let option = '';
         for (var i = 0; i <= 90; i++) {
             var date = ax5.util.date(new Date(), {add: {d: i}});
             var formattedDate = ax5.util.date(new Date(),
                 {add: {d: i}, return: 'yyyyMMdd'});
             var day = WEEKS[date.getDay()];
-
+            var selected = '';
+            if ( formattedDate == val ) {
+            	selected = 'selected';
+            } else {
+            	selected = '';
+            }
             var d = /*'`' + formattedDate.substr(2, 2) + '.' + */formattedDate.substr(
                 4, 2) + '.' + formattedDate.substr(6, 7);
-            option += '<option value="' + formattedDate + '">' + d + ' (' +
+            option += '<option value="' + formattedDate + '" ' + selected + '>' + d + ' (' +
                 day + ')' + '</option> ';
         }
 
@@ -254,16 +272,24 @@ fnObj.fn = {
             target.val(val);	//기존예약 시간을 기본값으로 설정
         }
     },
-    //레슨시간 셋팅 (0.5 ~ 6.0)
-    /*setLsnTime: function() {
+    //레슨시간 셋팅 (1.0, 1.5)
+    setLsnTime: function(mode, val) {
 //		let option = '';
 //		for (var i = 0.5; i <= 4; i+= 0.5) {
 //			option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
 //            '</option> ';
 //		}
 //		$('#lsnTm').html(option);
-//		$('#lsnTm').val('1.0');	//default 값 
-    },*/
+//		$('#lsnTm').val('1.0');	//default 값
+    	
+    	if ( typeof Number(val)) {
+    		let fixedVal = Number(val);
+    		fixedVal = fixedVal.toFixed(1);
+    		$('#update-lsnTm').val(fixedVal);
+    	} else {
+    		console.log('형식이 잘못되었습니다.');
+    	}
+    },
     //선생님 셋팅
     setTeacher: function(mode, user, empNo) {
         //강사목록 조회
@@ -344,6 +370,7 @@ fnObj.fn = {
     updatePrivateLesson: function(user) {
         let item = $('#update-reservation-container tbody').
             find('tr').eq(0).data('id');
+        console.log(JSON.stringify(item));
         let lsnEdDt = item.lsnEdDt;
         let lsnEndDate = new Date(lsnEdDt).getTime();
         let today = new Date().getTime();
@@ -359,18 +386,20 @@ fnObj.fn = {
             alert('선생님을 선택해 주세요.');
             return false;
         }
-
+        
+        let lsnData = JSON.parse($('#update-data').val());
         let data = [
             {
-                compCd: item.compCd,
-                storCd: item.storCd,
-                memberNo: item.memberNo,
+                compCd: lsnData.compCd,
+                storCd: lsnData.storCd,
+                memberNo: lsnData.memberNo,
                 empNo: empNo,
-                lsnNo: item.lsnNo,
-                lsnCd: item.lsnCd,
-                rsvDt: $('#rsvDt').val(),
-                rsvTm: $('#rsvTm').val(),
-                lsnTm: $('#lsnTm').val(),
+                lsnNo: lsnData.lsnNo,
+                lsnCd: lsnData.lsnCd,
+                lsnSeq: lsnData.lsnSeq,
+                rsvDt: $('#update-rsvDt').val(),
+                rsvTm: $('#update-rsvTm').val(),
+                lsnTm: $('#update-lsnTm').val(),
             }];
 
         /* 예약 confirm */
@@ -378,10 +407,10 @@ fnObj.fn = {
         if (retReserv != true) {
             return false;
         }
-
+        console.log(data);
         $.ajax({
             type: 'PUT',
-            url: '/api/teacher/reservation/add',
+            url: '/api/teacher/reservation/modify',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {

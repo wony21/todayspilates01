@@ -354,11 +354,9 @@
 		AND T.STOR_CD = #{storCd}
 		AND
 		T.MEMBER_NO IN (SELECT MEMBER_NO FROM MEMBER_M
-		WHERE COMP_CD =
-		#{compCd}
+		WHERE COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
-		AND MEMBER_NM LIKE '%' + #{memberNm} +
-		'%')
+		AND MEMBER_NM LIKE '%' + #{memberNm} + '%')
 		AND T.EMP_NO = #{empNo}
 		AND T.ATND_FG = '0'
 		AND T.RSV_DT BETWEEN
@@ -369,25 +367,21 @@
 		resultType="camelmap" statementType="PREPARED">
 		/* 개인레슨 예약현황 조회 */
 		SELECT C.NAME,
-		A.LSN_TY,
-		A.LSN_FG, A.LSN_USE_CNT, A.LSN_CNT,
-		A.LSN_ST_DT, A.LSN_ED_DT,
-		A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, A.MEMBER_NO, A.EMP_NO
-		FROM
-		MEMBER_LSN_M
-		A
+			A.LSN_TY,
+			A.LSN_FG, A.LSN_USE_CNT, A.LSN_CNT,
+			A.LSN_ST_DT, A.LSN_ED_DT,
+			A.COMP_CD, A.STOR_CD, A.LSN_NO, A.LSN_CD, A.MEMBER_NO, A.EMP_NO
+		FROM MEMBER_LSN_M A
 		INNER JOIN LSN_M B
 		ON A.COMP_CD = B.COMP_CD
-		AND A.STOR_CD =
-		B.STOR_CD
+		AND A.STOR_CD = B.STOR_CD
 		AND A.LSN_CD = B.LSN_CD
 		INNER JOIN (SELECT NAME, CODE
-		FROM
-		COMMON_CODE_M
-		WHERE GROUP_CD = '003'
-		AND USE_YN = 'Y') C
-		ON A.LSN_TY =
-		C.CODE
+					FROM
+					COMMON_CODE_M
+					WHERE GROUP_CD = '003'
+					AND USE_YN = 'Y') C
+		ON A.LSN_TY = C.CODE
 		WHERE A.COMP_CD = #{compCd}
 		AND A.STOR_CD = #{storCd}
 		AND
@@ -520,34 +514,37 @@
 		0)+${lsnTm} LSN_NUM
 		FROM ATND_T M
 		WHERE COMP_CD = #{compCd}
-		AND STOR_CD =
-		#{storCd}
+		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
 		AND LSN_NO = #{lsnNo}
-		AND LSN_CD =
-		#{lsnCd}
+		AND LSN_CD = #{lsnCd}
 		AND ATND_FG IN ('0' ,'1', '2')),
-		#{empNo},
-		#{lsnCd},
-		#{lsnTm},
-		#{rsvDt},
-		#{rsvTm},
-		0,
-		0,
-		#{userCd},
-		#{userCd})
+			#{empNo},
+			#{lsnCd},
+			#{lsnTm},
+			#{rsvDt},
+			#{rsvTm},
+			0,
+			0,
+			#{userCd},
+			#{userCd})
 	</insert>
 	<update id="updateAttend" parameterType="hashmap">
 		UPDATE ATND_T
-		SET ATND_DT
-		= CONVERT(CHAR, GETDATE(), 112),
-		ATND_TM =
-		SUBSTRING(REPLACE(CONVERT(CHAR, GETDATE(), 24), ':', ''), 1, 4),
-		ATND_FG = #{atndFg},
-		UPT_USER = #{userCd},
-		UPT_DATE = GETDATE()
-		WHERE
-		COMP_CD = #{compCd}
+		SET ATND_DT = CONVERT(CHAR, GETDATE(), 112), 
+			ATND_TM = SUBSTRING(REPLACE(CONVERT(CHAR, GETDATE(), 24), ':', ''), 1, 4),
+			<if test="atndFg != null and atndFg != ''">
+				ATND_FG = #{atndFg},
+			</if>
+			<if test="empNo != null and empNo != ''">
+				EMP_NO = #{empNo},
+			</if>
+			<if test="lsnTm != null and lsnTm != ''">
+				LSN_TM = ${lsnTm},
+			</if>
+			UPT_USER = #{userCd},
+			UPT_DATE = GETDATE()
+		WHERE COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
 		AND LSN_NO = #{lsnNo}
@@ -796,5 +793,18 @@
 		WHEN MATCHED THEN 
 			UPDATE SET
 				CLS_FG = B.CLS_FG;
+	</update>	
+	<update id="updateReservation" parameterType="hashmap">
+		UPDATE ATND_T
+		SET LSN_TM = ${lsnTm},
+			RSV_DT = #{rsvDt},
+			RSV_TM = #{rsvTm},
+			EMP_NO = #{empNo}
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+			AND LSN_NO = #{lsnNo}
+			AND LSN_CD = #{lsnCd}
+			AND LSN_SEQ = ${lsnSeq}
 	</update>
 </mapper>

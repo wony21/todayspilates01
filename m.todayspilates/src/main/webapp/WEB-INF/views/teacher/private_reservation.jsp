@@ -252,8 +252,8 @@
                                                 <td>{{lsnNm}}</td>
                                                 <td>{{lsnFgNm}}</td>
                                                 <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
-                                                <td>{{lsnStDt}}</td>
-                                                <td>{{lsnEdDt}}</td>
+                                                <td>{{lsnStDt2}}</td>
+                                                <td>{{lsnEdDt2}}</td>
                                             </tr>
                                             {{/list}}
                                             {{^list}}
@@ -285,6 +285,7 @@
                                                 style="width: 80px; margin-left: 5px;"></select>
                                     </div>
                                     <div class="input-group">
+                                    	<input type="hidden" id="update-data" value="" />
                                         <select class="custom-select" id="update-lsnTm" style="width: 70px; margin-left: 5px;">
                                             <option value="1.0">1.0</option>
                                             <option value="1.5">1.5</option>
