@@ -532,6 +532,7 @@ fnObj.fn = {
             ax5.util.date(lsnData.regDt, {return: 'yyyy-MM-dd'});
 
         console.log(lsnData.memberNo);
+        console.log(lsnData);
         $('#memberNo').val(lsnData.memberNm);
         $('#memberNo').data('id', lsnData.memberNo);
         $('#teacher').val(lsnData.empNo);
@@ -553,9 +554,8 @@ fnObj.fn = {
         $('#remark').val(lsnData.remark);
 
         //fnObj.fn.setRsvDate();
-        
-        console.log(lsnData.lsnRegTy);
-        console.log( $('#lsnTy').val());
+//        console.log(lsnData.lsnRegTy);
+//        console.log( $('#lsnTy').val());
 
 
         let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();

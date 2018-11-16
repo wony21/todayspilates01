@@ -458,8 +458,11 @@
 		A.LSN_CD, A.MEMBER_NO
 	</select>
 	<select id="getMemberLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		/* 회원 레슨 조회. */
 		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD,
-		B.LSN_NM, A.LSN_USE_CNT, D.MEMBER_NM,
+		B.LSN_NM, 
+		ISNULL(A.LSN_USE_CNT, 0) LSN_USE_CNT,
+		D.MEMBER_NM,
 		A.LSN_FG, C.NAME LSN_FG_NM,
 		A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
 		FROM MEMBER_LSN_M A

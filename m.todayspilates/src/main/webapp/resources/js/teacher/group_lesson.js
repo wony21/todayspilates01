@@ -343,8 +343,12 @@ fnObj.fn = {
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
+                $('#exampleModalCenter').modal('hide');
+                let user = JSON.parse(window.localStorage.getItem('todays'));
+                fnObj.fn.getGroupLesson(user);
                 alert('예약이 완료되었습니다.');
-                location.reload();
+                // 화면을 갱신하면 안된다.
+                //location.reload();
             },
             error: function(error) {
                 alert(error);
