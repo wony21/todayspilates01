@@ -619,7 +619,7 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                //alert('업데이트 완료되었습니다.');
+                alert('업데이트 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
                 //수정된 수업데이터를 재조회 처리
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});

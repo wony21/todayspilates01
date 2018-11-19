@@ -359,6 +359,7 @@ fnObj.fn = {
                 alert('예약이 완료되었습니다.');
                 //location.reload();
                 fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
+                $('#addPrivateLesson').modal('hide');
             },
             error: function(error) {
                 alert(error);

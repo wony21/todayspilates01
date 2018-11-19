@@ -155,7 +155,8 @@
                             <tr style="text-align: center">
                                 <%--<th width="12%">#순번</th>--%>
                                 <th width="15%">회원명</th>
-                                <th>종류</th>
+                                <th>수업</th>
+								<th>종류</th>
                                 <th>등록</th>
                                 <th>사용</th>
                                 <th>조정</th>
@@ -170,6 +171,7 @@
                                 <%--<td style="height:40px;">{{idx}}</td>--%>
                                 <td style="height:40px;">{{memberNm}}</td>
                                 <td>{{lsnNm}}</td>
+								<td>{{lsnFgNm}}</td>
                                 <td>{{lsnCnt}}</td>
                                 <td>{{lsnUseCnt}}</td>
                                 <td>{{lsnModCnt}}</td>
@@ -410,16 +412,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td width="25%" style="height:40px;">등록일자</td>
-                                        <td width="25%">
-                                            <div class="input-group" id="datepicker">
-                                                <%--<select class="custom-select" id="regDt" style="width: 80px;  margin-right: 0px; margin-left: 0px; padding-left: 2px; padding-right: 0px"></select>--%>
-                                                <input type="text" class="form-control" id="regDt"
-                                                       style="width: 80px;  margin-left: 0px; padding-left: 5px; padding-right: 5px" readonly>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">시작일</td>
                                         <td width="25%">
                                             <div class="input-group">
@@ -427,6 +419,10 @@
                                                        style="width: 80px;  margin-left: 0px; padding-left: 5px; padding-right: 5px" readonly>
                                             </div>
                                         </td>
+                                    </tr>
+                                    <tr style="text-align: center;">
+                                        <td width="25%" style="height:40px;"></td>
+                                        <td width="25%"></td>
                                         <td width="25%" style="height:40px;">종료일</td>
                                         <td width="25%">
                                             <div class="input-group">
@@ -442,7 +438,14 @@
                                             <option value="2">종료</option>
                                             <option value="3">보류</option>
                                         </select></td>
-                                        <td width="50%" style="height:40px;" colspan="2"></td>
+                                        <td width="25%" style="height:40px;">등록일자</td>
+                                        <td width="25%">
+                                            <div class="input-group" id="datepicker">
+                                                <%--<select class="custom-select" id="regDt" style="width: 80px;  margin-right: 0px; margin-left: 0px; padding-left: 2px; padding-right: 0px"></select>--%>
+                                                <input type="text" class="form-control" id="regDt"
+                                                       style="width: 80px;  margin-left: 0px; padding-left: 5px; padding-right: 5px" readonly>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td width="25%" style="height:40px;">메모</td>
