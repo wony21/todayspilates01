@@ -170,6 +170,14 @@ public class MemberResrvService extends BaseService {
 		return memberResrvMapper.getGroupLessonView(parameter);
 	}
 	
+	public List getPersonalLesson(String compCd, String storCd, String memberNm) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNm, memberNm);
+		return memberResrvMapper.getPersonalLesson(parameter);
+	}
+	
 	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {
@@ -356,4 +364,6 @@ public class MemberResrvService extends BaseService {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		memberResrvMapper.updateEndDate(parameter);
 	}
+	
+	
 }

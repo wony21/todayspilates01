@@ -149,6 +149,15 @@ public class ReservationController extends BaseController {
 		return memberResrvService.getUserLesson(compCd, storCd, memberNo, empNo);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/reservation/person", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	public List getPersonalLesson(
+			@RequestParam String storCd,
+			@RequestParam String memberNm) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getPersonalLesson(compCd, storCd, memberNm);
+	}
+	
 	/**
 	 * 개인레슨출석부 - 예약현황
 	 * @package 	: m.todays.pilates.controllers

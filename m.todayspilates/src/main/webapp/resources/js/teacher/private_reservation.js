@@ -141,9 +141,15 @@ fnObj.fn = {
         // 없는 경우를 조회하고 싶은 경우에는 opt1의 값을 할당하지 않는다.
         search.opt1 = opt1;
         search.empNo = '';
+        let requestUrl = '/api/teacher/reservation/list';
+        if ( opt1 == OPT_NO_RSVDT) {
+        	requestUrl = '/api/teacher/reservation/list';
+        } else {
+        	requestUrl = '/api/teacher/reservation/person';
+        }
         $.ajax({
             type: 'GET',
-            url: '/api/teacher/reservation/list',
+            url: requestUrl,
             data: search,
             success: function(res) {
                 res.forEach(function(n) {

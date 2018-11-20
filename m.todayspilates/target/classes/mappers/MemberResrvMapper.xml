@@ -175,7 +175,7 @@
 		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO,
 		A.LSN_CD, H.LSN_SEQ
 		,M.MEMBER_NM
-		,F.LSN_NM, F.LSN_TM
+		,F.LSN_NM, H.LSN_TM
 		,A.LSN_TY, A.LSN_FG
 		,G.NAME AS LSN_FG_NM
 		,A.LSN_CNT
@@ -207,7 +207,7 @@
 		) G ON A.LSN_FG = G.CODE
 		LEFT OUTER JOIN (
 		SELECT
-		T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM
+		T.COMP_CD,T.STOR_CD ,T.MEMBER_NO ,T.LSN_NO ,T.LSN_NUM, T.LSN_TM
 		,(select sum(lsn_tm)
 		from atnd_t 
 		where comp_cd = t.comp_cd
@@ -810,4 +810,67 @@
 			AND LSN_CD = #{lsnCd}
 			AND LSN_SEQ = ${lsnSeq}
 	</update>
+	<select id="getPersonalLesson" parameterType="hashmap" resultType="camelmap">
+	SELECT
+		A.COMP_CD,
+		A.STOR_CD,
+		A.MEMBER_NO,
+		A.LSN_NO,
+		A.LSN_CD,
+		M.MEMBER_NM ,
+		F.LSN_NM,
+		F.LSN_TM ,
+		A.LSN_TY,
+		A.LSN_FG ,
+		G.NAME AS LSN_FG_NM ,
+		A.LSN_CNT,
+		ISNULL(A.LSN_USE_CNT, 0) AS LSN_USE_CNT ,
+		A.LSN_MOD_CNT,
+		A.LSN_ST_DT,
+		CASE
+			WHEN A.LSN_ED_DT = '' THEN NULL
+			ELSE A.LSN_ED_DT
+		END LSN_ED_DT ,
+		A.LSN_EXP_WK ,
+		A.REMARK ,
+		A.CLS_FG
+	FROM
+		MEMBER_LSN_M A
+	INNER JOIN LSN_M F ON
+		A.COMP_CD = F.COMP_CD
+		AND A.STOR_CD = F.STOR_CD
+		AND A.LSN_CD = F.LSN_CD
+	INNER JOIN (
+		SELECT
+			CODE,
+			NAME
+		FROM
+			COMMON_CODE_M
+		WHERE
+			GROUP_CD = '003' ) G ON
+		A.LSN_FG = G.CODE
+	INNER JOIN MEMBER_M M ON
+		A.COMP_CD = M.COMP_CD
+		AND A.STOR_CD = M.STOR_CD
+		AND A.MEMBER_NO = M.MEMBER_NO
+	WHERE
+		A.COMP_CD = #{compCd}
+		AND A.STOR_CD = #{storCd}
+		AND A.MEMBER_NO IN (
+		SELECT
+			MEMBER_NO
+		FROM
+			MEMBER_M
+		WHERE
+			COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NM = #{memberNm})
+		AND A.CLS_FG = '1'
+		AND F.LSN_FG = '1'
+	ORDER BY
+		A.COMP_CD,
+		A.STOR_CD,	
+		A.LSN_NO,
+		A.LSN_CD
+	</select>
 </mapper>
