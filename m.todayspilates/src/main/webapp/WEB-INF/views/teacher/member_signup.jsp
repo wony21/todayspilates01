@@ -167,12 +167,12 @@
                             </thead>
                             <tbody>
                             {{#list}}
-                            <tr data-id="{{lsnData}}" style="text-align: center;">
+                            <tr data-id="{{lsnData}}" style="text-align: center; {{cssText1}}">
                                 <%--<td style="height:40px;">{{idx}}</td>--%>
                                 <td style="height:40px;">{{memberNm}}</td>
                                 <td>{{lsnNm}}</td>
 								<td>{{lsnFgNm}}</td>
-                                <td>{{lsnCnt}}</td>
+								<td>{{lsnCnt}}</td>
                                 <td>{{lsnUseCnt}}</td>
                                 <td>{{lsnModCnt}}</td>
                                 <td>{{lsnRestCnt}}</td>
@@ -182,7 +182,7 @@
                             {{/list}}
                             {{^list}}
                             <tr style="text-align: center;">
-                                <td style="height:40px;" colspan="8">등록정보가 없습니다.</td>
+                                <td style="height:40px;" colspan="9">등록정보가 없습니다.</td>
                             </tr>
                             {{/list}}
                             </tbody>

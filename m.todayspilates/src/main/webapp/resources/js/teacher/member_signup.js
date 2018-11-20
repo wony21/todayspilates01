@@ -516,6 +516,11 @@ fnObj.fn = {
                             {return: 'yyyy-MM-dd'});
                     }
                     n['lsnData'] = JSON.stringify(n);
+                    if (n.clsFg == '2') {
+                    	n['cssText1'] = 'text-decoration:line-through;';
+                    } else {
+                    	n['cssText1'] = 'text-decoration:none;';
+                    }
                 });
 
                 var html = Mustache.render(lessonTmpl, {list: res});
@@ -531,8 +536,8 @@ fnObj.fn = {
         let regDt = (isValidDate(lsnData.regDt) === false) ? '' :
             ax5.util.date(lsnData.regDt, {return: 'yyyy-MM-dd'});
 
-        console.log(lsnData.memberNo);
-        console.log(lsnData);
+        //console.log(lsnData.memberNo);
+        //console.log(lsnData);
         $('#memberNo').val(lsnData.memberNm);
         $('#memberNo').data('id', lsnData.memberNo);
         $('#teacher').val(lsnData.empNo);
@@ -558,17 +563,18 @@ fnObj.fn = {
 //        console.log( $('#lsnTy').val());
 
 
-        let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
-        //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리
-        if (lsnEndDate) {
-	        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
-	            lsnData.lsnUseCnt == lsnData.lsnCnt) {
-	            console.log('Lesson is expired...');
-	            $('#clsFg').val(2);
-	        } else {
-	        	$('#clsFg').val(1);
-	        }
-        }
+        //let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
+        //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리  
+        //11.20. 최재원 - db에서 값이 변경되어야 할 부분이고 프론트에서는 있는 그대로 보여주면 됨.
+//        if (lsnEndDate) {
+//	        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
+//	            lsnData.lsnUseCnt == lsnData.lsnCnt) {
+//	            console.log('Lesson is expired...');
+//	            $('#clsFg').val(2);
+//	        } else {
+//	        	$('#clsFg').val(1);
+//	        }
+//        }
     },
     //팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
@@ -619,7 +625,7 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                alert('업데이트 완료되었습니다.');
+//                alert('업데이트 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
                 //수정된 수업데이터를 재조회 처리
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});

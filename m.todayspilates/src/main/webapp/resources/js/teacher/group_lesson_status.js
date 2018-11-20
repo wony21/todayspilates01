@@ -8,7 +8,7 @@ const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 fnObj.initView = function(user) {
     $('.username').text(user.username);
 
-    fnObj.fn.setDatePicker();
+    //fnObj.fn.setDatePicker();
     fnObj.fn.getGroupLesson(user);
 };
 

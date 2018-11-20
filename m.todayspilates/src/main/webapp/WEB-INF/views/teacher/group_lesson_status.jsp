@@ -74,14 +74,16 @@
 <header class="d-flex">
     <div class="container">
         <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
-            <h4>그룹레슨 등록현황 관리</h4>
+            <h4>그룹레슨 등록현황 관리(재개발중)</h4>
             <div class="table-responsive">
                 <div id="date-container">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="input-group">
+                            	<!-- 
                                 <select class="custom-select" id="week"
                                         style="width: 140px; margin-left: 5px;"></select>
+                                 -->
                             </div>
                         </div>
                     </div>
@@ -90,7 +92,16 @@
                         <!-- 동적생성 -->
                         </thead>
                         <tbody>
-                        <!-- 동적생성 -->
+                        <tr>
+                        	<td style="height:40px;" data-id="2">월</td>
+                        	<td data-id="3">화</td>
+                        	<td data-id="4">수</td>
+                        	<td data-id="5">목</td>
+                        	<td data-id="6">금</td>
+                        	<td data-id="7">토</td>
+                        	<td data-id="1">일</td>
+                        </tr>
+                        	
                         </tbody>
                     </table>
                 </div>
