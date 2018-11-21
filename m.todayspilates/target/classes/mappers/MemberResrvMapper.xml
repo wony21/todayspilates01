@@ -873,4 +873,62 @@
 		A.LSN_NO,
 		A.LSN_CD
 	</select>
+	<select id="getGroupSchedule" parameterType="hashmap" resultType="camelmap">
+		SELECT
+			A.COMP_CD,
+			A.STOR_CD,
+			LEFT(A.SCH_DT, 6) AS SCH_DT,
+			A.EMP_NO,
+			MAX(B.EMP_NM) AS EMP_NM,
+			A.ST_TM,
+			A.LSN_TM,
+			A.SEQ,
+			C.SCH_NO,
+			MAX(E.CODE) AS LSN_LV,
+			MAX(E.NAME) AS LSN_LV_NM,
+			MAX(C.MEMBER_NO) AS MEMBER_NO,
+			MAX(D.MEMBER_NM) AS MEMBER_NM
+		FROM
+			GRP_SCH_M AS A
+		INNER JOIN EMP_M B ON
+			A.COMP_CD = B.COMP_CD
+			AND A.EMP_NO = B.EMP_NO
+		LEFT OUTER JOIN GRP_SCH_BOARD C ON
+			A.COMP_CD = C.COMP_CD
+			AND A.STOR_CD = C.STOR_CD
+			AND SUBSTRING(A.SCH_DT, 1, 6) = C.SCH_MONTH
+			AND A.SCH_WEEK = C.SCH_WEEK
+			AND A.ST_TM = C.ST_TM
+			AND A.SEQ = C.SEQ
+		LEFT OUTER JOIN MEMBER_M D ON
+			C.COMP_CD = D.COMP_CD
+			AND C.STOR_CD = D.STOR_CD
+			AND C.MEMBER_NO = D.MEMBER_NO
+		LEFT OUTER JOIN (
+			SELECT
+				CODE,
+				NAME
+			FROM
+				COMMON_CODE_M
+			WHERE
+				GROUP_CD = '007') E ON
+			A.LSN_LV = E.CODE
+		WHERE
+			A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+			AND A.SCH_DT like #{schMonth} + '%'
+			AND A.SCH_WEEK = #{schWeek}
+			AND A.USE_YN = 'Y'
+		GROUP BY
+			A.COMP_CD,
+			A.STOR_CD,
+			SUBSTRING(A.SCH_DT, 1, 6),
+			A.EMP_NO,
+			A.ST_TM,
+			A.LSN_TM,
+			A.SEQ,
+			C.SCH_NO
+		ORDER BY
+			A.ST_TM, A.SEQ
+	</select>
 </mapper>

@@ -45,5 +45,6 @@ public class ParamNames {
 	public final static String schMonth = "schMonth";
 	public final static String useYn = "useYn";
 	public final static String hp = "hp";
+	public final static String schWeek = "schWeek";
 	
 }

@@ -112,7 +112,7 @@
                     <script type="text/html" id="reservation-template">
                         {{#list}}
                         <div class="input-group" style="vertical-align: bottom;" id="caption">
-                            <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}})
+                            <label id="tbl-caption" class="group-lesson-tbl-caption">{{stTmNm}} {{lsnLvNm}} ({{lsnTm}})
                                 {{empNm}}
                             </label>
                         </div>
@@ -125,67 +125,12 @@
                               <th width="25%">등록처리</th>
                             </tr>--%>
                             </thead>
-                            <tbody>
-                            {{#schedule}}
-                            <tr data-id="{{lsnData}}" style="text-align: center;">
-                                {{#memberNm0}}
-                                <td width="15%">{{memberNm0}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData0}}">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
-                                </td>
-                                {{/memberNm0}}
-                                {{^memberNm0}}
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                                {{/memberNm0}}
-                                {{#memberNm1}}
-                                <td width="15%">{{memberNm1}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData1}}">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
-                                </td>
-                                {{/memberNm1}}
-                                {{^memberNm1}}
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                                {{/memberNm1}}
-                                {{#memberNm2}}
-                                <td width="15%">{{memberNm2}}</td>
-                                <td width="18%" class="select" data-id="{{lsnData2}}">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 50px">-</button>
-                                </td>
-                                {{/memberNm2}}
-                                {{^memberNm2}}
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                                {{/memberNm2}}
-                            </tr>
-                            {{/schedule}}
-                            {{#schedule_length}}
-                            <tr data-id="{{lsnData}}" style="text-align: center;">
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                                <td width="15%"></td>
-                                <td width="18%" class="select" data-id="">
-                                    <button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 50px">+</button>
-                                </td>
-                            </tr>
-                            {{/schedule_length}}
+                            <tbody id="lsn-board">
+								%lesson-area%
                             </tbody>
                         </table>
                         {{/list}}
-                        {{^list}}
+						{{^list}}
                         <div class="group-lesson-tbl-caption-empty">그룹레슨 시간표가 없습니다</div>
                         {{/list}}
                     </script>

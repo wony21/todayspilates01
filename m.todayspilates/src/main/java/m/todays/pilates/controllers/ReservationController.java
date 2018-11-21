@@ -2,6 +2,8 @@ package m.todays.pilates.controllers;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -240,6 +242,24 @@ public class ReservationController extends BaseController {
 			@RequestParam String schDt) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return memberResrvService.getGroupLessonView(compCd, storCd, schDt);
+	}
+	
+	
+	/**
+	 * 그룹스케쥴 조회
+	 * @param storCd 매장코드
+	 * @param schMonth 조회월(yyyyMM)
+	 * @param schWeek (일:1, 월:2, 화:3, 수:4, 목:5, 금:6, 토:7)
+	 * @return
+	 */
+	@RequestMapping(value = "/api/teacher/reservation/group/schedule", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getGroupSchedule(
+			@RequestParam String storCd,
+			@RequestParam String schMonth,
+			@RequestParam String schWeek) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getGroupSchedule(compCd, storCd, schMonth, schWeek);
 	}
 	
 	/**

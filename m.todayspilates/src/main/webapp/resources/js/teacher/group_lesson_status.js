@@ -7,9 +7,9 @@ const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 //view 초기화 
 fnObj.initView = function(user) {
     $('.username').text(user.username);
-
     //fnObj.fn.setDatePicker();
     fnObj.fn.getGroupLesson(user);
+    fnObj.fn.createEmptyTemplete();
 };
 
 //이벤트 초기화 
@@ -27,11 +27,15 @@ fnObj.initEvent = function(user) {
             $('#datepicker tbody td').removeClass('selected');
             $(this).addClass('selected');
         }
+        let schWeek = $(this).data('id');
+        console.log('selected schedule week value : ' + schWeek);
         fnObj.fn.getGroupLesson(user);
     });
 
     // 그룹레슨 등록 팝업창 호출
     $(document.body).on('click', '.btn-rsv-add', function(e) {
+    	
+    	console.log('btn rsv add clicked!');
 
         let dy = WEEKS[$('#datepicker tbody tr .selected').index()];
         let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
@@ -168,94 +172,109 @@ fnObj.fn = {
         $('#datepicker thead').html(thead);
         $('#datepicker tbody').html(tbody);
     },
+    
+    createEmptyTemplete: function() {
+    	// 동적회원등록영역생성
+      	let childHtml = '';
+      	for(var seq=1; seq<8; seq += 2) {
+      		childHtml += ' <tr data-id="{{lsnData}}" style="text-align: center;"> ';
+      		childHtml += ' 	<td width="26%"> ';
+      		childHtml += ' 	<div class="input-group"> ';
+      		childHtml += ' 	          <input type="text" class="form-control" id="filter" ';
+      		childHtml += ' 	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + seq +'}}> ';
+      		childHtml += ' 	      </div> ';
+      		childHtml += ' 	</td> ';
+      		childHtml += ' 	<td width="12%" class="select"> ';
+      		childHtml += ' 	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-member="{{memberData}}" style="width: 40px">+</button> ';
+      		childHtml += ' 	</td> ';
+      		childHtml += ' 	  <td width="12%" class="select"> ';
+      		childHtml += ' 	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-member="{{memberData}}" style="width: 40px">-</button> ';
+      		childHtml += ' 	</td> ';
+      		childHtml += '	<td width="26%"> ';
+      		childHtml += '	<div class="input-group">    ';
+      		childHtml += '	          <input type="text" class="form-control" id="filter" ';
+      		childHtml += '	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + (seq+1) +'}}> ';
+      		childHtml += '	      </div>  ';
+      		childHtml += '	</td>   ';
+      		childHtml += '	<td width="12%" class="select"> ';
+      		childHtml += '	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 40px">+</button> ';
+      		childHtml += '	</td> ';
+      		childHtml += '	  <td width="12%" class="select"> ';
+      		childHtml += '	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 40px">-</button>  ';
+      		childHtml += '	</td>  ';
+      		childHtml += '</tr>  ';
+      	}
+      	var readText = $('#reservation-template').text();
+      	var changedText = readText.replace('%lesson-area%', childHtml);
+      	$('#reservation-template').text(changedText);
+      	reservationTmpl = $('#reservation-template').html();
+    },
 
     //예약정보조회 (선택주, 선생님, 회원명, 일자)
     getGroupLesson: function(user) {
-        let search = fnObj.fn.getData(user);
-
-        //검색일자가 유효하지 않으면 현재일자로 조회
-        if (isValidDate(search.schDt) === false) {
-            search.schDt = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
-        }
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/teacher/reservation/group/list',
-            data: search,
-            success: function(res) {
-                if (res.length) {
-
-                    res.forEach(function(m, odx) {
-                        let obj = $.extend(true, {}, m);	//object deep copy
-                        delete obj.schedule;
-                        m.lsnData = JSON.stringify(obj);
-                        m.stTm = (isValidTime(m.stTm) === false) ?
-                            '' :
-                            m.stTm.substr(0, 2) + ':' + m.stTm.substr(2, 3);  // hh:mm
-                        m.lsnTm = m.lsnTm.toFixed(1);
-
-                        let arr = [];
-                        let myObj = {};
-                        let count  = 0;
-                        // 추가 등록행이 필요한지 체크
-                        if ((m.schedule.length % 3) === 0) {
-                            m.schedule_length = 3;
-                        }
-
-                        arr.length = 0;
-                        m.schedule.forEach(function(n, idx) {
-                            n.empNo = m.empNo;
-                            n.empNm = m.empNm;
-                            n.lsnLv = m.lsnLv;
-                            n.lsnLvNm = m.lsnLvNm;
-                            n.lsnData = JSON.stringify(n);
-
-                            n.idx = idx + 1;
-                            n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ?
-                                '' :
-                                ('`' + n.lsnEdDt.substr(2, 2) + '.' +
-                                    n.lsnEdDt.substr(4, 2) +
-                                    '.' + n.lsnEdDt.substr(6, 7));	// yy-mm-dd
-
-                            let tmpObj = {};
-                            let rem = idx % 3;
-                            //todo: 하나의 row에 3개씩 표시해야 하기때문에 idx % 3으로 인덱스를 재구성함.
-                            //나머지가 0 일때 배열의 인덱스를 생성하고 아니면 배열의 인덱스값에 obj스트링을 concat 처리함.
-                            if (rem === 0) {
-                                //let tmpObj = {};
-                                tmpObj['memberNm' + rem] = n.memberNm;
-                                tmpObj['lsnData' + rem] = n.lsnData;
-                                arr.push(tmpObj);
-                            } else {
-                                let curIdx = parseInt(idx / 3);
-                                let curObj = arr[curIdx];
-                                tmpObj['memberNm' + rem] = n.memberNm;
-                                tmpObj['lsnData' + rem] = n.lsnData;
-                                $.extend(curObj, tmpObj);
-
-                                arr[curIdx] = curObj;
-                            }
-                        });
-                        m.schedule = arr.slice(0);
-                    });
-                }
-
-                let html = Mustache.render(reservationTmpl, {list: res});
-                $('#reservation-container').html(html);
-                /*// 출/결처리가 된 항목은 '취소'는 불가하도록 처리
-                $('#sel-attend option[display-flag=\'0\']').each(function() {
-                    $(this).remove();
-                });*/
-            },
-        });
-        return false;
+    	let search = fnObj.fn.getData(user);
+		// test
+		search.schMonth = '201808';
+		console.log(search);
+		
+		let group = [];	// templete에 맞게 데이터타입을 재정의 한다.
+		$.ajax({
+			  type: 'GET',
+			  url: '/api/teacher/reservation/group/schedule',
+			  data: search,
+			  success: function(res) {
+				  	res.forEach(function(item, idx) {
+				  		console.log(item);
+				  		// 현재 레슨의 대상이 존재하는 확인한다. (존재하면 index >= 0, 미존재하면 index == -1)
+				  		let index = group.findIndex(function(m, i){
+				  			return (m.compCd == item.compCd
+				  					&& m.storCd == item.storCd
+				  					&& m.stTm == item.stTm
+				  					&& m.lsnLv == item.lsnLv
+				  					&& m.empNo == item.empNo);
+				  		});
+				  		// 신규 건수인 경우, 데이터 생성.
+				  		if ( index == -1 ) {
+				  			let data = { };
+				  			data.compCd = item.compCd;
+				  			data.storCd = item.storCd;
+				  			data.stTm = item.stTm;
+				  			data.stTmNm = (data.stTm.length == 0 ) ? '' : data.stTm.substr(0, 2) + ':' + data.stTm.substr(2, 2);
+				  			data.lsnLv = item.lsnLv;
+				  			data.lsnLvNm = item.lsnLvNm;
+				  			data.lsnTm = Number(item.lsnTm).toFixed(1);
+				  			data.empNo = item.empNo;
+				  			data.empNm = item.empNm;
+				  			data.seq = item.seq;
+				  			data.members = [];
+				  			if (item.memberNo) {
+				  				data['memberNo' + item.seq] = item.memberNo;
+				  				data['memberNm' + item.seq] = item.memberNm;
+				  				data['memberSeq' + item.seq] = item.seq;
+				  			}
+				  			group.push(data);
+				  		} else {
+				  			// 기존인 경우에는 기존데이터에 맴버 추가.
+				  			if (item.memberNo) {
+				  				group[index]['memberNo' + item.seq] = item.memberNo;
+				  				group[index]['memberNm' + item.seq] = item.memberNm;
+				  				group[index]['memberSeq' + item.seq] = item.seq;
+				  			}
+				  		}
+				  	});
+				  	var html = Mustache.render(reservationTmpl, {list: group});
+	                $('#reservation-container').html(html);
+			      },
+			  });
+			  return false;
     },
 
     // 조회조건
     getData: function(user) {
         return {
             storCd: user.storCd,
-            schDt: $('#datepicker tbody tr .selected').data('id'),
+            schMonth: ax5.util.date((new Date()), {return: 'yyyyMM'}),
+            schWeek: $('#datepicker tbody tr .selected').data('id'),
         };
     },
 
@@ -289,7 +308,7 @@ fnObj.fn = {
                             n.lsnEdDt.substr(6, 7));
                 });
 
-                var html = Mustache.render(newReservationTmpl, {list: res});
+                var html = Mustache.render(reservationTmpl, {list: res});
                 $('#new-reservation-container').html(html);
             },
         });

@@ -178,6 +178,15 @@ public class MemberResrvService extends BaseService {
 		return memberResrvMapper.getPersonalLesson(parameter);
 	}
 	
+	public List getGroupSchedule(String compCd, String storCd, String schMonth, String schWeek) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.schMonth, schMonth);
+		parameter.put(ParamNames.schWeek, schWeek);
+		return memberResrvMapper.getGroupSchedule(parameter);
+	}
+	
 	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {
