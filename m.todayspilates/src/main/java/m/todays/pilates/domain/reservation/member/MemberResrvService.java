@@ -22,6 +22,7 @@ import m.todays.pilates.common.SessionUtils;
 import m.todays.pilates.common.CommonData.ATTEND;
 import m.todays.pilates.common.api.ApiResponse;
 import m.todays.pilates.domain.lesson.LessonMapper;
+import m.todays.pilates.utils.PilatesUtils;
 
 @Service
 public class MemberResrvService extends BaseService {
@@ -162,6 +163,14 @@ public class MemberResrvService extends BaseService {
 		return lesson;
 	}
 	
+	public List getGroupMembers(String compCd, String storCd, String memberNm) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNm, memberNm);
+		return memberResrvMapper.getGroupMembers(parameter);
+	}
+	
 	public List getGroupLessonView(String compCd, String storCd, String schDate) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
@@ -187,6 +196,100 @@ public class MemberResrvService extends BaseService {
 		return memberResrvMapper.getGroupSchedule(parameter);
 	}
 	
+	@Transactional
+	public ApiResponse saveGroupSchedule(List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd = SessionUtils.getCurrentUser().getUsername();
+		for (HashMap map : requestParams) {
+			
+			String storCd = (String) map.getOrDefault(ParamNames.storCd, "");
+			String memberNo = (String) map.getOrDefault(ParamNames.memberNo, "");
+			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
+			String lsnTm = map.getOrDefault(ParamNames.lsnTm, "").toString();
+			String lsnLv = (String) map.getOrDefault(ParamNames.lsnLv, "");
+			String schWeek = map.getOrDefault(ParamNames.schWeek, "").toString();
+			String stTm = (String) map.getOrDefault(ParamNames.stTm, "");
+			String lsnMonth = (String) map.getOrDefault(ParamNames.lsnMonth, "");
+			String schNo = map.getOrDefault(ParamNames.schNo, "").toString();
+			String seq = map.getOrDefault(ParamNames.seq, "").toString();
+			
+			//int schWeekNum = Integer.parseInt(schWeek);
+			//List weekOfDays = PilatesUtils.getWeekDays(schWeekNum, lsnMonth);
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			//for(Object day : weekOfDays) {
+				
+				//String lsnDt = (String) day;
+				if (StringUtils.isEmpty(storCd)) {
+					return ApiResponse.error("KEY : [storCd] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(memberNo)) {
+					return ApiResponse.error("KEY : [memberNo] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(stTm)) {
+					return ApiResponse.error("KEY : [stTm] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(schWeek)) {
+					return ApiResponse.error("KEY : [schWeek] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(lsnMonth)) {
+					return ApiResponse.error("KEY : [lsnMonth] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(memberNo)) {
+					return ApiResponse.error("KEY : [memberNo] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(empNo)) {
+					return ApiResponse.error("KEY : [empNo] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(lsnTm)) {
+					return ApiResponse.error("KEY : [lsnTm] 가 존재하지 않습니다.");
+				} else if (StringUtils.isEmpty(lsnLv)) {
+					return ApiResponse.error("KEY : [lsnLv] 가 존재하지 않습니다.");
+				} 
+				
+				parameter.put(ParamNames.compCd, compCd);
+				parameter.put(ParamNames.storCd, storCd);
+				parameter.put(ParamNames.userCd, userCd);
+				parameter.put(ParamNames.memberNo, memberNo);
+				parameter.put(ParamNames.lsnMonth, lsnMonth);
+				parameter.put(ParamNames.schWeek, schWeek);
+				//parameter.put(ParamNames.lsnDt, lsnDt);
+				parameter.put(ParamNames.stTm, stTm);
+				parameter.put(ParamNames.seq, seq);
+				parameter.put(ParamNames.empNo, empNo);
+				parameter.put(ParamNames.lsnTm, lsnTm);
+				parameter.put(ParamNames.lsnLv, lsnLv);
+				parameter.put(ParamNames.schNo, schNo);
+				
+				//memberResrvMapper.insertGroupSchedule(parameter);
+			//}
+			memberResrvMapper.insertScheduleBoard(parameter);
+		}
+		return ApiResponse.success("ok");
+	}
+	
+	@Transactional
+	public ApiResponse deleteGroupSchedule(List<HashMap> requestParams) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		String userCd = SessionUtils.getCurrentUser().getUsername();
+		for(HashMap map : requestParams) {
+			String storCd = (String) map.getOrDefault(ParamNames.storCd, "");
+			String memberNo = (String) map.getOrDefault(ParamNames.memberNo, "");
+			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
+			String lsnTm = map.getOrDefault(ParamNames.lsnTm, "").toString();
+			String lsnLv = (String) map.getOrDefault(ParamNames.lsnLv, "");
+			String schWeek = map.getOrDefault(ParamNames.schWeek, "").toString();
+			String stTm = (String) map.getOrDefault(ParamNames.stTm, "");
+			String lsnMonth = (String) map.getOrDefault(ParamNames.lsnMonth, "");
+			String schNo = map.getOrDefault(ParamNames.schNo, "").toString();
+			String seq = map.getOrDefault(ParamNames.seq, "").toString();
+			
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			parameter.put(ParamNames.compCd, compCd);
+			parameter.put(ParamNames.storCd, storCd);
+			parameter.put(ParamNames.userCd, userCd);
+			parameter.put(ParamNames.schMonth, lsnMonth);
+			parameter.put(ParamNames.schWeek, schWeek);
+			parameter.put(ParamNames.stTm, stTm);
+			parameter.put(ParamNames.seq, seq);
+			parameter.put(ParamNames.schNo, schNo);
+			
+			memberResrvMapper.deleteScheduleBoard(parameter);
+		}
+		return ApiResponse.success("ok");
+	}
 	
 	@Transactional
 	private ApiResponse SaveAttend(List<HashMap> requestParams, String atndFg) {

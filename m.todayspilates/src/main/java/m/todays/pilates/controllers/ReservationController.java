@@ -243,7 +243,20 @@ public class ReservationController extends BaseController {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
 		return memberResrvService.getGroupLessonView(compCd, storCd, schDt);
 	}
-	
+	/**
+	 * 그룹레슨자 목록 가져오기
+	 * @param storCd 매장코드
+	 * @param memberNm 맴버이름
+	 * @return
+	 */
+	@RequestMapping(value = "/api/member/group", method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public List getGroupMembers(
+			@RequestParam String storCd,
+			@RequestParam(required=false) String memberNm) {
+		String compCd = SessionUtils.getCurrentUser().getCompCd();
+		return memberResrvService.getGroupMembers(compCd, storCd, memberNm);
+	}
 	
 	/**
 	 * 그룹스케쥴 조회
@@ -351,6 +364,18 @@ public class ReservationController extends BaseController {
 	@RequestMapping(value = "/api/teacher/reservation/modify", method = RequestMethod.PUT, produces = APPLICATION_JSON)
 	public ApiResponse modifyReservation(@RequestBody List<HashMap> requestParams) {
 		return memberResrvService.updateRservation(requestParams);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/schedule/add", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse saveGroupSchedule(@RequestBody List<HashMap> requestParams) {
+		return memberResrvService.saveGroupSchedule(requestParams);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/api/teacher/schedule/delete", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse removeGroupSchedule(@RequestBody List<HashMap> requestParams) {
+		return memberResrvService.deleteGroupSchedule(requestParams);
 	}
 	
 	@RequestMapping(value = "/api/common", method = RequestMethod.GET, produces = APPLICATION_JSON)

@@ -931,4 +931,68 @@
 		ORDER BY
 			A.ST_TM, A.SEQ
 	</select>
+	<select id="getGroupMembers" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+	 	SELECT
+			MAX(A.COMP_CD) COMP_CD,
+			MAX(A.STOR_CD) STOR_CD,
+			MAX(A.MEMBER_NO) MEMBER_NO,
+			MAX(C.MEMBER_NM) MEMBER_NM
+		FROM
+			MEMBER_LSN_M A
+		INNER JOIN (
+			SELECT
+				COMP_CD,
+				STOR_CD,
+				LSN_CD
+			FROM
+				LSN_M
+			WHERE
+				LSN_FG = '2'
+				AND USE_YN = 'Y') B ON
+			A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND A.LSN_CD = B.LSN_CD
+		INNER JOIN MEMBER_M C ON
+			A.COMP_CD = C.COMP_CD
+			AND A.STOR_CD = C.STOR_CD
+			AND A.MEMBER_NO = C.MEMBER_NO
+		WHERE
+			A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+			AND A.CLS_FG = '1'
+		<if test="memberNm != null and memberNm != ''">
+			AND C.MEMBER_NM = #{memberNm}
+		</if>
+		GROUP BY
+			A.COMP_CD,
+			A.STOR_CD,
+			A.MEMBER_NO
+	</select>
+	<insert id="insertGroupSchedule" parameterType="hashmap" statementType="PREPARED">
+		INSERT INTO GRP_SCH_M (COMP_CD,STOR_CD,SCH_DT,ST_TM,SEQ,LSN_TM,LSN_LV,EMP_NO,SCH_WEEK,USE_YN,PRE_EMP_NO,PRE_EMP_NM,INS_DATE,INS_USER,UPT_DATE,UPT_USER)
+		VALUES (#{compCd}, #{storCd}, #{lsnDt}, #{stTm}, 
+					(SELECT ISNULL(MAX(SEQ), 0) + 1 SEQ
+					FROM GRP_SCH_M
+					WHERE COMP_CD = #{compCd}
+						AND STOR_CD = #{storCd}
+						AND SCH_DT = #{lsnDt}
+						AND ST_TM = #{stTm}
+						AND EMP_NO = #{empNo}
+						AND LSN_LV = #{lsnLv})
+				, #{lsnTm}, #{lsnLv}, #{empNo}, #{schWeek}, 'Y', NULL, NULL, GETDATE(), #{userCd},  GETDATE(), #{userCd})
+	</insert>
+	<insert id="insertScheduleBoard" parameterType="hashmap" statementType="PREPARED">
+		INSERT INTO GRP_SCH_BOARD (COMP_CD,STOR_CD,SCH_MONTH,SCH_WEEK,ST_TM,SEQ,SCH_NO,MEMBER_NO,INS_DATE,INS_USER,UPT_DATE,UPT_USER)
+		VALUES (#{compCd}, #{storCd}, #{lsnMonth}, #{schWeek}, #{stTm}, #{seq}, #{schNo}, #{memberNo}, GETDATE(), #{userCd}, GETDATE(), #{userCd})
+	</insert>
+	<delete id="deleteScheduleBoard" parameterType="hashmap" statementType="PREPARED">
+		DELETE GRP_SCH_BOARD
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND SCH_MONTH = #{schMonth}
+			AND SCH_WEEK = #{schWeek}
+			AND ST_TM = #{stTm}
+			AND SEQ = #{seq}
+			AND SCH_NO = #{schNo}
+	</delete>
 </mapper>

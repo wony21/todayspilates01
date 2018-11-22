@@ -20,6 +20,7 @@ public interface MemberResrvMapper {
 	List getGroupLessonView(Map<String, Object> parameter);
 	List getPersonalLesson(Map<String, Object> parameter);
 	List getGroupSchedule(Map<String, Object> parameter);
+	List getGroupMembers(Map<String, Object> parameter);
 	void insertAttend(Map<String, Object> parameter);
 	void updateAttend(Map<String, Object> parameter);
 	void updateLessonUseCount(Map<String, Object> parameter);
@@ -28,5 +29,8 @@ public interface MemberResrvMapper {
 	String isEndLesson(Map<String, Object> parameter);
 	void updateEndDate(Map<String, Object> parameter);
 	void updateReservation(Map<String, Object> parameter);
+	void insertGroupSchedule(Map<String, Object> parameter);
+	void insertScheduleBoard(Map<String, Object> parameter);
+	void deleteScheduleBoard(Map<String, Object> parameter);
 	
 }

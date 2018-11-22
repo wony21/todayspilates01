@@ -152,7 +152,7 @@
                 </div>
                 <div class="modal-body" style="padding: 0.5rem;">
                     <!-- 예약잡기 팝업body start -->
-                    <div id="modal-caption" data-id="">test</div>
+                    <div id="modal-caption" data-id="" data-schno="">test</div>
                     <div class="table-responsive" style="margin-top: 30px;">
                         <div id="modal-date-container">
                             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
@@ -172,24 +172,20 @@
                                 <table class="table table-striped table-sm">
                                     <thead>
                                     <tr style="text-align: center">
-                                        <th width="12%">#구분</th>
-                                        <th width="18%">회차</th>
-                                        <th>시작일</th>
-                                        <th>종료일</th>
+                                        <th width="50%">#회원번호</th>
+                                        <th width="50%">회원명</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {{#list}}
-                                    <tr data-id="{{lsnData}}" style="text-align: center;">
-                                        <td>{{lsnNm}}</td>
-                                        <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
-                                        <td>{{lsnStDt}}</td>
-                                        <td>{{lsnEdDt}}</td>
+                                    <tr data-id="{{member}}" style="text-align: center;">
+                                        <td>{{memberNo}}</td>
+                                        <td>{{memberNm}}</td>
                                     </tr>
                                     {{/list}}
                                     {{^list}}
                                     <tr>
-                                        <td colspan="4">등록정보가 없습니다.</td>
+                                        <td colspan="2">검색결과가 존재하지 않습니다.</td>
                                     </tr>
                                     {{/list}}
                                     </tbody>

@@ -8,7 +8,7 @@ const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 fnObj.initView = function(user) {
     $('.username').text(user.username);
     //fnObj.fn.setDatePicker();
-    fnObj.fn.getGroupLesson(user);
+    //fnObj.fn.getGroupLesson(user);
     fnObj.fn.createEmptyTemplete();
 };
 
@@ -35,29 +35,33 @@ fnObj.initEvent = function(user) {
     // 그룹레슨 등록 팝업창 호출
     $(document.body).on('click', '.btn-rsv-add', function(e) {
     	
-    	console.log('btn rsv add clicked!');
-
-        let dy = WEEKS[$('#datepicker tbody tr .selected').index()];
-        let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
-        //let lsnData = $(this).data('id');
+        let dy = $('#datepicker tbody tr .selected').text();
+        let dyFg = $('#datepicker tbody tr .selected').data('id');
+        //let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
         let lsnData = $(this).parent().parent().data('id');
-        let dt = rsvDt.substr(0, 4) + '년 ' + rsvDt.substr(4, 2) + '월 ' +
-            rsvDt.substr(6, 2) + '일 ';
-        let stTm = (isValidTime(lsnData.stTm) === false) ?
-            '' :
-            lsnData.stTm.substr(0, 2) + ':' + lsnData.stTm.substr(2, 3);  // hh:mm
-        let caption = dt + '(' + dy + ') ' + stTm + ' ' + lsnData.lsnLvNm +
-            ' (' + lsnData.lsnTm.toFixed(1) + ') ' + lsnData.empNm;
-        let captionData = {
-            rsvDt: rsvDt,
-            dy: dy,
-            stTm: lsnData.stTm,
-            lsnTm: lsnData.lsnTm,
-            lsnLv: lsnData.lsnLv,
-            lsnLvNm: lsnData.lsnLvNm,
-            empNo: lsnData.empNo,
-        };
+        let schNo = $(this).data('schno');
+        console.log('schno ----> ' + schNo);
+        let dayOfWeek = $('#datepicker tbody tr td .selected').data('id');
+        let today = new Date();
+        let todayStr = ax5.util.date(today, {add: {d: -today.getDay()}, return: 'yyyy-MM'});
 
+        let caption = todayStr + '(' + dy + ') ' + lsnData.lsnLvNm + ' ' + lsnData.empNm + '(' + lsnData.lsnTm + ')'; 
+        let captionData = {
+        		compCd:lsnData.compCd,
+        		storCd:lsnData.storCd,
+        		lsnMonth: lsnData.lsnMonth,
+        		seq: lsnData.seq,
+        		dyFg: dyFg,
+				dy: dy,
+				schNo : schNo,
+				stTm: lsnData.stTm,
+				lsnTm: lsnData.lsnTm,
+				lsnLv: lsnData.lsnLv,
+				lsnLvNm: lsnData.lsnLvNm,
+				empNo: lsnData.empNo,
+        };
+        console.log(captionData);
+        //$('#modal-caption').data('id', JSON.stringify(captionData));
         $('#modal-caption').attr('data-id', JSON.stringify(captionData));
         $('#modal-caption').text(caption);
         $('#filter').val('');
@@ -66,13 +70,21 @@ fnObj.initEvent = function(user) {
         $('#new-reservation-container').html(html);
 
         $('#groupLessonModalCenter').modal('toggle');
+        
     });
 
     //등록된 그룹레슨 예약(회원)삭제
     $(document.body).on('click', '.btn-rsv-del', function(e) {
-        let lsnData = $(this).parent().data('id');
+        let lsnData = $(this).parent().parent().data('id');
+        let schNo = $(this).data('schno');
+        if(schNo){
+        	lsnData.schNo = schNo;
+        }
+        let schWeek = $('#datepicker tbody tr .selected').data('id');
+        if(schWeek){
+        	lsnData.schWeek = schWeek;
+        }
         let response = confirm('등록된 회원을 삭제하시겠습니까?');
-
         if (response) {
             fnObj.fn.delGroupLesson(user, lsnData);
         }
@@ -96,6 +108,7 @@ fnObj.initEvent = function(user) {
         let captionData = {
             rsvDt: rsvDt,
             dy: dy,
+            schNo: lsnData.schNo,
             stTm: lsnData.stTm,
             lsnTm: lsnData.lsnTm,
             lsnLv: lsnData.lsnLv,
@@ -180,27 +193,27 @@ fnObj.fn = {
       		childHtml += ' <tr data-id="{{lsnData}}" style="text-align: center;"> ';
       		childHtml += ' 	<td width="26%"> ';
       		childHtml += ' 	<div class="input-group"> ';
-      		childHtml += ' 	          <input type="text" class="form-control" id="filter" ';
+      		childHtml += ' 	          <input type="text" class="form-control" ';
       		childHtml += ' 	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + seq +'}}> ';
       		childHtml += ' 	      </div> ';
       		childHtml += ' 	</td> ';
       		childHtml += ' 	<td width="12%" class="select"> ';
-      		childHtml += ' 	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-member="{{memberData}}" style="width: 40px">+</button> ';
+      		childHtml += ' 	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">+</button> ';
       		childHtml += ' 	</td> ';
       		childHtml += ' 	  <td width="12%" class="select"> ';
-      		childHtml += ' 	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-member="{{memberData}}" style="width: 40px">-</button> ';
+      		childHtml += ' 	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">-</button> ';
       		childHtml += ' 	</td> ';
       		childHtml += '	<td width="26%"> ';
       		childHtml += '	<div class="input-group">    ';
-      		childHtml += '	          <input type="text" class="form-control" id="filter" ';
+      		childHtml += '	          <input type="text" class="form-control" ';
       		childHtml += '	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + (seq+1) +'}}> ';
       		childHtml += '	      </div>  ';
       		childHtml += '	</td>   ';
       		childHtml += '	<td width="12%" class="select"> ';
-      		childHtml += '	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" style="width: 40px">+</button> ';
+      		childHtml += '	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">+</button> ';
       		childHtml += '	</td> ';
       		childHtml += '	  <td width="12%" class="select"> ';
-      		childHtml += '	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" style="width: 40px">-</button>  ';
+      		childHtml += '	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">-</button>  ';
       		childHtml += '	</td>  ';
       		childHtml += '</tr>  ';
       	}
@@ -215,7 +228,7 @@ fnObj.fn = {
     	let search = fnObj.fn.getData(user);
 		// test
 		search.schMonth = '201808';
-		console.log(search);
+		//console.log(search);
 		
 		let group = [];	// templete에 맞게 데이터타입을 재정의 한다.
 		$.ajax({
@@ -224,7 +237,7 @@ fnObj.fn = {
 			  data: search,
 			  success: function(res) {
 				  	res.forEach(function(item, idx) {
-				  		console.log(item);
+				  		// console.log(item);
 				  		// 현재 레슨의 대상이 존재하는 확인한다. (존재하면 index >= 0, 미존재하면 index == -1)
 				  		let index = group.findIndex(function(m, i){
 				  			return (m.compCd == item.compCd
@@ -246,18 +259,21 @@ fnObj.fn = {
 				  			data.empNo = item.empNo;
 				  			data.empNm = item.empNm;
 				  			data.seq = item.seq;
+				  			data.lsnMonth = search.schMonth;
+				  			data.lsnData = JSON.stringify(data);
 				  			data.members = [];
 				  			if (item.memberNo) {
-				  				data['memberNo' + item.seq] = item.memberNo;
-				  				data['memberNm' + item.seq] = item.memberNm;
-				  				data['memberSeq' + item.seq] = item.seq;
+				  				data['memberNo' + item.schNo] = item.memberNo;
+				  				data['memberNm' + item.schNo] = item.memberNm;
+				  				data['memberSeq' + item.schNo] = item.seq;
 				  			}
 				  			group.push(data);
+				  			
 				  		} else {
 				  			// 기존인 경우에는 기존데이터에 맴버 추가.
 				  			if (item.memberNo) {
-				  				group[index]['memberNo' + item.seq] = item.memberNo;
-				  				group[index]['memberNm' + item.seq] = item.memberNm;
+				  				group[index]['memberNo' + item.schNo] = item.memberNo;
+				  				group[index]['memberNm' + item.schNo] = item.memberNm;
 				  				group[index]['memberSeq' + item.seq] = item.seq;
 				  			}
 				  		}
@@ -291,24 +307,13 @@ fnObj.fn = {
         }
         $.ajax({
             type: 'GET',
-            url: '/api/teacher/reservation/group',
+            url: '/api/member/group',
             data: {storCd: user.storCd, memberNm: memberNm},
             success: function(res) {
                 res.forEach(function(n){
-                    n.lsnData = JSON.stringify(n);
-                    n.lsnStDt = (isValidDate(n.lsnStDt) === false) ?
-                        '' :
-                        ('`' + n.lsnStDt.substr(2, 2) + '.' +
-                            n.lsnStDt.substr(4, 2) + '.' +
-                            n.lsnStDt.substr(6, 7));
-                    n.lsnEdDt = (isValidDate(n.lsnEdDt) === false) ?
-                        '' :
-                        ('`' + n.lsnEdDt.substr(2, 2) + '.' +
-                            n.lsnEdDt.substr(4, 2) + '.' +
-                            n.lsnEdDt.substr(6, 7));
+                	n.member = JSON.stringify(n);
                 });
-
-                var html = Mustache.render(reservationTmpl, {list: res});
+                var html = Mustache.render(newReservationTmpl, {list: res});
                 $('#new-reservation-container').html(html);
             },
         });
@@ -317,8 +322,8 @@ fnObj.fn = {
     //그룹레슨 예약등록 처리
     addGroupLesson: function(user) {
         let selectedItem = {};
-        let lsnData = $('#modal-caption').data('id');
-
+        //let lsnData = $('#modal-caption').data('id');
+        let lsnData = JSON.parse($('#modal-caption').attr('data-id'));
         $('#new-reservation-container tbody tr').each(function() {
             let selected = $(this).find('td').hasClass('selected');
             if (selected) {
@@ -340,20 +345,23 @@ fnObj.fn = {
 
         let data = [
             {
-                compCd: selectedItem.compCd,
-                storCd: selectedItem.storCd,
-                memberNo: selectedItem.memberNo,
-                lsnNo: selectedItem.lsnNo,
-                lsnCd: selectedItem.lsnCd,
-                empNo: lsnData.empNo,
-                rsvDt: lsnData.rsvDt,
-                rsvTm: lsnData.stTm,
+                compCd: lsnData.compCd,
+                storCd: lsnData.storCd,
+                lsnMonth: lsnData.lsnMonth,
+                schNo: lsnData.schNo,
+                seq : lsnData.seq,
+                stTm: lsnData.stTm,
                 lsnTm: lsnData.lsnTm,
-            }];
-
+                lsnLv: lsnData.lsnLv,
+                empNo: lsnData.empNo,
+                schWeek: lsnData.dyFg,
+                memberNo: selectedItem.memberNo,
+            }
+        ];
+                
         $.ajax({
             type: 'PUT',
-            url: '/api/teacher/reservation/add',
+            url: '/api/teacher/schedule/add',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
@@ -373,7 +381,7 @@ fnObj.fn = {
 
         $.ajax({
             type: 'PUT',
-            url: '/api/teacher/lesson/cancel',
+            url: '/api/teacher/schedule/delete',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
@@ -393,7 +401,7 @@ $(function() {
     fnObj.initEvent(user);
 
     //주차 datepicker 셋팅 (현재월을 기준으로 -3개월 ~ +3개월)
-    makeWeekSelectOptions('week', 3);
+    //makeWeekSelectOptions('week', 3);
     //var date = new Date("20181001".replace( /(\d{4})(\d{2})(\d{2})/, "$1/$2/$3"));
 });
 	

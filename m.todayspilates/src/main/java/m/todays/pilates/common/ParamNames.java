@@ -46,5 +46,10 @@ public class ParamNames {
 	public final static String useYn = "useYn";
 	public final static String hp = "hp";
 	public final static String schWeek = "schWeek";
+	public final static String lsnLv = "lsnLv";
+	public final static String lsnMonth = "lsnMonth";
+	public final static String lsnDt = "lsnDt";
+	public final static String schNo = "schNo";
+	public final static String seq = "seq";
 	
 }
