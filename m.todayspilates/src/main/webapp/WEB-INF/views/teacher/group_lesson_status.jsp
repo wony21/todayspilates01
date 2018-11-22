@@ -74,7 +74,7 @@
 <header class="d-flex">
     <div class="container">
         <div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
-            <h4>그룹레슨 등록현황 관리(재개발중)</h4>
+            <h4>그룹레슨 등록현황 관리</h4>
             <div class="table-responsive">
                 <div id="date-container">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
