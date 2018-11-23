@@ -31,6 +31,18 @@ fnObj.initEvent = function(user) {
         console.log('selected schedule week value : ' + schWeek);
         fnObj.fn.getGroupLesson(user);
     });
+    
+    // 등록버튼 활성/비활성화 
+//    $(document.body).on('change', 'txtMember', function(e) {
+//    	let memberNm = $(this).val();
+//    	let seq = $(this).data('seq');
+//    	console.log('member seq ----> ' + seq);
+//    	if (memberNm) {
+//    		$('#btnAdd' + seq).prop("disabled", true);	// 비활성화
+//    	} else {
+//    		$('#btnAdd' + seq).prop("disabled", false);	// 활성화
+//    	}
+//    });
 
     // 그룹레슨 등록 팝업창 호출
     $(document.body).on('click', '.btn-rsv-add', function(e) {
@@ -40,7 +52,13 @@ fnObj.initEvent = function(user) {
         //let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
         let lsnData = $(this).parent().parent().data('id');
         let schNo = $(this).data('schno');
-        console.log('schno ----> ' + schNo);
+        let txtId = '#txtMember' + schNo;
+        let txtValue = $(txtId).val();
+        if ( txtValue ) {
+        	alert('먼저 등록된 회원을 삭제하세요.');
+        	return false;
+        }
+        //console.log('schno ----> ' + schNo);
         let dayOfWeek = $('#datepicker tbody tr td .selected').data('id');
         let today = new Date();
         let todayStr = ax5.util.date(today, {add: {d: -today.getDay()}, return: 'yyyy-MM'});
@@ -193,27 +211,27 @@ fnObj.fn = {
       		childHtml += ' <tr data-id="{{lsnData}}" style="text-align: center;"> ';
       		childHtml += ' 	<td width="26%"> ';
       		childHtml += ' 	<div class="input-group"> ';
-      		childHtml += ' 	          <input type="text" class="form-control" ';
+      		childHtml += ' 	          <input type="text" class="form-control" id="txtMember' + seq + '" data-seq="' + seq + '"';
       		childHtml += ' 	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + seq +'}}> ';
       		childHtml += ' 	      </div> ';
       		childHtml += ' 	</td> ';
       		childHtml += ' 	<td width="12%" class="select"> ';
-      		childHtml += ' 	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">+</button> ';
+      		childHtml += ' 	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" id="btnAdd' + seq + '" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">+</button> ';
       		childHtml += ' 	</td> ';
       		childHtml += ' 	  <td width="12%" class="select"> ';
-      		childHtml += ' 	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">-</button> ';
+      		childHtml += ' 	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" id="btnRemove' + seq + '" data-schno="'+ seq +'" data-no="{{memberNo' + seq + '}}" data-seq="{{memberSeq' + seq + '}}" style="width: 40px">-</button> ';
       		childHtml += ' 	</td> ';
       		childHtml += '	<td width="26%"> ';
       		childHtml += '	<div class="input-group">    ';
-      		childHtml += '	          <input type="text" class="form-control" ';
+      		childHtml += '	          <input type="text" class="form-control" id="txtMember' + (seq+1) + '" data-seq="' + (seq+1) + '"';
       		childHtml += '	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + (seq+1) +'}}> ';
       		childHtml += '	      </div>  ';
       		childHtml += '	</td>   ';
       		childHtml += '	<td width="12%" class="select"> ';
-      		childHtml += '	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">+</button> ';
+      		childHtml += '	<button type="button" class="btn btn-sm btn-primary btn-rsv-add" id="btnAdd' + (seq+1) + '" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">+</button> ';
       		childHtml += '	</td> ';
       		childHtml += '	  <td width="12%" class="select"> ';
-      		childHtml += '	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">-</button>  ';
+      		childHtml += '	      <button type="button" class="btn btn-sm btn-secondary btn-rsv-del" id="btnRemove' + (seq+1) + '" data-schno="'+ (seq+1) +'" data-no="{{memberNo' + (seq+1) + '}}" data-seq="{{memberSeq' + (seq+1) + '}}" style="width: 40px">-</button>  ';
       		childHtml += '	</td>  ';
       		childHtml += '</tr>  ';
       	}
@@ -280,6 +298,7 @@ fnObj.fn = {
 				  	});
 				  	var html = Mustache.render(reservationTmpl, {list: group});
 	                $('#reservation-container').html(html);
+	                
 			      },
 			  });
 			  return false;
