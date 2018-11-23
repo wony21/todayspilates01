@@ -245,7 +245,7 @@ fnObj.fn = {
     getGroupLesson: function(user) {
     	let search = fnObj.fn.getData(user);
 		// test
-		search.schMonth = '201808';
+		//search.schMonth = '201808';
 		//console.log(search);
 		
 		let group = [];	// templete에 맞게 데이터타입을 재정의 한다.
