@@ -72,7 +72,7 @@
     <!-- Header -->
     <header class="callout">
       <div class="container text-center mb-2">
-        <h2 class="mx-auto mb-5">STOTT Todayspilates
+        <h2 class="mx-auto mb-5">Todayspilates
         <em></em>
         </h2>
       </div>

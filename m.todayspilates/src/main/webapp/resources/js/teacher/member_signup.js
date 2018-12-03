@@ -2,7 +2,7 @@ let fnObj = {};
 let memberTmpl = $('#member-template').html();
 let lessonTmpl = $('#lesson-template').html();
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
-//view 초기화
+// view 초기화
 fnObj.initView = function(user) {
     let html;
     $('.username').text(user.username);
@@ -13,28 +13,28 @@ fnObj.initView = function(user) {
     html = Mustache.render(lessonTmpl, {list: []});
     $('#lesson-container').html(html);
 
-    //가입경로조회
+    // 가입경로조회
     fnObj.fn.setSignUpPath(user);
-    //선생님조회
+    // 선생님조회
     fnObj.fn.setTeacher(user);
-    //레슨코드조회(개인,그룹..)
+    // 레슨코드조회(개인,그룹..)
     fnObj.fn.setLessonCd(user);
-    //레슨종류조회 (정상,체험,쿠폰)
+    // 레슨종류조회 (정상,체험,쿠폰)
     fnObj.fn.setLessonType();
-    //결제방법조회
+    // 결제방법조회
     fnObj.fn.setPayType();
-    //수업여부조회
+    // 수업여부조회
     fnObj.fn.setLessonStatus();
 };
 
-//이벤트 초기화
+// 이벤트 초기화
 fnObj.initEvent = function(user) {
     // 회원명 조회
     $(document.body).on('click', '#search-member', function(e) {
         fnObj.fn.getMember(user);
     });
 
-    //회원등록버튼 처리
+    // 회원등록버튼 처리
     $(document.body).on('click', '#call-add-member', function(e) {
         let data = {
             __created__: true,
@@ -42,13 +42,16 @@ fnObj.initEvent = function(user) {
             entFg: '1',
             useYn: 'Y',
         };
-
+        // 초기화 처리
+// $('#hp1').val('010');
+// $('#hp2').val('');
+// $('#hp3').val('');
         $('#delete-member').hide();
         fnObj.fn.setMemberData(data);
         fnObj.fn.showMemberModal();
     });
 
-    //정보수정버튼 처리
+    // 정보수정버튼 처리
     $(document.body).on('click', '#call-update-member', function(e) {
         let data;
         let selected = fnObj.fn.isSelectedMember();
@@ -59,16 +62,17 @@ fnObj.initEvent = function(user) {
         }
 
         $('#delete-member').show();
-        //선택된 회원의 정보를 조회
+        // 선택된 회원의 정보를 조회
         data = $('#member-container tbody').find('tr').eq(selected).data('id');
-        //팝업창 데이터 초기화
+        // 팝업창 데이터 초기화
         fnObj.fn.setMemberData(data);
-        /*//팝업창 호출
-        $('#memberModalCenter').modal('toggle');*/
+        /*
+		 * //팝업창 호출 $('#memberModalCenter').modal('toggle');
+		 */
         fnObj.fn.showMemberModal(data);
     });
 
-    //회원중복체크 처리
+    // 회원중복체크 처리
     $('#check-member').on('click', function(e) {
         let filter = $.trim($('#memberNm').val());
         if (filter.length) {
@@ -82,12 +86,15 @@ fnObj.initEvent = function(user) {
     // 회원정보저장(수정/등록)
     $('#save-member').on('click', function(e) {
     	// 회원명 중복 체크
+    	let memberNo = $('#new-member-container #memberNm').attr('data-id');
     	let dataMemberNm = $('#memberNm').attr('data-value');
     	let memberNm = $('#memberNm').val();
     	if ( dataMemberNm != memberNm ) {
-    		alert('회원명 중복확인을 하시기 바랍니다.');
-    		$('#check-member').trigger('focus');
-    		return false;
+    		if (memberNo === '') {
+	    		alert('회원명 중복확인을 하시기 바랍니다.');
+	    		$('#check-member').trigger('focus');
+	    		return false;
+    		}
     	}
     	// 휴대폰번호 유효성 체크
         let hp = $.trim($('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val());
@@ -95,9 +102,9 @@ fnObj.initEvent = function(user) {
             alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
             $('#hp').trigger('focus');
             return false;
-        }
+        }	
         
-        let memberNo = $('#new-member-container #memberNm').data('id');
+        
         console.log('memberNo : ' + memberNo);
         if (memberNo === '') {
             fnObj.fn.addMember(user);
@@ -123,7 +130,7 @@ fnObj.initEvent = function(user) {
                 removeClass('selected');
             $(this).children('td').addClass('selected');
         }
-        //선택된 회원의 등록된 수업조회
+        // 선택된 회원의 등록된 수업조회
         fnObj.fn.getLesson(user, lsnData);
     });
 
@@ -136,6 +143,10 @@ fnObj.initEvent = function(user) {
             return false;
         }
         data = $('#member-container tbody').find('tr').eq(selected).data('id');
+        if( data.useYn != 'Y' ) {
+        	alert('미활동 회원은 수업등록이 불가합니다');
+        	return false;
+        }
         
         // 신규/재등록
         let lsnCd = '01';
@@ -168,7 +179,7 @@ fnObj.initEvent = function(user) {
                          lsnFg: 1,
                          clsFg: 1,
                      };
-                     //console.log($('#lsnTy').val(1));
+                     // console.log($('#lsnTy').val(1));
                      fnObj.fn.setLessonData(lsnData);
                      $('#lessonModalCenter').modal('toggle');
              },
@@ -177,6 +188,8 @@ fnObj.initEvent = function(user) {
     	// 신규등록인 경우, "수업종류","등록구분" 활성화
         $('#lsnCd').prop('disabled', false);
         $('#lsnTy').prop('disabled', false);
+        // 신규레슨등록인 경우에는 삭제버튼 비활성화
+        $('#delete-lesson').prop('disabled','disabled');
     });
 
     $('#lesson-container').on('click', 'tbody tr', function(e) {
@@ -184,7 +197,7 @@ fnObj.initEvent = function(user) {
         if (typeof lsnData === 'undefined') {
             return false;
         }
-        //선택한 일자의 개인레슨을 조회
+        // 선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
             $('#lesson-container tbody tr').
@@ -194,25 +207,31 @@ fnObj.initEvent = function(user) {
             $(this).children('td').addClass('selected');
         }
 
-        //선택된 회원의 등록된 수업조회
+        // 선택된 회원의 등록된 수업조회
         fnObj.fn.setLessonData(lsnData);
-        //그룹레슨의 경우 선생님 선택 비활성황
+        // 그룹레슨의 경우 선생님 선택 비활성황
         if (lsnData.lsnTy === '2') {
             $('#teacher').prop('disabled', 'disabled');
         } else {
             $('#teacher').prop('disabled', false);
         }
         // 수정인 경우, "수업종류","등록구분" 비활성화
-        $('#lsnCd').prop('disabled', 'disabled');
+        //$('#lsnCd').prop('disabled', 'disabled');
         $('#lsnTy').prop('disabled', 'disabled');
+        // 삭제버튼 활성/비활성 처리(사용회수가 0인경우에만 비활성)
+        if (lsnData.lsnUseCnt == 0) {
+        	$('#delete-lesson').prop('disabled', false);
+        } else {
+        	$('#delete-lesson').prop('disabled','disabled');
+        }
         
-        //수업등록 팝업 띄우기
+        // 수업등록 팝업 띄우기
         $('#lessonModalCenter').modal('toggle');
         
         
     });
 
-    // 수업저장 이벤트
+ // 수업저장 이벤트
     $('#save-lesson').on('click', function(e) {
     	    	
         let lsnNo = $('#lsnNo').val();
@@ -247,15 +266,21 @@ fnObj.initEvent = function(user) {
         	return false;
         }
         
-        if (lsnNo === '') {                 //신규등록
+        if (lsnNo === '') {                 // 신규등록
             fnObj.fn.addLesson(user);
             alert('수업이 등록되었습니다.');
-        } else {                            //수정
+        } else {                            // 수정
             fnObj.fn.updateLesson(user);
             alert('수업이 수정되었습니다.');
         }
 
-        //todo: 팝업 닫을때 수업만 재조회 처리
+        // todo: 팝업 닫을때 수업만 재조회 처리
+    });
+    
+    // 수업삭제 이벤트
+    $('#delete-lesson').on('click', function(e) {
+    	fnObj.fn.deleteLesson(user);
+        alert('수업이 삭제되었습니다.');
     });
 
     // 휴대폰 형식 변경
@@ -269,10 +294,10 @@ fnObj.initEvent = function(user) {
     });
 
     $('#lsnCd').on('change', function(e) {
-       //console.log('lsnCd:' + $(this).val());
+       // console.log('lsnCd:' + $(this).val());
         let lsnCd = $(this).val();
         let memberNo = $('#memberNo').data('id');
-        //개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
+        // 개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
         if (lsnCd == '03') {
         	$('#teacher').prop('disabled', 'disabled');
         } else {
@@ -313,9 +338,13 @@ fnObj.initEvent = function(user) {
 };
 
 fnObj.fn = {
-    //등록된 회원조회 (회원명으로 검색)
+    // 등록된 회원조회 (회원명으로 검색)
     getMember: function(user) {
         let filter = $.trim($('#filter').val());
+        if ( filter == '') {
+        	alert('회원명을 입력하세요.');
+        	return false;
+        }
 
         $.ajax({
             type: 'GET',
@@ -337,28 +366,18 @@ fnObj.fn = {
         });
         return false;
     },
-    /*//회원 모바일번호 중복체크
-    checkMember: function(user) {
-        let filter = $.trim($('#filter').val());
-        $.ajax({
-            type: 'GET',
-            url: '/api/member/check',
-            data: {storCd: user.storCd, mobile: $('#hp').val()},
-            success: function(res) {
-                if (res[0].existMember === false) {
-                    alert('신규회원 입니다.');
-                } else {
-                    alert('이미 등록된 회원입니다. 변경하십시오');
-                }
-            },
-        });
-        return false;
-    },*/
+    /*
+	 * //회원 모바일번호 중복체크 checkMember: function(user) { let filter =
+	 * $.trim($('#filter').val()); $.ajax({ type: 'GET', url:
+	 * '/api/member/check', data: {storCd: user.storCd, mobile: $('#hp').val()},
+	 * success: function(res) { if (res[0].existMember === false) { alert('신규회원
+	 * 입니다.'); } else { alert('이미 등록된 회원입니다. 변경하십시오'); } }, }); return false; },
+	 */
     //
     isDupMemberByName: function(user, filter) {
         $.ajax({
             type: 'GET',
-            //url: '/api/member/list',
+            // url: '/api/member/list',
             url: '/api/member/createMemberName',
             data: {storCd: user.storCd, memberNm: filter},
             success: function(res) {
@@ -366,24 +385,24 @@ fnObj.fn = {
             	if ( retMemberNm != filter ) {
             		alert('이미 등록된 회원명이므로 [' + retMemberNm + '] 으로 자동 변경합니다.');
             		$('#memberNm').val(retMemberNm);
-            		//$('#memberNm').attr('data-value', retMemberNm);
+            		// $('#memberNm').attr('data-value', retMemberNm);
             	} else {
             		alert('신규회원 입니다.');
             	}
-            	//중복체크확인여부를 위해 'data-value'에 결과값을 같이 저장.
+            	// 중복체크확인여부를 위해 'data-value'에 결과값을 같이 저장.
             	$('#memberNm').attr('data-value', retMemberNm);
             	
-//                let list = res.filter(n => (n.memberNm === filter));
-//                if (list.length) {
-//                    alert('이미 등록된 회원명입니다. 변경하십시요');
-//                    $('#memberNm').trigger('focus');
-//                } else {
-//                    alert('신규회원 입니다.');
-//                }
+// let list = res.filter(n => (n.memberNm === filter));
+// if (list.length) {
+// alert('이미 등록된 회원명입니다. 변경하십시요');
+// $('#memberNm').trigger('focus');
+// } else {
+// alert('신규회원 입니다.');
+// }
             },
         });
     },
-    //신규회원등록 (팝업창에서 처리)
+    // 신규회원등록 (팝업창에서 처리)
     addMember: function(user) {
     	let hp1 = $('#hp1').val();
         let hp2 = $('#hp2').val();
@@ -399,9 +418,9 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                //alert('회원등록이 완료되었습니다.');
+                // alert('회원등록이 완료되었습니다.');
                 if (res.status === 500) {
-                    //alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
+                    // alert('입력하신 모바일 번호는 이미 등록된 번호입니다.');
                 	alert(res.message);
                     return false;
                 } else {
@@ -418,7 +437,7 @@ fnObj.fn = {
         });
         return false;
     },
-    //회원정보수정
+    // 회원정보수정
     updateMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
 
@@ -428,9 +447,9 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                //alert('회원수정이 완료되었습니다.');
+                // alert('회원수정이 완료되었습니다.');
                 $('#memberModalCenter').modal('toggle');
-                //회원 재조회 처리
+                // 회원 재조회 처리
                 $('#filter').val(gd[0].memberNm);
                 fnObj.fn.getMember(user);
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
@@ -441,7 +460,7 @@ fnObj.fn = {
         });
         return false;
     },
-    //회원삭제
+    // 회원삭제
     deleteMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
         $.ajax({
@@ -450,9 +469,9 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                //alert('회원삭제가 완료되었습니다.');
+                // alert('회원삭제가 완료되었습니다.');
                 $('#memberModalCenter').modal('toggle');
-                //회원 재조회 처리
+                // 회원 재조회 처리
                 $('#filter').val(gd[0].memberNm);
                 fnObj.fn.getMember(user);
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
@@ -464,26 +483,44 @@ fnObj.fn = {
         return false;
     },
 
-    //화면에 회원데이터 셋팅
+    // 화면에 회원데이터 셋팅
     setMemberData: function(lsnData) {
+    	console.log(lsnData.memberNo);
         $('#memberNm').val(lsnData.memberNm);
-        $('#memberNm').data('id', lsnData.memberNo);
-        $('#hp').val(lsnData.hp);
+        // $('#memberNm').data('id', lsnData.memberNo);
+        $('#memberNm').attr('data-id', lsnData.memberNo);
+        let hp = lsnData.hp;
+        hp = hp.replace('-', '');
+        let hp1;
+        let hp2;
+        let hp3;
+        if (hp.length == 11) {
+	        hp1 = hp.substr(0, 3);
+	        hp2 = hp.substr(3, 4);
+	        hp3 = hp.substr(7, 4);
+        } else {
+        	hp1 = hp.substr(0, 3);
+	        hp2 = hp.substr(3, 3);
+	        hp3 = hp.substr(6, 4);
+        }
+        $('#hp1').val(hp1);
+        $('#hp2').val(hp2);
+        $('#hp3').val(hp3);
         $('#sex').val(lsnData.sex);
         $('#entFg').val(lsnData.entFg);
         $('#member-remark').val(lsnData.remark);
         $('#useYn').val(lsnData.useYn);
     },
 
-    //화면의 회원데이터 조회
+    // 화면의 회원데이터 조회
     getMemberData: function(user) {
         let date = ax5.util.date((new Date()), {return: 'yyyyMMdd'});
         let hpNumber = $('#hp1').val() + '-' + $('#hp2').val() + '-' + $('#hp3').val();
         console.log(hpNumber);
         return {
-            compCd: user.compCd,                    //key3
-            storCd: user.storCd,                    //key1
-            memberNo: $('#memberNm').data('id'),    //key2
+            compCd: user.compCd,                    // key3
+            storCd: user.storCd,                    // key1
+            memberNo: $('#memberNm').data('id'),    // key2
             memberNm: $('#memberNm').val(),
             mobile: $('#hp').val(),
             hp: hpNumber,
@@ -499,7 +536,7 @@ fnObj.fn = {
         $('#memberModalCenter').modal('toggle');
     },
 
-    //검색된 회원의 수업조회
+    // 검색된 회원의 수업조회
     getLesson: function(user, lsnData) {
         $.ajax({
             type: 'GET',
@@ -530,14 +567,14 @@ fnObj.fn = {
         return false;
     },
 
-    //선택된 수업의 상세정보를 조회 (수업등록 팝업)
+    // 선택된 수업의 상세정보를 조회 (수업등록 팝업)
     setLessonData: function(lsnData) {
         let today = new Date().getTime();
         let regDt = (isValidDate(lsnData.regDt) === false) ? '' :
             ax5.util.date(lsnData.regDt, {return: 'yyyy-MM-dd'});
 
-        //console.log(lsnData.memberNo);
-        //console.log(lsnData);
+        // console.log(lsnData.memberNo);
+        // console.log(lsnData);
         $('#memberNo').val(lsnData.memberNm);
         $('#memberNo').data('id', lsnData.memberNo);
         $('#teacher').val(lsnData.empNo);
@@ -558,25 +595,25 @@ fnObj.fn = {
         $('#clsFg').val(lsnData.clsFg);
         $('#remark').val(lsnData.remark);
 
-        //fnObj.fn.setRsvDate();
-//        console.log(lsnData.lsnRegTy);
-//        console.log( $('#lsnTy').val());
+        // fnObj.fn.setRsvDate();
+// console.log(lsnData.lsnRegTy);
+// console.log( $('#lsnTy').val());
 
 
-        //let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
-        //레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리  
-        //11.20. 최재원 - db에서 값이 변경되어야 할 부분이고 프론트에서는 있는 그대로 보여주면 됨.
-//        if (lsnEndDate) {
-//	        if ((lsnEndDate !== 0 && lsnEndDate < today) ||
-//	            lsnData.lsnUseCnt == lsnData.lsnCnt) {
-//	            console.log('Lesson is expired...');
-//	            $('#clsFg').val(2);
-//	        } else {
-//	        	$('#clsFg').val(1);
-//	        }
-//        }
+        // let lsnEndDate = new Date(lsnData.lsnEdDt).getTime();
+        // 레슨종료일이 지난경우 & 등록횟수와 사용횟수가 같으면 수업종료 처리
+        // 11.20. 최재원 - db에서 값이 변경되어야 할 부분이고 프론트에서는 있는 그대로 보여주면 됨.
+// if (lsnEndDate) {
+// if ((lsnEndDate !== 0 && lsnEndDate < today) ||
+// lsnData.lsnUseCnt == lsnData.lsnCnt) {
+// console.log('Lesson is expired...');
+// $('#clsFg').val(2);
+// } else {
+// $('#clsFg').val(1);
+// }
+// }
     },
-    //팝업화면의 수업 데이터 조회
+    // 팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
         return {
             compCd: user.compCd,
@@ -587,7 +624,7 @@ fnObj.fn = {
             lsnCd: $('#lsnCd').val(),
             lsnTy: $('#lsnTy').val(),
             lsnFg: $('#lsnFg').val(),
-            lsnAmt: parseInt($('#lsnAmt').val().replace(/[^0-9]/g, '')), //str.replace(/[^d.,]+/,'')
+            lsnAmt: parseInt($('#lsnAmt').val().replace(/[^0-9]/g, '')), // str.replace(/[^d.,]+/,'')
             payTp: $('#payTp').val(),
             lsnCnt: parseInt($('#lsnCnt').val()),
             lsnExpWk: parseInt($('#lsnExpWk').val()),
@@ -596,7 +633,7 @@ fnObj.fn = {
             remark: $('#remark').val(),
         };
     },
-    //수업신규등록
+    // 수업신규등록
     addLesson: function(user) {
         let gd = [].concat(this.getLessonData(user));
         $.ajax({
@@ -605,9 +642,9 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                //alert('수업등록이 완료되었습니다.');
+                // alert('수업등록이 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
-                //등록된 수업데이터를 재조회 처리
+                // 등록된 수업데이터를 재조회 처리
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
             },
             error: function(error) {
@@ -616,7 +653,7 @@ fnObj.fn = {
         });
         return false;
     },
-    //기존수업수정
+    // 기존수업수정
     updateLesson: function(user) {
         let gd = [].concat(this.getLessonData(user));
         $.ajax({
@@ -625,9 +662,9 @@ fnObj.fn = {
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-//                alert('업데이트 완료되었습니다.');
+// alert('업데이트 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
-                //수정된 수업데이터를 재조회 처리
+                // 수정된 수업데이터를 재조회 처리
                 fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
             },
             error: function(error) {
@@ -636,11 +673,30 @@ fnObj.fn = {
         });
         return false;
     },
-    //회원리스트에서 선택된 회원이 있는지 체크. (true/false 반환)
+    deleteLesson: function(user) {
+        let gd = [].concat(this.getLessonData(user));
+        $.ajax({
+            type: 'PUT',
+            url: '/api/lesson/delete',
+            data: JSON.stringify(gd),
+            contentType: 'application/json; charset=UTF-8',
+            success: function(res) {
+                $('#lessonModalCenter').modal('toggle');
+                // 삭제된 수업데이터를 재조회 처리
+                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+            },
+            error: function(error) {
+                alert(error);
+            },
+        });
+        return false;
+    },
+    // 회원리스트에서 선택된 회원이 있는지 체크. (true/false 반환)
     isSelectedMember: function() {
         let index = -1;
 
-        //selected = $('#member-container tbody tr').find('td').hasClass('selected');
+        // selected = $('#member-container tbody
+		// tr').find('td').hasClass('selected');
         $('#member-container tbody tr').each(function() {
             let selected = $(this).find('td').hasClass('selected');
             if (selected) {
@@ -649,7 +705,7 @@ fnObj.fn = {
         });
         return index;
     },
-    //회원가입경로 코드 조회
+    // 회원가입경로 코드 조회
     setSignUpPath: function(user) {
         $.ajax({
             type: 'GET',
@@ -667,7 +723,7 @@ fnObj.fn = {
         });
         return false;
     },
-    //수업등록 팝업 - 선생님리스트 조회
+    // 수업등록 팝업 - 선생님리스트 조회
     setTeacher: function(user) {
         $.ajax({
             type: 'GET',
@@ -684,7 +740,7 @@ fnObj.fn = {
             },
         });
     },
-    //수업코드 조회 (개인,그룹,....)
+    // 수업코드 조회 (개인,그룹,....)
     setLessonCd: function(user) {
         $.ajax({
             type: 'GET',
@@ -692,7 +748,7 @@ fnObj.fn = {
             data: {storCd: user.storCd},
             success: function(res) {
                 let option;
-                //option += ' <option value="-99">선택하세요</option> ';
+                // option += ' <option value="-99">선택하세요</option> ';
                 res.forEach(function(n) {
                     option += ' <option value="' + n.lsnCd + '">' + n.lsnNm +
                         '</option> ';
@@ -724,7 +780,7 @@ fnObj.fn = {
         });
     },
 
-    //레슨종류 조회 (정상,체험,쿠폰...)
+    // 레슨종류 조회 (정상,체험,쿠폰...)
     setLessonType: function() {
         $.ajax({
             type: 'GET',
@@ -737,12 +793,12 @@ fnObj.fn = {
                         '</option> ';
                 });
                 $('#lsnFg').html(option);
-                //$('#lsnFg').html('1');
+                // $('#lsnFg').html('1');
             },
         });
     },
 
-    //결제방법 조회
+    // 결제방법 조회
     setPayType: function() {
         $.ajax({
             type: 'GET',
@@ -759,25 +815,21 @@ fnObj.fn = {
         });
     },
 
-    /*setRsvDate: function() {
-        let option = '';
-        for (var i = 0; i <= 90; i++) {
-            var date = ax5.util.date(new Date(), {add: {d: i}});
-            var formattedDate = ax5.util.date(new Date(),
-                {add: {d: i}, return: 'yyyyMMdd'});
-            var day = WEEKS[date.getDay()];
-
-            var d = formattedDate.substr(0, 4) + '-' + formattedDate.substr(
-                4, 2) + '-' + formattedDate.substr(6, 7);
-            option += '<option value="' + formattedDate + '">' + d + '</option> ';
-        }
-        $('#regDt').html(option);
-    },*/
+    /*
+	 * setRsvDate: function() { let option = ''; for (var i = 0; i <= 90; i++) {
+	 * var date = ax5.util.date(new Date(), {add: {d: i}}); var formattedDate =
+	 * ax5.util.date(new Date(), {add: {d: i}, return: 'yyyyMMdd'}); var day =
+	 * WEEKS[date.getDay()];
+	 * 
+	 * var d = formattedDate.substr(0, 4) + '-' + formattedDate.substr( 4, 2) +
+	 * '-' + formattedDate.substr(6, 7); option += '<option value="' +
+	 * formattedDate + '">' + d + '</option> '; } $('#regDt').html(option); },
+	 */
     // 회원상태값 초기화
     setLessonStatus: function() {
         $('#useYn').val('Y');
     },
-    //휴대폰형식 반환
+    // 휴대폰형식 반환
     getMobileNumberFormat: function(str) {
         let digit = str.replace(/\D/g, '');
         return digit.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');

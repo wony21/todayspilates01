@@ -138,5 +138,21 @@ public class LessonService extends BaseService {
 		parameter.put(ParamNames.lsnCd, lsnCd);
 		return lessonMapper.checkReLesson(parameter);
 	}
+	
+	public ApiResponse deleteMemberLesson(List<HashMap> requestParams) {
+		for (HashMap map : requestParams) {
+			String compCd = (String) map.get(ParamNames.compCd);
+			String storCd = (String) map.get(ParamNames.storCd);
+			String memberNo = (String) map.get(ParamNames.memberNo);
+			String lsnNo = (String) map.get(ParamNames.lsnNo);
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			parameter.put(ParamNames.compCd, compCd);
+			parameter.put(ParamNames.storCd, storCd);
+			parameter.put(ParamNames.memberNo, memberNo);
+			parameter.put(ParamNames.lsnNo, lsnNo);
+			lessonMapper.deleteMemberLesson(parameter);
+		}
+		return ApiResponse.success("레슨정보를 삭제완료하였습니다.");
+	}
 
 }

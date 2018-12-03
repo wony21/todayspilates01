@@ -59,9 +59,10 @@
 														AND STOR_CD = #{storCd}
 														AND MEMBER_NO = #{memberNo}), #{lsnCd}, #{lsnTy}, #{lsnFg}, #{lsnAmt}, #{payTp}, ${lsnCnt}, #{lsnExpWk}, #{empNo}, #{remark}, #{entDt}, #{clsFg})
     </insert>
-    <insert id="updateMemberLesson" parameterType="hashmap">
+    <update id="updateMemberLesson" parameterType="hashmap">
     	UPDATE MEMBER_LSN_M 
-    	SET LSN_CNT = ${lsnCnt},
+    	SET LSN_CD = #{lsnCd},
+    		LSN_CNT = ${lsnCnt},
     		LSN_AMT = ${lsnAmt},
     		LSN_FG = #{lsnFg},
     		PAY_TP = #{payTp},
@@ -74,7 +75,7 @@
     		AND STOR_CD = #{storCd}
     		AND MEMBER_NO = #{memberNo}
     		AND LSN_NO = #{lsnNo}
-    </insert>
+    </update>
     <select id="checkReLesson" parameterType="hashmap" resultType="camelmap">
 	SELECT ISNULL(MAX(LSN_CD), '99') LSN_CD 
 	FROM MEMBER_LSN_M
@@ -85,4 +86,11 @@
 		AND LSN_CD = #{lsnCd}
 		-->
 	</select>
+	<delete id="deleteMemberLesson" parameterType="hashmap">
+		DELETE MEMBER_LSN_M
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+			AND LSN_NO = #{lsnNo}
+	</delete>
 </mapper>

@@ -57,7 +57,7 @@
     <!-- Header -->
     <header class="callout">
       <div class="container text-center">
-        <h2 class="mx-auto mb-5">STOTT Todayspilates
+        <h2 class="mx-auto mb-5">Todayspilates
           <em></em>
         </h2>
         <a class="btn btn-primary btn-xl" href="/member/reservation">나의 예약현황보기</a>

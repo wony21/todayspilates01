@@ -96,7 +96,7 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public ApiResponse updateMember(String compCd, String storCd, String memberNo, 
+	public ApiResponse updateMember(String compCd, String storCd, String memberNo, String useYn,
 									String sex, String entFg, String entDt, String remark) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
@@ -112,6 +112,7 @@ public class MemberService {
 		parameter.put(ParamNames.entDt, entDt);
 		parameter.put(ParamNames.entFg, entFg);
 		parameter.put(ParamNames.sex, sexCode);
+		parameter.put(ParamNames.useYn, useYn);
 		parameter.put(ParamNames.remark, remark);
 		try {
 			memberMapper.updateMember(parameter);

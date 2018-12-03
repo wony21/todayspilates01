@@ -12,6 +12,7 @@ public interface LessonMapper {
 	List getRegisterLessons(Map<String, Object> parameter);
 	void addMemberLesson(Map<String, Object> parameter);
 	void updateMemberLesson(Map<String, Object> parameter);
+	void deleteMemberLesson(Map<String, Object> parameter);
 	List checkReLesson(Map<String, Object> parameter);
 	
 }

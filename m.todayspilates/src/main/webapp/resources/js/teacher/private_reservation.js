@@ -12,10 +12,10 @@ fnObj.initView = function() {
 
     html = Mustache.render(reservation, {});
     $('#reservation-container').html(html);
-    //예약등록 팝업창 렌더링 초기화 필요
+    // 예약등록 팝업창 렌더링 초기화 필요
     html = Mustache.render(newReservation, {});
     $('#new-reservation-container').html(html);
-    //예약수정 팝업창
+    // 예약수정 팝업창
     html = Mustache.render(updateReservation, {});
     $('#update-reservation-container').html(html);
 };
@@ -33,12 +33,12 @@ fnObj.initEvent = function(user) {
         fnObj.fn.setRsvDate();
         fnObj.fn.setRsvTime();
         fnObj.fn.setTeacher(mode, user, empNo);
-        //fnObj.fn.setLsnTime();
+        // fnObj.fn.setLsnTime();
         fnObj.fn.getPrivateLesson(user, null);
-        //$('#exampleModalCenter').modal('toggle');
+        // $('#exampleModalCenter').modal('toggle');
     });
 
-    //예약수정 모드
+    // 예약수정 모드
     $('#reservation-container').on('click', 'tbody tr', function(e) {
     	
         let mode = 'update';
@@ -57,11 +57,11 @@ fnObj.initEvent = function(user) {
             url: '/api/teacher/reservation/lesson',
             data: r,
             success: function(res) {
-//				if ( res.length == 0) {
-//					alert('관리자에게 예약할 레슨을 등록 후 예약하세요.');
-//					location.refresh();
-//					return false;
-//				}
+// if ( res.length == 0) {
+// alert('관리자에게 예약할 레슨을 등록 후 예약하세요.');
+// location.refresh();
+// return false;
+// }
                 res.forEach(function(n) {
                     n.lsnData = JSON.stringify(n);
                     n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ?
@@ -89,22 +89,22 @@ fnObj.initEvent = function(user) {
 		                    		lsnData.lsnEdDt.substr(6, 7));	// yy-mm-dd
                 $('#up-userInfo').text(lsnData.memberNm);
                 $('#update-data').val(JSON.stringify(lsnData));
-                $('#update-lsnTm').attr('disabled', true);
-                $('#update-lsnTm').attr('disabled', true);
+                //$('#update-lsnTm').attr('disabled', true);
+                //$('#update-lsnTm').attr('disabled', true);
 
                 let html = Mustache.render(updateReservation, {list: lsnData});
                 $('#update-reservation-container').html(html);
 
-                //레슨 등록정보 셋팅
-                //fnObj.fn.setReservationList(n);
+                // 레슨 등록정보 셋팅
+                // fnObj.fn.setReservationList(n);
                 fnObj.fn.setLsnCd(mode, lsnData.lsnCd);
                 fnObj.fn.setRsvDate(mode, lsnData.rsvDt);
                 fnObj.fn.setRsvTime(mode, lsnData.rsvTm);
                 fnObj.fn.setLsnTime(mode, lsnData.lsnTm);
                 fnObj.fn.setTeacher(mode, user, lsnData.empNo);
 
-                //$('#update-teacher').val(res[0].empNo);	//현재 레슨선생님을 기본값으로 설정
-                //팝업창 띄우기
+                // $('#update-teacher').val(res[0].empNo); //현재 레슨선생님을 기본값으로 설정
+                // 팝업창 띄우기
                 $('#updateModalCenter').modal('toggle');
             },
         });
@@ -112,9 +112,9 @@ fnObj.initEvent = function(user) {
 
     $('#new-reservation-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
-        selectedItem = $(this).index(); //selectedItem => 전역변수
+        selectedItem = $(this).index(); // selectedItem => 전역변수
 
-        //선택한 일자의 개인레슨을 조회
+        // 선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
             $('#new-reservation-container tbody tr').
@@ -124,7 +124,7 @@ fnObj.initEvent = function(user) {
         }
     });
 
-    //예약등록 버튼 이벤트
+    // 예약등록 버튼 이벤트
     $('#add-lesson').on('click', function(e) {
         fnObj.fn.addPrivateLesson(user);
     });
@@ -197,36 +197,33 @@ fnObj.fn = {
         };
     },
 
-    /*//선택된 회원의 레슨을 조회하여 리스트에 셋팅한다.
-    setReservationList: function(items) {
-        item.lsnData = JSON.stringify(item);
-        item.lsnStDt = (isValidDate(item.lsnStDt) === false) ?
-            '' :
-            ('`' + item.lsnStDt.substr(2, 2) + '.' + item.lsnStDt.substr(4, 2) +
-                '.' + item.lsnStDt.substr(6, 7));
-        item.lsnEdDt = (isValidDate(item.lsnEdDt) === false) ?
-            '' :
-            ('`' + item.lsnEdDt.substr(2, 2) + '.' + item.lsnEdDt.substr(4, 2) +
-                '.' + item.lsnEdDt.substr(6, 7));
-        let html = Mustache.render(newReservation, {list: [item]});
-        $('#new-reservation-container').html(html);
-    },*/
+    /*
+	 * //선택된 회원의 레슨을 조회하여 리스트에 셋팅한다. setReservationList: function(items) {
+	 * item.lsnData = JSON.stringify(item); item.lsnStDt =
+	 * (isValidDate(item.lsnStDt) === false) ? '' : ('`' +
+	 * item.lsnStDt.substr(2, 2) + '.' + item.lsnStDt.substr(4, 2) + '.' +
+	 * item.lsnStDt.substr(6, 7)); item.lsnEdDt = (isValidDate(item.lsnEdDt) ===
+	 * false) ? '' : ('`' + item.lsnEdDt.substr(2, 2) + '.' +
+	 * item.lsnEdDt.substr(4, 2) + '.' + item.lsnEdDt.substr(6, 7)); let html =
+	 * Mustache.render(newReservation, {list: [item]});
+	 * $('#new-reservation-container').html(html); },
+	 */
 
     setLsnCd: function(mode, val) {
-//		let option = '';
-//		//todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
-//		option += '<option value="01">' + '개인' + '</option> ';
-//		option += '<option value="02">' + '듀엣' + '</option> ';
+// let option = '';
+// //todo: 레슨코드는 동적설정으로 변경하자 .. (지금은 하드코딩)
+// option += '<option value="01">' + '개인' + '</option> ';
+// option += '<option value="02">' + '듀엣' + '</option> ';
 //		
-//		$('#lsnCd').html(option);
-//		$('#lsnCd').val(val);
+// $('#lsnCd').html(option);
+// $('#lsnCd').val(val);
         let target = $('#lsnCd');
         if (mode === 'update') {
             target = $('#update-lsnCd');
         }
     },
 
-    //예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
+    // 예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
     setRsvDate: function(mode, val) {
         let option = '';
         for (var i = 0; i <= 90; i++) {
@@ -240,7 +237,7 @@ fnObj.fn = {
             } else {
             	selected = '';
             }
-            var d = /*'`' + formattedDate.substr(2, 2) + '.' + */formattedDate.substr(
+            var d = /* '`' + formattedDate.substr(2, 2) + '.' + */formattedDate.substr(
                 4, 2) + '.' + formattedDate.substr(6, 7);
             option += '<option value="' + formattedDate + '" ' + selected + '>' + d + ' (' +
                 day + ')' + '</option> ';
@@ -252,13 +249,13 @@ fnObj.fn = {
         }
         target.html(option);
     },
-    //예약시간 셋팅 (00 ~ 24)
+    // 예약시간 셋팅 (00 ~ 24)
     setRsvTime: function(mode, val) {
         let option = '';
         for (var i = 1; i < 24; i++) {
-            //let prefix = (i < 12) ? 'am ' : 'pm ';
+            // let prefix = (i < 12) ? 'am ' : 'pm ';
             let tm = ('0' + i).slice(-2) + '00';
-            let formattedTm = /*prefix + */('0' + i).slice(-2) + ':' + '00';
+            let formattedTm = /* prefix + */('0' + i).slice(-2) + ':' + '00';
 
             option += ' <option value="' + tm + '">' + formattedTm +
                 '</option> ';
@@ -272,21 +269,21 @@ fnObj.fn = {
 
         target.html(option);
         if (typeof val === 'undefined' || val === '' || val === null) {
-            //기본값이 없으면 현재시각을 기본값으로 설정
+            // 기본값이 없으면 현재시각을 기본값으로 설정
             target.val(('0' + now.getHours()).slice(-2) + '00');
         } else {
-            target.val(val);	//기존예약 시간을 기본값으로 설정
+            target.val(val);	// 기존예약 시간을 기본값으로 설정
         }
     },
-    //레슨시간 셋팅 (1.0, 1.5)
+    // 레슨시간 셋팅 (1.0, 1.5)
     setLsnTime: function(mode, val) {
-//		let option = '';
-//		for (var i = 0.5; i <= 4; i+= 0.5) {
-//			option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
-//            '</option> ';
-//		}
-//		$('#lsnTm').html(option);
-//		$('#lsnTm').val('1.0');	//default 값
+// let option = '';
+// for (var i = 0.5; i <= 4; i+= 0.5) {
+// option += ' <option value="' + i.toFixed(1) + '">' + i.toFixed(1) +
+// '</option> ';
+// }
+// $('#lsnTm').html(option);
+// $('#lsnTm').val('1.0'); //default 값
     	
     	if ( typeof Number(val)) {
     		let fixedVal = Number(val);
@@ -296,9 +293,9 @@ fnObj.fn = {
     		console.log('형식이 잘못되었습니다.');
     	}
     },
-    //선생님 셋팅
+    // 선생님 셋팅
     setTeacher: function(mode, user, empNo) {
-        //강사목록 조회
+        // 강사목록 조회
         $.ajax({
             type: 'GET',
             url: '/api/teacher',
@@ -320,7 +317,7 @@ fnObj.fn = {
         return false;
     },
 
-    //실제 예약등록 처리
+    // 실제 예약등록 처리
     addPrivateLesson: function(user) {
         let item = '';
 
@@ -336,7 +333,38 @@ fnObj.fn = {
             alert('선생님을 선택해 주세요.');
             return false;
         }
-
+        
+        let lsnCnt = item.lsnCnt;
+        let lsnUseCnt = item.lsnUseCnt;
+        if ( lsnUseCnt == '' ) {
+        	lsnUseCnt = 0;
+        }
+        let lsnTm = $('#rsvTm').val();
+        if(lsnTm == '') {
+        	lsnTm = 0;
+        }
+        if ( lsnCnt < (lsnUseCnt + lsnTm) ) {
+        	alert('사용횟수가 등록횟수를 초과합니다.');
+        	return false;
+        }
+        let today = new Date();
+        let rsvDt = new Date();
+        let rsvDtStr = $('#rsvDt').val();
+        rsvDt.setFullYear(rsvDtStr.substr(0, 4));
+        rsvDt.setMonth(rsvDtStr.substr(4, 2));
+        rsvDt.setDate(rsvDtStr.substr(6, 2));
+        let lsnEdDt = new Date();
+        lsnEdDt.setFullYear(item.lsnEdDt.substr(0, 4));
+        lsnEdDt.setMonth(item.lsnEdDt.substr(2, 2)-1);
+        lsnEdDt.setDate(item.lsnEdDt.substr(6, 2));
+        if ( today > lsnEdDt ) {
+        	alert('이미 종료일이 지난 레슨입니다.');
+        	return false;
+        }
+        if ( rsvDt > lsnEdDt ) {
+        	alert('예약일이 레슨종료일을 초과하였습니다.');
+        	return false;
+        }
         let data = [
             {
                 compCd: user.compCd,
@@ -363,7 +391,7 @@ fnObj.fn = {
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
                 alert('예약이 완료되었습니다.');
-                //location.reload();
+                // location.reload();
                 fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
                 $('#exampleModalCenter').modal('hide');
             },
@@ -377,7 +405,7 @@ fnObj.fn = {
     updatePrivateLesson: function(user) {
         let item = $('#update-reservation-container tbody').
             find('tr').eq(0).data('id');
-        console.log(JSON.stringify(item));
+        //console.log(JSON.stringify(item));
         let lsnEdDt = item.lsnEdDt;
         let lsnEndDate = new Date(lsnEdDt).getTime();
         let today = new Date().getTime();
@@ -414,7 +442,7 @@ fnObj.fn = {
         if (retReserv != true) {
             return false;
         }
-        console.log(data);
+        //console.log(data);
         $.ajax({
             type: 'PUT',
             url: '/api/teacher/reservation/modify',
@@ -422,7 +450,7 @@ fnObj.fn = {
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
                 alert('예약수정이 완료되었습니다.');
-                //location.reload();
+                // location.reload();
                 fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
             },
             error: function(error) {
@@ -439,9 +467,9 @@ $(function() {
     fnObj.initView();
     fnObj.initEvent(user);
 
-    //개인레슨 예약조회
-    //fnObj.fn.getPrivateLesson(user);
-    //선생님 목록은 예약현황 로드시 한번만 셋팅
+    // 개인레슨 예약조회
+    // fnObj.fn.getPrivateLesson(user);
+    // 선생님 목록은 예약현황 로드시 한번만 셋팅
     let mode = '';
     fnObj.fn.setTeacher(mode, user);
 });

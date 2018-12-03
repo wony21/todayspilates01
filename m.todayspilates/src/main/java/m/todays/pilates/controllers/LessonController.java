@@ -57,6 +57,12 @@ public class LessonController extends BaseController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/api/lesson/delete", method = RequestMethod.PUT, produces = APPLICATION_JSON)
+	public ApiResponse deleteLesson(@RequestBody List<HashMap> requestParams) {
+		return lessonService.deleteMemberLesson(requestParams);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/api/lesson/relsn", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	public List reLesson(@RequestParam String storCd,
 								@RequestParam String lsnCd,

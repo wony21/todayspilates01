@@ -80,6 +80,9 @@
 			<if test="entDt != null and entDt != ''">
 			ENT_DT = #{entDt},
 			</if>
+			<if test="useYn != null and useYn != ''">
+			USE_YN = #{useYn},
+			</if>
 			REMARK = #{remark}
 		WHERE COMP_CD = #{compCd}
 			AND STOR_CD = #{storCd}

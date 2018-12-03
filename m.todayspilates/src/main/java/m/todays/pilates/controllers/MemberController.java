@@ -105,7 +105,8 @@ public class MemberController extends BaseController {
 			String entFg = (String) item.get(ParamNames.entFg);
 			String entDt = (String)item.get(ParamNames.entDt);
 			String remark = (String)item.get(ParamNames.remark);
-			memberService.updateMember(compCd, storCd, memberNo, sex, entFg, entDt, remark);
+			String useYn = (String)item.get(ParamNames.useYn);
+			memberService.updateMember(compCd, storCd, memberNo, useYn, sex, entFg, entDt, remark);
 		}
 		return ApiResponse.success("ok");
 	}
