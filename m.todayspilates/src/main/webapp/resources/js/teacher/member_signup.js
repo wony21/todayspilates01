@@ -490,22 +490,24 @@ fnObj.fn = {
         // $('#memberNm').data('id', lsnData.memberNo);
         $('#memberNm').attr('data-id', lsnData.memberNo);
         let hp = lsnData.hp;
-        hp = hp.replace('-', '');
-        let hp1;
-        let hp2;
-        let hp3;
-        if (hp.length == 11) {
-	        hp1 = hp.substr(0, 3);
-	        hp2 = hp.substr(3, 4);
-	        hp3 = hp.substr(7, 4);
-        } else {
-        	hp1 = hp.substr(0, 3);
-	        hp2 = hp.substr(3, 3);
-	        hp3 = hp.substr(6, 4);
+        if (hp){
+	        hp = hp.replace('-', '');
+	        let hp1;
+	        let hp2;
+	        let hp3;
+	        if (hp.length == 11) {
+		        hp1 = hp.substr(0, 3);
+		        hp2 = hp.substr(3, 4);
+		        hp3 = hp.substr(7, 4);
+	        } else {
+	        	hp1 = hp.substr(0, 3);
+		        hp2 = hp.substr(3, 3);
+		        hp3 = hp.substr(6, 4);
+	        }
+	        $('#hp1').val(hp1);
+	        $('#hp2').val(hp2);
+	        $('#hp3').val(hp3);
         }
-        $('#hp1').val(hp1);
-        $('#hp2').val(hp2);
-        $('#hp3').val(hp3);
         $('#sex').val(lsnData.sex);
         $('#entFg').val(lsnData.entFg);
         $('#member-remark').val(lsnData.remark);
