@@ -75,8 +75,18 @@ fnObj.initEvent = function(user) {
     });
 
     $(document.body).on('click', '#group-lesson-add-btn', function(e) {
+    	
+    	let parent = $(this).parent();
+    	let table = parent.children('table')[0];
+    	let existFg = $(table).find('select').length;
+    	console.log(existFg);
+    	if ( existFg >= 8 ) {
+    		alert("최대 8명까지 등록가능합니다.");
+    		return false;
+    	}
         //fnObj.fn.getGroupLessonByMember(user);
         //예약일자,
+    	$('#filter').val('');
         let dy = WEEKS[$('#datepicker tbody tr .selected').index()];
         let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
         let lsnData = $(this).data('id');

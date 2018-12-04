@@ -75,6 +75,9 @@
 		<div class="container">
 			<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
 				<h4>그룹레슨 출석부</h4>
+				<button type="button">
+                	<span class="badge badge-pill badge-info">레슨당 최대 8명까지 등록 가능합니다.</span>
+                </button>
 				<div class="table-responsive">
 					<div id="date-container">
 						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
@@ -104,8 +107,7 @@
 								<label id="tbl-caption" class="group-lesson-tbl-caption">{{stTm}} {{lsnLvNm}} ({{lsnTm}}) {{empNm}}</label>
 								<button type="button" id="group-lesson-add-btn" class="btn btn-sm btn-primary" for="tbl-caption" 
 									data-toggle="modal" data-target="#exampleModalCenter" data-id="{{lsnData}}">예약하기</button>
-							</div>
-							<table class="table table-striped table-sm">
+							<table id="group-table" class="table table-striped table-sm">
 							  <thead>
 								<tr style="text-align: center">
 								  <th width="12%">#순번</th>
@@ -137,6 +139,7 @@
 								{{/schedule}}
 							  </tbody>
 							</table>
+						</div>
 						{{/list}}
 						{{^list}}
 							<div class="group-lesson-tbl-caption-empty">그룹레슨 시간표가 없습니다</div>

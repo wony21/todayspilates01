@@ -259,7 +259,10 @@
 			WHERE
 			COMP_CD = #{compCd}
 			AND STOR_CD = #{storCd}
-			AND MEMBER_NM = #{memberNm})
+			<if test="memberNm != null and memberNm != ''">
+				AND MEMBER_NM = #{memberNm}
+			</if>
+			)
 		<if test="empNo != null and empNo != ''">
 			AND H.EMP_NO = #{empNo}
 		</if>
