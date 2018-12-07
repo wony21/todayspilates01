@@ -304,9 +304,7 @@
                     <h5 class="modal-title" id="lessonModalCenterTitle">
                         수업등록
                     </h5>
-                    <button type="button">
-                    	<span class="badge badge-pill badge-danger">* 사용횟수가 0인 수업만 삭제 가능합니다.</span>
-                    </button>
+                    <span class="badge badge-pill badge-danger">* 사용횟수가 0인 수업만 삭제 가능합니다.</span>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

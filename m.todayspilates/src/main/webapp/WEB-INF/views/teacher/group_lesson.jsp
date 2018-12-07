@@ -75,9 +75,9 @@
 		<div class="container">
 			<div class="row" style="padding-top: 48px; padding-left: 5px; padding-right: 5px;">
 				<h4>그룹레슨 출석부</h4>
-				<button type="button">
-                	<span class="badge badge-pill badge-info">레슨당 최대 8명까지 등록 가능합니다.</span>
-                </button>
+				<div>
+					<span class="badge badge-pill badge-info">레슨당 최대 8명까지 등록 가능합니다.</span>
+				</div>
 				<div class="table-responsive">
 					<div id="date-container">
 						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
