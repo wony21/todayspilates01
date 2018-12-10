@@ -1,6 +1,8 @@
 var common = {};
+let fnObj = {};
+let detail_template = $('#reservation-template').html();
+
 $(function(e) {
-    var detail_template = $('#reservation-template').html();
     //console.log('memberNo:' + memberNo);
     let user = JSON.parse(window.localStorage.getItem('todays'));
     let empNm = user.empNm;

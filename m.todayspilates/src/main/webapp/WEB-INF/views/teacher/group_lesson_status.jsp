@@ -83,10 +83,10 @@
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="input-group">
-                            	<!-- 
-                                <select class="custom-select" id="week"
+
+                                <select class="custom-select" id="schMonth"
                                         style="width: 140px; margin-left: 5px;"></select>
-                                 -->
+
                             </div>
                         </div>
                     </div>
