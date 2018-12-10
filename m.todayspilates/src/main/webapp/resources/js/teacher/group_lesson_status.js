@@ -10,6 +10,7 @@ fnObj.initView = function(user) {
     //fnObj.fn.setDatePicker();
     //fnObj.fn.getGroupLesson(user);
     fnObj.fn.createEmptyTemplete();
+    fnObj.fn.setSchMonth();
 };
 
 //이벤트 초기화 
@@ -70,13 +71,13 @@ fnObj.initEvent = function(user) {
         		lsnMonth: lsnData.lsnMonth,
         		seq: lsnData.seq,
         		dyFg: dyFg,
-				dy: dy,
-				schNo : schNo,
-				stTm: lsnData.stTm,
-				lsnTm: lsnData.lsnTm,
-				lsnLv: lsnData.lsnLv,
-				lsnLvNm: lsnData.lsnLvNm,
-				empNo: lsnData.empNo,
+            dy: dy,
+            schNo : schNo,
+            stTm: lsnData.stTm,
+            lsnTm: lsnData.lsnTm,
+            lsnLv: lsnData.lsnLv,
+            lsnLvNm: lsnData.lsnLvNm,
+            empNo: lsnData.empNo,
         };
         console.log(captionData);
         //$('#modal-caption').data('id', JSON.stringify(captionData));
@@ -170,6 +171,25 @@ fnObj.initEvent = function(user) {
 
 fnObj.fn = {
     //주간 Datepicker 초기화
+    setSchMonth: function() {
+        let curr = new Date();
+        let sYear = curr.getFullYear() - 1;
+        let eYear = curr.getFullYear() + 1;
+        let currMonth = curr.getFullYear() + '' + ("00" + (curr.getMonth() + 1)).slice(-2);
+
+        let option = '';
+        for (var y = sYear; y <= eYear; y++) {
+            for (var m = 1; m <= 12; m++) {
+                let val = y + '' + ("00" + m).slice(-2);
+                option += ' <option value="' + val + '">' + y + '년 ' + m + '월'
+                    '</option> ';
+            }
+        }
+
+        $('#schMonth').html(option);
+        $('#schMonth').val(currMonth);
+    },
+
     setDatePicker: function(dateString) {
         let curr = new Date(); // get current date
         let getDay = curr.getDay();
@@ -308,7 +328,7 @@ fnObj.fn = {
     getData: function(user) {
         return {
             storCd: user.storCd,
-            schMonth: ax5.util.date((new Date()), {return: 'yyyyMM'}),
+            schMonth: $('#schMonth').val(),
             schWeek: $('#datepicker tbody tr .selected').data('id'),
         };
     },
