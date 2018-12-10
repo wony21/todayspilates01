@@ -313,12 +313,12 @@ fnObj.fn = {
     //그룹레슨 예약등록 처리
     addGroupLesson: function() {
         let selectedItem;
-        let lsnData = $('#modal-caption').data('id');
+        let lsnData = $('#modal-caption').attr('data-id');
 
         $('#new-reservation-container tbody tr').each(function() {
             let selected = $(this).find('td').hasClass('selected');
             if (selected) {
-                selectedItem = $(this).data('id');
+                selectedItem = $(this).attr('data-id');
             }
         });
         
@@ -333,7 +333,11 @@ fnObj.fn = {
         if (retReserv != true) {
             return false;
         }
-
+        
+        // convert to json object
+        selectedItem = JSON.parse(selectedItem);
+        lsnData = JSON.parse(lsnData);
+        
         let data = [
             {
                 compCd: selectedItem.compCd,
