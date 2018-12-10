@@ -1,8 +1,12 @@
 <%@page import="m.todays.pilates.common.SessionUtils" %>
+<%@ page import="java.util.UUID"%>
+
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 <%
+	String uuid = UUID.randomUUID().toString();
+	request.setAttribute("uuid", uuid);
     String userLv = SessionUtils.getCurrentUser().getUserLv();
     String empNo = SessionUtils.getCurrentUser().getEmpNo();
     String storCd = SessionUtils.getCurrentUser().getStorCd();
@@ -189,8 +193,8 @@
 <script src="/js/boot4/vendor/ax5core.min.js"></script>
 <script src="/js/boot4/vendor/ax5formatter.js"></script>
 <script src="/js/boot4/stylish-portfolio.js"></script>
-<script src="/js/common.js"></script>
-<script src="/js/teacher/private_lesson.js"></script>
+<script src="/js/common.js?=${uuid}"></script>
+<script src="/js/teacher/private_lesson.js?=${uuid}"></script>
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 let fnObj = {};
 let memberTmpl = $('#member-template').html();
 let lessonTmpl = $('#lesson-template').html();
+let registerType = 'reg';	// reg(등록) or mod(수정)
 const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
 // view 초기화
 fnObj.initView = function(user) {
@@ -36,16 +37,20 @@ fnObj.initEvent = function(user) {
 
     // 회원등록버튼 처리
     $(document.body).on('click', '#call-add-member', function(e) {
+    	registerType = 'reg';
         let data = {
             __created__: true,
             sex: '남',
             entFg: '1',
             useYn: 'Y',
         };
-        // 초기화 처리
-// $('#hp1').val('010');
-// $('#hp2').val('');
-// $('#hp3').val('');
+        let memberNo = $('memberNo').data('id');
+        if ( !memberNo ) {
+            // 초기화 처리
+    		$('#hp1').val('010');
+    		$('#hp2').val('');
+    		$('#hp3').val('');        	
+        }
         $('#delete-member').hide();
         fnObj.fn.setMemberData(data);
         fnObj.fn.showMemberModal();
@@ -53,6 +58,7 @@ fnObj.initEvent = function(user) {
 
     // 정보수정버튼 처리
     $(document.body).on('click', '#call-update-member', function(e) {
+    	registerType = 'mod';
         let data;
         let selected = fnObj.fn.isSelectedMember();
 
@@ -64,6 +70,12 @@ fnObj.initEvent = function(user) {
         $('#delete-member').show();
         // 선택된 회원의 정보를 조회
         data = $('#member-container tbody').find('tr').eq(selected).data('id');
+        
+        if ( !data ) {
+        	alert('회원을 선택해주세요');
+        	return false;
+        }
+        
         // 팝업창 데이터 초기화
         fnObj.fn.setMemberData(data);
         /*
@@ -102,11 +114,9 @@ fnObj.initEvent = function(user) {
             alert('입력된 휴대폰 번호가 올바르지 않습니다. 변경 후 저장하세요');
             $('#hp').trigger('focus');
             return false;
-        }	
+        }
         
-        
-        console.log('memberNo : ' + memberNo);
-        if (memberNo === '') {
+        if (registerType == 'reg') {
             fnObj.fn.addMember(user);
         } else {
             fnObj.fn.updateMember(user);
@@ -211,6 +221,7 @@ fnObj.initEvent = function(user) {
         fnObj.fn.setLessonData(lsnData);
         // 그룹레슨의 경우 선생님 선택 비활성황
         if (lsnData.lsnTy === '2') {
+        	$('#teacher').prop('selectedIndex', 0);
             $('#teacher').prop('disabled', 'disabled');
         } else {
             $('#teacher').prop('disabled', false);
@@ -299,6 +310,7 @@ fnObj.initEvent = function(user) {
         let memberNo = $('#memberNo').data('id');
         // 개인수업일 경우만 선생님 선택가능 그외는 선생님 선택불가
         if (lsnCd == '03') {
+        	$('#teacher').prop('selectedIndex', 0);
         	$('#teacher').prop('disabled', 'disabled');
         } else {
         	$('#teacher').prop('disabled', false);
@@ -440,14 +452,14 @@ fnObj.fn = {
     // 회원정보수정
     updateMember: function(user) {
         let gd = [].concat(this.getMemberData(user));
-
+        console.log('update member : ' + gd[0].memberNo);
         $.ajax({
             type: 'PUT',
             url: '/api/member/modify',
             data: JSON.stringify(gd),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                // alert('회원수정이 완료되었습니다.');
+                alert('회원수정이 완료되었습니다.');
                 $('#memberModalCenter').modal('toggle');
                 // 회원 재조회 처리
                 $('#filter').val(gd[0].memberNm);
@@ -489,6 +501,7 @@ fnObj.fn = {
         $('#memberNm').val(lsnData.memberNm);
         // $('#memberNm').data('id', lsnData.memberNo);
         $('#memberNm').attr('data-id', lsnData.memberNo);
+        $('#memberNm').attr('member-no', lsnData.memberNo);
         let hp = lsnData.hp;
         if (hp){
 	        hp = hp.replace('-', '');
@@ -522,7 +535,7 @@ fnObj.fn = {
         return {
             compCd: user.compCd,                    // key3
             storCd: user.storCd,                    // key1
-            memberNo: $('#memberNm').data('id'),    // key2
+            memberNo: $('#memberNm').attr('data-id'),    // key2
             memberNm: $('#memberNm').val(),
             mobile: $('#hp').val(),
             hp: hpNumber,
@@ -617,6 +630,7 @@ fnObj.fn = {
     },
     // 팝업화면의 수업 데이터 조회
     getLessonData: function(user) {
+    	console.log($('#memberNo').data('id'));
         return {
             compCd: user.compCd,
             storCd: user.storCd,
@@ -666,8 +680,10 @@ fnObj.fn = {
             success: function(res) {
 // alert('업데이트 완료되었습니다.');
                 $('#lessonModalCenter').modal('toggle');
-                // 수정된 수업데이터를 재조회 처리
-                fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+                if ( gd[0].memberNo ) {
+                	// 수정된 수업데이터를 재조회 처리
+                	fnObj.fn.getLesson(user, {memberNo: gd[0].memberNo});
+                }
             },
             error: function(error) {
                 alert(error);

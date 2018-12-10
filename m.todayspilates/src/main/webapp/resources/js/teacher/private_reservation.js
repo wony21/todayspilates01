@@ -339,7 +339,7 @@ fnObj.fn = {
         if ( lsnUseCnt == '' ) {
         	lsnUseCnt = 0;
         }
-        let lsnTm = $('#rsvTm').val();
+        let lsnTm = $('#lsnTm').val();
         if(lsnTm == '') {
         	lsnTm = 0;
         }
