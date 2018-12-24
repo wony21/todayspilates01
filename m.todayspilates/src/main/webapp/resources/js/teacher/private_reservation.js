@@ -343,7 +343,9 @@ fnObj.fn = {
         if(lsnTm == '') {
         	lsnTm = 0;
         }
-        if ( lsnCnt < (lsnUseCnt + lsnTm) ) {
+        console.log(lsnCnt);
+        console.log((Number(lsnUseCnt) + Number(lsnTm)));
+        if ( Number(lsnCnt) < (Number(lsnUseCnt) + Number(lsnTm)) ) {
         	alert('사용횟수가 등록횟수를 초과합니다.');
         	return false;
         }
@@ -354,16 +356,18 @@ fnObj.fn = {
         rsvDt.setMonth(rsvDtStr.substr(4, 2));
         rsvDt.setDate(rsvDtStr.substr(6, 2));
         let lsnEdDt = new Date();
-        lsnEdDt.setFullYear(item.lsnEdDt.substr(0, 4));
-        lsnEdDt.setMonth(item.lsnEdDt.substr(2, 2)-1);
-        lsnEdDt.setDate(item.lsnEdDt.substr(6, 2));
-        if ( today > lsnEdDt ) {
-        	alert('이미 종료일이 지난 레슨입니다.');
-        	return false;
-        }
-        if ( rsvDt > lsnEdDt ) {
-        	alert('예약일이 레슨종료일을 초과하였습니다.');
-        	return false;
+        if ( item.lsnEdDt ) {
+        	lsnEdDt.setFullYear(item.lsnEdDt.substr(0, 4));
+            lsnEdDt.setMonth(item.lsnEdDt.substr(2, 2)-1);
+            lsnEdDt.setDate(item.lsnEdDt.substr(6, 2));
+            if ( today > lsnEdDt ) {
+            	alert('이미 종료일이 지난 레슨입니다.');
+            	return false;
+            }
+            if ( rsvDt > lsnEdDt ) {
+            	alert('예약일이 레슨종료일을 초과하였습니다.');
+            	return false;
+            }	
         }
         let data = [
             {

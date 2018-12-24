@@ -52,9 +52,13 @@ fnObj.initEvent = function(user) {
         let dyFg = $('#datepicker tbody tr .selected').data('id');
         //let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
         let lsnData = $(this).parent().parent().data('id');
+        console.log(lsnData);
         let schNo = $(this).data('schno');
-        let txtId = '#txtMember' + schNo;
+        let txtId = '#txtMember' + schNo + '-' + lsnData.stTm;
+        let objParent = $(this).parent().parent();
         let txtValue = $(txtId).val();
+        //let txtValue = $(txtId).val();
+        console.log(txtValue);
         if ( txtValue ) {
         	alert('먼저 등록된 회원을 삭제하세요.');
         	return false;
@@ -227,11 +231,12 @@ fnObj.fn = {
     createEmptyTemplete: function() {
     	// 동적회원등록영역생성
       	let childHtml = '';
-      	for(var seq=1; seq<8; seq += 2) {
+      	let limited = 6;
+      	for(var seq=1; seq<limited; seq += 2) {
       		childHtml += ' <tr data-id="{{lsnData}}" style="text-align: center;"> ';
       		childHtml += ' 	<td width="26%"> ';
       		childHtml += ' 	<div class="input-group"> ';
-      		childHtml += ' 	          <input type="text" class="form-control" id="txtMember' + seq + '" data-seq="' + seq + '"';
+      		childHtml += ' 	          <input type="text" class="form-control" id="txtMember' + seq + '-{{stTm}}' + '" data-seq="' + seq + '"';
       		childHtml += ' 	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + seq +'}}> ';
       		childHtml += ' 	      </div> ';
       		childHtml += ' 	</td> ';
@@ -243,7 +248,7 @@ fnObj.fn = {
       		childHtml += ' 	</td> ';
       		childHtml += '	<td width="26%"> ';
       		childHtml += '	<div class="input-group">    ';
-      		childHtml += '	          <input type="text" class="form-control" id="txtMember' + (seq+1) + '" data-seq="' + (seq+1) + '"';
+      		childHtml += '	          <input type="text" class="form-control" id="txtMember' + (seq+1) + '-{{stTm}}' + '" data-seq="' + (seq+1) + '"';
       		childHtml += '	                 style="width: 60px;  margin-left: 0px; text-align: center; background-color:white;" readonly=readonly value={{memberNm' + (seq+1) +'}}> ';
       		childHtml += '	      </div>  ';
       		childHtml += '	</td>   ';
