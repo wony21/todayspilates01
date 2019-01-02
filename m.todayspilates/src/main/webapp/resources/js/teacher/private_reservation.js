@@ -115,7 +115,7 @@ fnObj.initEvent = function(user) {
         selectedItem = $(this).index(); // selectedItem => 전역변수
 
         //todo: 등록된 선생님으로 초기화 => api 수정필요
-        $('#update-teacher').val(lsnData.empNo);
+        //$('#update-teacher').val(lsnData.empNo);
         // 선택한 일자의 개인레슨을 조회
         let selected = $(this).children('td').hasClass('selected');
         if (!selected) {
