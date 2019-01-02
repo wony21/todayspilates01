@@ -365,7 +365,7 @@ fnObj.fn = {
 
     //그룹레슨 예약등록 처리
     addGroupLesson: function(user) {
-        let selectedItem = {};
+        let selectedItem;
         //let lsnData = $('#modal-caption').data('id');
         let lsnData = JSON.parse($('#modal-caption').attr('data-id'));
         $('#new-reservation-container tbody tr').each(function() {
@@ -374,15 +374,17 @@ fnObj.fn = {
                 selectedItem = $(this).data('id');
             }
         });
-
+        
+        console.log(selectedItem);
+        
         //선택된 레슨이 있는지 체크
         if (typeof selectedItem === 'undefined') {
-            alert('먼저 예약할 레슨을 선택하세요.');
+            alert('회원이 선택하십시오.');
             return false;
         }
-
+        
         /* 예약 confirm */
-        var retReserv = confirm('선택한 등록정보로 예약하시겠습니까?');
+        var retReserv = confirm('선택한 회원을 예약하시겠습니까?');
         if (retReserv != true) {
             return false;
         }
@@ -410,7 +412,7 @@ fnObj.fn = {
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
                 fnObj.fn.getGroupLesson(user);
-                alert('예약이 완료되었습니다.');
+                alert('등록이 완료되었습니다.');
                 $('#groupLessonModalCenter').modal('toggle');
             },
             error: function(error) {
