@@ -6,7 +6,7 @@ function parse(str) {
     var y = str.substr(0, 4),
         m = str.substr(4, 2),
         d = str.substr(6, 2);
-    return new Date(y, m, d);
+    return new Date(y + '-' + m + '-' + d);
 }
 
 //todo : 공통함수로 뺄 것..
@@ -33,6 +33,7 @@ $(function() {
         success: function(res) {
             res.forEach(function(n) {
                 n.dayOfWeek = getDayOfWeek(n.rsvDt);
+                console.log(n.dayOfWeek);
                 n.rsvDt = (n.rsvDt == null) ?
                     '(예약없음)' :
                     n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);		//mm.dd
