@@ -147,7 +147,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="groupLessonModalCenterTitle">
-                        그룹레슨 예약등록
+                        그룹레슨 클래스등록
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

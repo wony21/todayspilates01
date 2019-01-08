@@ -48,6 +48,13 @@
 		AND A.STOR_CD = #{storCd}
 		AND replace(A.HP, '-', '') = replace(#{mobile}, '-', '')
     </select>
+    <select id="getMemberFromName" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+	    SELECT *
+		FROM MEMBER_M A
+		WHERE A.COMP_CD = #{compCd}
+		AND A.STOR_CD = #{storCd}
+		AND A.MEMBER_NM = #{memberNm}
+    </select>
     <!-- 
     <insert id="addMemberM" parameterType="hashmap">
     INSERT INTO MEMBER_M (COMP_CD, STOR_CD, MEMBER_NO, MEMBER_NM, HP, SEX, ENT_DT, ENT_FG, REMARK, USE_YN, INS_USER, UPT_USER)

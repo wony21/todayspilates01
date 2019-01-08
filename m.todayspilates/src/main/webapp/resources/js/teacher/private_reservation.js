@@ -112,6 +112,7 @@ fnObj.initEvent = function(user) {
 
     $('#new-reservation-container').on('click', 'tbody tr', function(e) {
         let lsnData = $(this).data('id');
+        console.log(lsnData);
         selectedItem = $(this).index(); // selectedItem => 전역변수
 
         //todo: 등록된 선생님으로 초기화 => api 수정필요
@@ -123,6 +124,11 @@ fnObj.initEvent = function(user) {
                 children('td').
                 removeClass('selected');
             $(this).children('td').addClass('selected');
+        }
+        
+        var empNo = lsnData.empNo;
+        if (empNo) {
+        	$('#teacher').val(empNo);	
         }
     });
 
@@ -139,6 +145,10 @@ fnObj.initEvent = function(user) {
 fnObj.fn = {
     getPrivateLesson: function(user, opt1) {
         let search = fnObj.fn.getData(user);
+        if (!search.memberNm) {
+        	alert('회원명 검색을 하십시오');
+        	return false;
+        }
         // 예약일자가 있는 것만 조회
         // 없는 경우를 조회하고 싶은 경우에는 opt1의 값을 할당하지 않는다.
         search.opt1 = opt1;
@@ -397,7 +407,6 @@ fnObj.fn = {
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
                 alert('예약이 완료되었습니다.');
-                // location.reload();
                 fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
                 $('#exampleModalCenter').modal('hide');
             },
@@ -458,6 +467,7 @@ fnObj.fn = {
                 alert('예약수정이 완료되었습니다.');
                 // location.reload();
                 fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
+                $('#updateModalCenter').modal('hide');
             },
             error: function(error) {
                 alert(error);

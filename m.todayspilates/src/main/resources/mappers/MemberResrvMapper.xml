@@ -269,7 +269,7 @@
 		<if test="rsvDt != null and rsvDt != ''">
 				<![CDATA[ AND H.RSV_DT = #{rsvDt} ]]>
 		</if>
-		AND A.CLS_FG = '1'
+		/* AND A.CLS_FG = '1' 출결처리된 모든내역 확인을 위한 주석 */
 		<if test="lsnFg != null and lsnFg != ''">
 			AND F.LSN_FG = #{lsnFg}
 		</if>
@@ -829,6 +829,7 @@
 		F.LSN_TM ,
 		A.LSN_TY,
 		A.LSN_FG ,
+		A.EMP_NO,
 		G.NAME AS LSN_FG_NM ,
 		A.LSN_CNT,
 		ISNULL(A.LSN_USE_CNT, 0) AS LSN_USE_CNT ,

@@ -231,7 +231,7 @@ fnObj.fn = {
     createEmptyTemplete: function() {
     	// 동적회원등록영역생성
       	let childHtml = '';
-      	let limited = 6;
+      	let limited = 8;
       	for(var seq=1; seq<limited; seq += 2) {
       		childHtml += ' <tr data-id="{{lsnData}}" style="text-align: center;"> ';
       		childHtml += ' 	<td width="26%"> ';
@@ -379,12 +379,12 @@ fnObj.fn = {
         
         //선택된 레슨이 있는지 체크
         if (typeof selectedItem === 'undefined') {
-            alert('회원이 선택하십시오.');
+            alert('회원을 선택하십시오.');
             return false;
         }
         
         /* 예약 confirm */
-        var retReserv = confirm('선택한 회원을 예약하시겠습니까?');
+        var retReserv = confirm('선택한 회원을 등록하시겠습니까?');
         if (retReserv != true) {
             return false;
         }

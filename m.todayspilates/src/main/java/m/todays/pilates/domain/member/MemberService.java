@@ -45,6 +45,14 @@ public class MemberService {
 		return memberMapper.getMemberList(parameter);
 	}
 	
+	public List getMemberFromName(String compCd, String storCd, String memberNm) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd,  storCd);
+		parameter.put(ParamNames.memberNm, memberNm);
+		return memberMapper.getMemberFromName(parameter);
+	}
+	
 	public List getExistMember(String compCd, String storCd, String mobile) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);

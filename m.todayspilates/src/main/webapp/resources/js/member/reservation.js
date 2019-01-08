@@ -43,7 +43,9 @@ $(function() {
                     '' :
                     '`' + n.lsnEdDt.substr(2, 2) + '.' +
                     n.lsnEdDt.substr(4, 2) + '.' + n.lsnEdDt.substr(6, 7);	// yy-mm-dd
-                n.lsnTm = n.lsnTm.toFixed(1);
+                if(n.lsnTm) {
+                	n.lsnTm = n.lsnTm.toFixed(1);
+                }
             });
             console.log(res);
             var html = Mustache.render(reservation, {list: res});
