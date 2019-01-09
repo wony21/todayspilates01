@@ -71,6 +71,7 @@
                   <th>#순번</th>
                   <th>예약일시</th>
                   <th>요일</th>
+				  <th>선생님</th>
                   <th>출석시간</th>
                   <th>출석여부</th>
 				  <th>&nbsp;</th>
@@ -80,9 +81,10 @@
 				{{#list}}
                 <tr style="text-align: center">
                   <td style="height:40px;">{{idx}}</td>
-                  <td>{{atndDt}}</td>
+                  <td>{{rsvDate}}<br/>{{rsvTime}}</td>
                   <td>{{dy}}</td>
-                  <td>{{atndTm}}</td>
+				  <td>{{empNm}}</td>
+                  <td>{{atndDt}}<br/>{{atndTm}}</td>
                   <td>{{atndNm}}</td>
 				  <td>{{cancRmk}}</td>
                 </tr>

@@ -25,12 +25,18 @@ $(function(e) {
                 n.atndTm = (n.atndTm == null) ?
                     '' :
                     n.atndTm.substr(0, 2) + ':' + n.atndTm.substr(2, 3);  // hh:mm
+                
+                n.rsvDate = (n.rsvDt == null) ? '' 
+                			: '`' + n.rsvDt.substr(2, 2) + '.' + n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);
+                n.rsvTime = (n.rsvTm == null) ? '' 
+                			: n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);
+                
                 n.idx = idx + 1;
             });
 
             var html = Mustache.render(detail_template, {list: res});
             $('#reservation-container').append(html);
-            $('#caption').text('( ' + empNm + '선생님 : ' + lsnNm + '레슨' + ' )');
+            $('#caption').text('( ' + memberNm + '회원님 : ' + lsnNm + '레슨' + ' )');
 
             //console.log('memberNo:' + {memberNo})
         },

@@ -284,27 +284,32 @@
 		resultType="camelmap" statementType="PREPARED">
 		/* 사용내역보기 */
 		SELECT
-		COMP_CD,
-		STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ,
-		ATND_DT,
-		SUBSTRING(DATENAME(WEEKDAY, ATND_DT), 1, 1) DY, ATND_TM, ATND_FG,
+		A.COMP_CD,
+		A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ,
+		A.ATND_DT,
+		A.RSV_DT, A.RSV_TM,
+		SUBSTRING(DATENAME(WEEKDAY, A.ATND_DT), 1, 1) DY, A.ATND_TM, A.ATND_FG,
 		CASE
-		WHEN ATND_FG = '0' THEN '예약'
-		WHEN ATND_FG = '1' THEN '출석'
-		WHEN ATND_FG =
-		'2' THEN '결석'
-		WHEN ATND_FG = '3' THEN '취소'
-		WHEN ATND_FG = '4' THEN '조정'
-		ELSE ''
+			WHEN ATND_FG = '0' THEN '예약'
+			WHEN ATND_FG = '1' THEN '출석'
+			WHEN ATND_FG = '2' THEN '결석'
+			WHEN ATND_FG = '3' THEN '취소'
+			WHEN ATND_FG = '4' THEN '조정'
+			ELSE ''
 		END ATND_NM,
-		CANC_RMK
-		FROM ATND_T
-		WHERE COMP_CD = #{compCd}
-		AND
-		STOR_CD = #{storCd}
-		AND LSN_CD = #{lsnCd}
-		AND MEMBER_NO = #{memberNo}
-		AND ATND_FG IN ('1','2','3')
+		A.CANC_RMK,
+		B.EMP_NO,
+		B.EMP_NM
+		FROM ATND_T A 
+		LEFT OUTER JOIN EMP_M B
+		ON A.COMP_CD = B.COMP_CD
+		AND A.STOR_CD = B.STOR_CD
+		AND A.EMP_NO = B.EMP_NO
+		WHERE A.COMP_CD = #{compCd}
+		AND	A.STOR_CD = #{storCd}
+		AND A.LSN_CD = #{lsnCd}
+		AND A.MEMBER_NO = #{memberNo}
+		AND A.ATND_FG IN ('1','2','3')
 		ORDER BY LSN_SEQ
 	</select>
 	<select id="getLessonSummary" parameterType="hashmap"
@@ -315,13 +320,15 @@
 		ISNULL(SUM(B.LSN_USE_CNT), 0) LSN_USE_SUM
 		FROM LSN_M A
 		LEFT OUTER JOIN
-		(SELECT COMP_CD, STOR_CD, LSN_CD, SUM(LSN_USE_CNT) AS LSN_USE_CNT
+		(SELECT COMP_CD, STOR_CD, LSN_CD,
+				SUM(LSN_TM) AS LSN_USE_CNT
 		FROM
-		MEMBER_LSN_M A
-		WHERE COMP_CD = #{compCd}
+			ATND_T A
+		WHERE
+			COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
-		AND
-		MEMBER_NO = #{memberNo}
+		AND MEMBER_NO = #{memberNo}
+		AND ATND_FG IN ('1', '2')
 		GROUP BY COMP_CD, STOR_CD, LSN_CD) B
 		ON
 		A.COMP_CD = B.COMP_CD
