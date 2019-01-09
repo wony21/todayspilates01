@@ -238,7 +238,7 @@ fnObj.fn = {
     // 예약일자 셋팅 (현재일 ~ 90일 까지만 일단 셋팅)
     setRsvDate: function(mode, val) {
         let option = '';
-        for (var i = 0; i <= 90; i++) {
+        for (var i = -30; i <= 60; i++) {
             var date = ax5.util.date(new Date(), {add: {d: i}});
             var formattedDate = ax5.util.date(new Date(),
                 {add: {d: i}, return: 'yyyyMMdd'});
@@ -260,6 +260,8 @@ fnObj.fn = {
             target = $('#update-rsvDt');
         }
         target.html(option);
+        var formattedToday = ax5.util.date(new Date(), {add: {d: 0}, return: 'yyyyMMdd'});
+        target.val(formattedToday);
     },
     // 예약시간 셋팅 (00 ~ 24)
     setRsvTime: function(mode, val) {
