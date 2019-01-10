@@ -2,6 +2,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false" pageEncoding="UTF-8"
 	contentType="text/html; charset=UTF-8"%>
+<%@ page import="java.util.UUID" %>
+<%
+	String uuid = UUID.randomUUID().toString();
+	request.setAttribute("uuid", uuid);
+%>
+	
 <html>
 
 <head>
@@ -91,6 +97,6 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
 	<script src="js/boot4/js/bootstrap.min.js"></script>
-	<script src="js/login.js"></script>
+	<script src="js/login.js?=${uuid}"></script>
 </body>
 </html>

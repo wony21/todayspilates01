@@ -1,5 +1,6 @@
 package m.todays.pilates.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.microsoft.sqlserver.jdbc.StringUtils;
+
 import m.todays.pilates.common.BaseController;
 import m.todays.pilates.common.SessionUtils;
 import m.todays.pilates.common.api.ApiResponse;
@@ -381,7 +385,10 @@ public class ReservationController extends BaseController {
 	@RequestMapping(value = "/api/common", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
 	public List getCommon(
-			@RequestParam String groupCd) {
+			@RequestParam(required=false) String groupCd) {
+		if(StringUtils.isEmpty(groupCd)) {
+			return new ArrayList();
+		}
 		return commonService.getCommon(groupCd);
 	}
 	

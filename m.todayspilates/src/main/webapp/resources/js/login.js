@@ -76,6 +76,7 @@ fnObj.fn = {
         $.ajax({
             url: '/api/stor',
             type: 'GET',
+            timeout: 3000,
             success: function(res) {
                 let option = '';
                 let defaultStudio = '';
@@ -95,6 +96,9 @@ fnObj.fn = {
                 } else {
                     $('#studio').val(defaultStudio);
                 }
+            },
+            error: function(error) {
+            	alert('인터넷 연결이 잠시 불안정합니다.');
             },
         });
     },
@@ -123,6 +127,9 @@ fnObj.fn = {
                         window.localStorage.setItem('lnk-blog', data.name);
                     }
                 });
+            },
+            error: function(e) {
+            	alert(e.responseText);
             },
         });
     },

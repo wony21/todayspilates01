@@ -21,10 +21,10 @@
 	-->
  
 	 <http auto-config="true">
+        <intercept-url pattern="/api/common" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/api/stor" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/api/existUserInStor" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/api/common" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/loginFail" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/" access="ROLE_USER,ROLE_TEACHER,ROLE_ADMIN" />
         <intercept-url pattern="/api/**" access="ROLE_USER,ROLE_TEACHER,ROLE_ADMIN" />

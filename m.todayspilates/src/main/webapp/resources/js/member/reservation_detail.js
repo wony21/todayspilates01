@@ -2,6 +2,26 @@ var common = {};
 let fnObj = {};
 let detail_template = $('#reservation-template').html();
 
+//todo : 공통함수로 뺄 것..
+function parse(str) {
+    if (!/^(\d){8}$/.test(str)) return 'invalid date';
+    var y = str.substr(0, 4),
+        m = str.substr(4, 2),
+        d = str.substr(6, 2);
+    return new Date(y + '-' + m + '-' + d);
+}
+
+//todo : 공통함수로 뺄 것..
+function getDayOfWeek(day) {
+    if (day == null) {
+        return '';
+    }
+    var dat1 = parse(day);
+    var week = ['일', '월', '화', '수', '목', '금', '토'];
+    var dayOfWeek = week[dat1.getDay()];
+    return dayOfWeek;
+}
+
 $(function(e) {
     //console.log('memberNo:' + memberNo);
     let user = JSON.parse(window.localStorage.getItem('todays'));
@@ -30,6 +50,8 @@ $(function(e) {
                 			: '`' + n.rsvDt.substr(2, 2) + '.' + n.rsvDt.substr(4, 2) + '.' + n.rsvDt.substr(6, 7);
                 n.rsvTime = (n.rsvTm == null) ? '' 
                 			: n.rsvTm.substr(0, 2) + ':' + n.rsvTm.substr(2, 3);
+                
+                n.dy = (n.rsvDt == null) ? '' : getDayOfWeek(n.rsvDt);
                 
                 n.idx = idx + 1;
             });
