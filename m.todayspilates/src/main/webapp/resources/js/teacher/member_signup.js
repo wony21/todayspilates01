@@ -504,7 +504,7 @@ fnObj.fn = {
         $('#memberNm').attr('member-no', lsnData.memberNo);
         let hp = lsnData.hp;
         if (hp){
-	        hp = hp.replace('-', '');
+	        hp = hp.split('-').join('');
 	        let hp1;
 	        let hp2;
 	        let hp3;
@@ -537,7 +537,7 @@ fnObj.fn = {
             storCd: user.storCd,                    // key1
             memberNo: $('#memberNm').attr('data-id'),    // key2
             memberNm: $('#memberNm').val(),
-            mobile: $('#hp').val(),
+            mobile: hpNumber,
             hp: hpNumber,
             sex: $('#sex').val(),
             entFg: $('#entFg').val(),
@@ -746,7 +746,7 @@ fnObj.fn = {
         $.ajax({
             type: 'GET',
             url: '/api/teacher',
-            data: {storCd: user.storCd},
+            data: {storCd: user.storCd, useYn: 'Y'},
             success: function(res) {
                 let option = '<option value="">선택</option>';
                 res.forEach(function(n) {

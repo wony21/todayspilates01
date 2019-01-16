@@ -16,11 +16,12 @@ public class TeacherService extends BaseService {
 	@Autowired
 	private TeacherMapper teacherMapper;
 	
-	public List getTeacher(String compCd, String storCd, String empNm) {
+	public List getTeacher(String compCd, String storCd, String empNm, String useYn) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.empNm, empNm);
+		parameter.put(ParamNames.useYn, useYn);
 		return teacherMapper.getTeacher(parameter);
 	}
 	

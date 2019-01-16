@@ -44,6 +44,19 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.atndFg, atndFg);
 		return memberResrvMapper.getRervation(parameter);
 	}
+	
+	public List<HashMap<Object, Object>> getMemberReservation(String compCd, String storCd, String memberNo, String pravt) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(ParamNames.compCd, compCd);
+		parameter.put(ParamNames.storCd, storCd);
+		parameter.put(ParamNames.memberNo, memberNo);
+		List<String> atndFgs = new ArrayList();
+		atndFgs.add(CommonData.ATND_FG.RESERVATION);
+		String[] atndFg = atndFgs.parallelStream().toArray(String[]::new);
+		parameter.put(ParamNames.atndFg, atndFg);
+		parameter.put(ParamNames.privt, pravt);
+		return memberResrvMapper.getRervation(parameter);
+	}
 
 	public List getLessonSummary(String compCd, String storCd, String memberNo) {
 		Map<String, Object> parameter = new HashMap<String, Object>();

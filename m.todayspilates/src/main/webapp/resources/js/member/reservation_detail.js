@@ -53,6 +53,8 @@ $(function(e) {
                 
                 n.dy = (n.rsvDt == null) ? '' : getDayOfWeek(n.rsvDt);
                 
+                n.lsnTm = n.lsnTm.toFixed(1);
+                
                 n.idx = idx + 1;
             });
 

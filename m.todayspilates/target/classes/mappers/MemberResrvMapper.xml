@@ -269,6 +269,9 @@
 		<if test="rsvDt != null and rsvDt != ''">
 				<![CDATA[ AND H.RSV_DT = #{rsvDt} ]]>
 		</if>
+		<if test="private != null and private != ''">
+			AND A.CLS_FG = '1'
+		</if>
 		/* AND A.CLS_FG = '1' 출결처리된 모든내역 확인을 위한 주석 */
 		<if test="lsnFg != null and lsnFg != ''">
 			AND F.LSN_FG = #{lsnFg}
@@ -287,7 +290,7 @@
 		A.COMP_CD,
 		A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_SEQ,
 		A.ATND_DT,
-		A.RSV_DT, A.RSV_TM,
+		A.RSV_DT, A.RSV_TM, A.LSN_TM,
 		SUBSTRING(DATENAME(WEEKDAY, A.ATND_DT), 1, 1) DY, A.ATND_TM, A.ATND_FG,
 		CASE
 			WHEN ATND_FG = '0' THEN '예약'
@@ -328,7 +331,7 @@
 			COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
-		AND ATND_FG IN ('1', '2')
+		AND ATND_FG IN ('0','1','2','4')
 		GROUP BY COMP_CD, STOR_CD, LSN_CD) B
 		ON
 		A.COMP_CD = B.COMP_CD

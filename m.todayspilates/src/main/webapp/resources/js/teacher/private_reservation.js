@@ -266,15 +266,16 @@ fnObj.fn = {
     // 예약시간 셋팅 (00 ~ 24)
     setRsvTime: function(mode, val) {
         let option = '';
-        for (var i = 1; i < 24; i++) {
+        for (var i = 0; i < 24; i++) {
             // let prefix = (i < 12) ? 'am ' : 'pm ';
-            let tm = ('0' + i).slice(-2) + '00';
-            let formattedTm = /* prefix + */('0' + i).slice(-2) + ':' + '00';
-
-            option += ' <option value="' + tm + '">' + formattedTm +
-                '</option> ';
+        	for(var j=0; j < 6; j++) {
+                let tm = ('0' + i).slice(-2) + (j + '0').slice(-2);
+                let formattedTm = /* prefix + */('0' + i).slice(-2) + ':' + (j + '0').slice(-2);
+                option += ' <option value="' + tm + '">' + formattedTm +
+                    '</option> ';
+        	}
         }
-
+        
         let now = new Date($.now());
         let target = $('#rsvTm');
         if (mode === 'update') {

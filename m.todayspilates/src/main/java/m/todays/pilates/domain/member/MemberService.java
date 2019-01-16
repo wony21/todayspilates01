@@ -18,6 +18,7 @@ import com.microsoft.sqlserver.jdbc.StringUtils;
 
 import m.todays.pilates.common.ParamNames;
 import m.todays.pilates.common.api.ApiResponse;
+import m.todays.pilates.domain.user.UserMapper;
 
 @Service
 public class MemberService {
@@ -27,6 +28,9 @@ public class MemberService {
 	
 	@Autowired 
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private UserMapper userMapper;
 	
 	public List getMember(String compCd, String storCd, String memberNo, String memberNm) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
@@ -104,7 +108,7 @@ public class MemberService {
 	}
 	
 	@Transactional
-	public ApiResponse updateMember(String compCd, String storCd, String memberNo, String useYn,
+	public ApiResponse updateMember(String compCd, String storCd, String memberNo, String useYn, String hp,
 									String sex, String entFg, String entDt, String remark) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
@@ -120,10 +124,12 @@ public class MemberService {
 		parameter.put(ParamNames.entDt, entDt);
 		parameter.put(ParamNames.entFg, entFg);
 		parameter.put(ParamNames.sex, sexCode);
+		parameter.put(ParamNames.hp, hp);
 		parameter.put(ParamNames.useYn, useYn);
 		parameter.put(ParamNames.remark, remark);
 		try {
 			memberMapper.updateMember(parameter);
+			userMapper.updateUserInfo(parameter);
 			return ApiResponse.success("ok");
 		} catch (Exception e) {
 			return ApiResponse.error("exist user");

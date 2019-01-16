@@ -11,6 +11,9 @@
         <if test="empNm != null and empNm != ''">
         	AND EMP_NM LIKE '%' + #{empNm} + '%'
         </if>
+        <if test="useYn != null and useYn != ''">
+        	AND USE_YN = #{useYn}
+        </if>
         ORDER BY EMP_NO
     </select>
    	<select id="getTeacherPerformance" resultType="camelmap" statementType="PREPARED">

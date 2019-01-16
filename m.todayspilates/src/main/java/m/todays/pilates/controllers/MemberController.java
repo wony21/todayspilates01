@@ -102,11 +102,12 @@ public class MemberController extends BaseController {
 			String storCd = (String)item.get(ParamNames.storCd);
 			String memberNo = (String)item.get(ParamNames.memberNo);
 			String sex = (String)item.get(ParamNames.sex);
+			String hp = (String)item.get(ParamNames.hp);
 			String entFg = (String) item.get(ParamNames.entFg);
 			String entDt = (String)item.get(ParamNames.entDt);
 			String remark = (String)item.get(ParamNames.remark);
 			String useYn = (String)item.get(ParamNames.useYn);
-			memberService.updateMember(compCd, storCd, memberNo, useYn, sex, entFg, entDt, remark);
+			memberService.updateMember(compCd, storCd, memberNo, useYn, hp, sex, entFg, entDt, remark);
 		}
 		return ApiResponse.success("ok");
 	}

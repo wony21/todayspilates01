@@ -90,6 +90,9 @@
 			<if test="useYn != null and useYn != ''">
 			USE_YN = #{useYn},
 			</if>
+			<if test="hp != null and hp != '' ">
+			HP = #{hp},
+			</if>
 			REMARK = #{remark}
 		WHERE COMP_CD = #{compCd}
 			AND STOR_CD = #{storCd}

@@ -12,4 +12,5 @@ public interface UserMapper {
 	List loginUser(Map<String, Object> parameter);
 	User getUserInfo(Map<String, Object> parameter);
 	List existUserInStor(Map<String, Object> parameter);
+	void updateUserInfo(Map<String, Object> parameter);
 }

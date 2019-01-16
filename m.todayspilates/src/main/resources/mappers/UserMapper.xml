@@ -36,4 +36,11 @@
         WHERE USER_CD = #{userCd}
         	AND USER_PS = #{userPs}
     </select>
+    <update id="updateUserInfo" parameterType="hashmap" statementType="PREPARED">
+    	/* 사용자 정보수정 */
+    	UPDATE USER_M
+    	SET USER_CD = replace(#{hp}, '-', ''),
+    		USER_PS = right(replace(#{hp}, '-', ''), 4) 
+    	WHERE USER_CD = replace(#{hp}, '-', '')
+    </update>
 </mapper>

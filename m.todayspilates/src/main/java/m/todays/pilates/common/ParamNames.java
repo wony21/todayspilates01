@@ -51,5 +51,6 @@ public class ParamNames {
 	public final static String lsnDt = "lsnDt";
 	public final static String schNo = "schNo";
 	public final static String seq = "seq";
+	public final static String privt = "private";
 	
 }

@@ -64,7 +64,7 @@ public class ReservationController extends BaseController {
 			@RequestParam String storCd, 
 			@RequestParam String memberNo) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getMemberReservation(compCd, storCd, memberNo);
+		return memberResrvService.getMemberReservation(compCd, storCd, memberNo, "private");
 	}
 	/**
 	 * 회원 - 사용내역보기

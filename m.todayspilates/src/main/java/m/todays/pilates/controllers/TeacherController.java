@@ -26,11 +26,11 @@ public class TeacherController extends BaseController {
 	 */
 	@RequestMapping(value = "/api/teacher", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	@ResponseBody
-	public List getTeacher(@RequestParam String storCd,
-							@RequestParam(required = false) String empNm) {
-		
+	public List getTeacherList(@RequestParam String storCd,
+								@RequestParam(required = false) String empNm,
+								@RequestParam(required = false) String useYn) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return teacherService.getTeacher(compCd, storCd, empNm);
+		return teacherService.getTeacher(compCd, storCd, empNm, useYn);
 	}
 	/**
 	 * 선생님 실적조회

@@ -19,4 +19,5 @@ public interface MemberMapper {
 	void deleteMember(Map<String, Object> parameter);
 	void deleteUser(Map<String, Object> parameter);
 	
+	
 }
