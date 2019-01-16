@@ -275,7 +275,6 @@ fnObj.fn = {
                     '</option> ';
         	}
         }
-        
         let now = new Date($.now());
         let target = $('#rsvTm');
         if (mode === 'update') {
