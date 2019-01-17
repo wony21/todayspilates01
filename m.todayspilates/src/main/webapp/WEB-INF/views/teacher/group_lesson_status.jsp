@@ -96,13 +96,13 @@
                         </thead>
                         <tbody>
                         <tr>
-                        	<td style="height:40px;" data-id="2">월</td>
-                        	<td data-id="3">화</td>
-                        	<td data-id="4">수</td>
-                        	<td data-id="5">목</td>
-                        	<td data-id="6">금</td>
-                        	<td data-id="7">토</td>
-                        	<td data-id="1">일</td>
+                        	<td style="height:40px;" data-id="1">월</td>
+                        	<td data-id="2">화</td>
+                        	<td data-id="3">수</td>
+                        	<td data-id="4">목</td>
+                        	<td data-id="5">금</td>
+                        	<td data-id="6">토</td>
+                        	<td data-id="0">일</td>
                         </tr>
                         	
                         </tbody>

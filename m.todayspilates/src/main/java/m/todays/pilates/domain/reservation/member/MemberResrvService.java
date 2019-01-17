@@ -319,7 +319,10 @@ public class MemberResrvService extends BaseService {
 			String rsvDt = (String) map.getOrDefault(ParamNames.rsvDt, "");
 			String rsvTm = (String) map.getOrDefault(ParamNames.rsvTm, "");
 			String empNo = (String) map.getOrDefault(ParamNames.empNo, "");
-
+			String seq = "0";
+			if(map.get(ParamNames.seq) != null) {
+				seq = map.get(ParamNames.seq).toString();
+			} 
 			if (StringUtils.isEmpty(storCd)) {
 				return ApiResponse.error("KEY : [storCd] 가 존재하지 않습니다.");
 			} else if (StringUtils.isEmpty(memberNo)) {
@@ -346,6 +349,7 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.lsnCd, lsnCd);
 			parameter.put(ParamNames.lsnNo, lsnNo);
 			parameter.put(ParamNames.lsnTm, lsnTm);
+			parameter.put(ParamNames.seq, seq);
 			parameter.put(ParamNames.rsvDt, rsvDt);
 			parameter.put(ParamNames.rsvTm, rsvTm);
 			parameter.put(ParamNames.atndFg, atndFg);

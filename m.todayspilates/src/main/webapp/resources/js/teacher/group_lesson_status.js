@@ -2,7 +2,7 @@ let common = {};
 let fnObj = {};
 let reservationTmpl = $('#reservation-template').html();
 let newReservationTmpl = $('#new-reservation-template').html();
-const WEEKS = ['일', '월', '화', '수', '목', '금', '토'];
+const WEEKS = ['월', '화', '수', '목', '금', '토', '일'];	// 현황판만 요일이 다름 (1.17 실장님과 협의)
 
 //view 초기화 
 fnObj.initView = function(user) {
@@ -70,11 +70,11 @@ fnObj.initEvent = function(user) {
 
         let caption = todayStr + '(' + dy + ') ' + lsnData.lsnLvNm + ' ' + lsnData.empNm + '(' + lsnData.lsnTm + ')'; 
         let captionData = {
-        		compCd:lsnData.compCd,
-        		storCd:lsnData.storCd,
-        		lsnMonth: lsnData.lsnMonth,
-        		seq: lsnData.seq,
-        		dyFg: dyFg,
+    		compCd:lsnData.compCd,
+    		storCd:lsnData.storCd,
+    		lsnMonth: lsnData.lsnMonth,
+    		seq: lsnData.seq,
+    		dyFg: dyFg,
             dy: dy,
             schNo : schNo,
             stTm: lsnData.stTm,

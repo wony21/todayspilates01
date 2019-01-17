@@ -511,39 +511,24 @@
 	</select>
 	<insert id="insertAttend" parameterType="hashmap">
 		INSERT INTO ATND_T
-		(COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM,
-		EMP_NO, LSN_CD,
-		LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER,
-		UPT_USER)
+		(COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER, UPT_USER)
 		VALUES(#{compCd},#{storCd},#{memberNo},#{lsnNo},
 		(SELECT
-		ISNULL(MAX(LSN_SEQ)+1, 1) LSN_SEQ
-		FROM ATND_T M
-		WHERE COMP_CD =
-		#{compCd}
-		AND STOR_CD = #{storCd}
-		AND MEMBER_NO = #{memberNo}
-		AND LSN_NO
-		= #{lsnNo}
-		AND LSN_CD = #{lsnCd}),
-		(SELECT ISNULL(SUM(LSN_TM),
-		0)+${lsnTm} LSN_NUM
+			ISNULL(MAX(LSN_SEQ)+1, 1) LSN_SEQ
 		FROM ATND_T M
 		WHERE COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
 		AND LSN_NO = #{lsnNo}
-		AND LSN_CD = #{lsnCd}
-		AND ATND_FG IN ('0' ,'1', '2')),
-			#{empNo},
-			#{lsnCd},
-			#{lsnTm},
-			#{rsvDt},
-			#{rsvTm},
-			0,
-			0,
-			#{userCd},
-			#{userCd})
+		AND LSN_CD = #{lsnCd}),
+		(SELECT ISNULL(SUM(LSN_TM),0)+${lsnTm} LSN_NUM
+		 FROM ATND_T M
+		 WHERE COMP_CD = #{compCd}
+		 AND STOR_CD = #{storCd}
+		 AND MEMBER_NO = #{memberNo}
+		 AND LSN_NO = #{lsnNo}
+		 AND LSN_CD = #{lsnCd}
+		 AND ATND_FG IN ('0' ,'1', '2')), #{empNo}, #{lsnCd}, #{lsnTm}, #{rsvDt}, #{rsvTm}, 0, #{seq}, #{userCd}, #{userCd})
 	</insert>
 	<update id="updateAttend" parameterType="hashmap">
 		UPDATE ATND_T
@@ -801,6 +786,7 @@
 		USING(SELECT COMP_CD, STOR_CD, LSN_NO, MEMBER_NO,
 				CASE
 					WHEN LSN_ED_DT IS NULL THEN '1'
+					WHEN LSN_ED_DT = '' THEN '1'
 <![CDATA[
 					WHEN CONVERT(CHAR, GETDATE(), 112) <= LSN_ED_DT THEN '1'
 ]]>

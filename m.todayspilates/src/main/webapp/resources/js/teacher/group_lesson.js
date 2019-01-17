@@ -90,6 +90,7 @@ fnObj.initEvent = function(user) {
         let dy = WEEKS[$('#datepicker tbody tr .selected').index()];
         let rsvDt = ($('#datepicker tbody tr .selected').data('id')).toString();
         let lsnData = $(this).data('id');
+        console.log(lsnData);
         let dt = rsvDt.substr(0, 4) + '년 ' + rsvDt.substr(4, 2) + '월 ' +
             rsvDt.substr(6, 2) + '일 ';
         let stTm = (isValidTime(lsnData.stTm) === false) ?
@@ -105,6 +106,7 @@ fnObj.initEvent = function(user) {
             lsnLv: lsnData.lsnLv,
             lsnLvNm: lsnData.lsnLvNm,
             empNo: lsnData.empNo,
+            seq	: lsnData.seq,
         };
 
         $('#modal-caption').attr('data-id', JSON.stringify(captionData));
@@ -345,6 +347,7 @@ fnObj.fn = {
                 memberNo: selectedItem.memberNo,
                 lsnNo: selectedItem.lsnNo,
                 lsnCd: selectedItem.lsnCd,
+                seq : lsnData.seq,
                 empNo: lsnData.empNo,
                 rsvDt: lsnData.rsvDt,
                 rsvTm: lsnData.stTm,
