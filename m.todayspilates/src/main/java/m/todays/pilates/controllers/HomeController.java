@@ -39,7 +39,7 @@ public class HomeController {
 		// 사용자 권한별 접근페이지
 		switch (userLv) {
 		case CommonData.UserLv.SYSTEM:
-			index = "admin/admin";
+			index = "teacher/teacher";
 			break;
 		case CommonData.UserLv.MEMBER:
 			index = "member/member";

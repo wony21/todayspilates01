@@ -79,6 +79,7 @@
                                 <th>선생님</th>
                                 <th>회차</th>
                                 <th>종료일</th>
+								<th style="display:none;">조정</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -88,8 +89,9 @@
                                 <td>{{rsvDt}}{{dayOfWeek}}<br>{{rsvTm}}</td>
                                 <td>{{lsnTm}}</td>
                                 <td>{{empNm}}</td>
-                                <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnTotalUseCnt}}/{{lsnCnt}}</td>
                                 <td>{{lsnEdDt}}</td>
+								<td style="display:none;">{{lsnModCnt}}</td>
                             </tr>
                             {{/list}}
                             {{^list}}
@@ -128,7 +130,7 @@
                                 <td>{{lsn02UseCnt}}</td>
                                 <td>{{lsn03UseCnt}}</td>
                                 <td>{{lsn04UseCnt}}</td>
-                                <td>{{lsn05UseCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsn05UseCnt}}</td>
                                 <td>{{lsnUseSum}}</td>
                             </tr>
                             {{/list}}

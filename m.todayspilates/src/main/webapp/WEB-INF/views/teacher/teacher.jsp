@@ -16,6 +16,15 @@
 	request.setAttribute("storCd", storCd);
 	request.setAttribute("compCd", compCd);
 	request.setAttribute("username2", username2);
+	String userLvNm = "";
+    if ( userLv.equals("01") ) {
+   		userLvNm = "원장";
+   	} else if (userLv.equals("02") ) {
+   		userLvNm = "선생님";
+   	} else if (userLv.equals("03")) {
+   		userLvNm = "회원";
+   	}
+   	request.setAttribute("userLvNm", userLvNm);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +59,7 @@
     <nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a class="js-scroll-trigger"
-				href="#page-top">선생님<!--( ${userLv} )--> : <span class="username">${username}</span> 님
+				href="#page-top">${userLvNm}<!--( ${userLv} )--> : <span class="username">${username}</span> 님
 			</a></li>
 			<li class="sidebar-nav-item"><a class="js-scroll-trigger"
 				href="/teacher">Home</a></li>

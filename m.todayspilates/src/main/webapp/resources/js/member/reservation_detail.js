@@ -28,14 +28,18 @@ $(function(e) {
     let empNm = user.empNm;
     let lsnNm = user.lsnNm;
     let lsnCd = user.lsnCd;
+    let lsnNo = user.lsnNo;
+    let lsnModCnt = user.lsnModCnt;
     let memberNm = user.username;
-
+    if (!lsnModCnt) {
+    	lsnModCnt = '0';
+    }
     $('.username').text(user.username);
 
     $.ajax({
         type: 'GET',
         url: '/api/member/reservation/detail', ///api/member/reservation/detail?storCd=001&memberNo=00001&lsnCd=01
-        data: {storCd: user.storCd, memberNo: user.memberNo, lsnCd: user.lsnCd},
+        data: {storCd: user.storCd, memberNo: user.memberNo, lsnCd: user.lsnCd, lsnNo: user.lsnNo},
         success: function(res) {
             var regEx = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/;
             res.forEach(function(n, idx) {
@@ -60,7 +64,7 @@ $(function(e) {
 
             var html = Mustache.render(detail_template, {list: res});
             $('#reservation-container').append(html);
-            $('#caption').text('( ' + memberNm + '회원님 : ' + lsnNm + '레슨' + ' )');
+            $('#caption').text('( ' + memberNm + '회원님 : ' + lsnNm + '레슨' + ' ) (조정시간 : ' + Number(lsnModCnt).toFixed(1) + ')');
 
             //console.log('memberNo:' + {memberNo})
         },

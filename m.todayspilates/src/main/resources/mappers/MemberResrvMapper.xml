@@ -474,7 +474,7 @@
 		/* 회원 레슨 조회. */
 		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD,
 		B.LSN_NM, 
-		ISNULL(A.LSN_USE_CNT, 0) LSN_USE_CNT,
+		ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_USE_CNT,
 		D.MEMBER_NM,
 		A.LSN_FG, C.NAME LSN_FG_NM,
 		A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
@@ -683,7 +683,7 @@
 			and lsn_no = a.lsn_no
 			and atnd_fg in ('0','1', '2')
 			<![CDATA[
-			and lsn_seq <= a.lsn_seq) as LSN_NUM,
+			and lsn_seq <= a.lsn_seq)+ISNULL(E.LSN_MOD_CNT, 0) as LSN_NUM,
 			]]>
 		A.LSN_CD, A.LSN_TM, A.ATND_FG, A.GRP_SEQ,
 		A.RSV_DT,

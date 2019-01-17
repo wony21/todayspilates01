@@ -103,7 +103,7 @@ fnObj.fn = {
         $.ajax({
             type: 'GET',
             url: '/api/teacher',
-            data: {storCd: user.storCd},
+            data: {storCd: user.storCd, useYn: 'Y'},
             success: function(res) {
                 let option = '<option value="">전체보기</option>';
                 res.forEach(function(n) {

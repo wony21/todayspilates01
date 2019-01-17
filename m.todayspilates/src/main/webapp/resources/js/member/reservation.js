@@ -47,6 +47,13 @@ $(function() {
                 if(n.lsnTm) {
                 	n.lsnTm = n.lsnTm.toFixed(1);
                 }
+                if (!n.lsnModCnt) {
+                	n.lsnModCnt = '0';
+                }
+                if (!n.lsnUseCnt) {
+                	n.lsnUseCnt = '0';
+                }
+                n.lsnTotalUseCnt = Number(n.lsnNum) + Number(n.lsnModCnt);
             });
             console.log(res);
             var html = Mustache.render(reservation, {list: res});
@@ -71,10 +78,12 @@ $('#reservation-container').on('click', 'tbody tr', function(e) {
     let lsnCd = $(this).data('id');
     let lsnNm = $(this).find('td').eq(0).text();
     let empNm = $(this).find('td').eq(3).text();
+    let lsnModCnt = $(this).find('td').eq(6).text();
     let user = JSON.parse(window.localStorage.getItem('todays'));
     user.lsnCd = lsnCd;
     user.lsnNm = lsnNm;
     user.empNm = empNm;
+    user.lsnModCnt= lsnModCnt;
     window.localStorage.setItem('todays', JSON.stringify(user));
 
     //goPage('member/reservation-detail');
