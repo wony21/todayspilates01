@@ -13,7 +13,7 @@ public class LessonTask {
 	private MemberResrvService memberResrvService;
 
 	// 매일 0시 0분 0초에 실행
-	@Scheduled(cron = "0 0 0 * * *")
+	@Scheduled(cron = "*/10 * * * * *")
 	public void lessonSchedule() {
 		System.out.println("Schedule Start ------------------------------------------------");
 		memberResrvService.updateEndLesson();
