@@ -79,11 +79,13 @@ $('#reservation-container').on('click', 'tbody tr', function(e) {
     let lsnNm = $(this).find('td').eq(0).text();
     let empNm = $(this).find('td').eq(3).text();
     let lsnModCnt = $(this).find('td').eq(6).text();
+    let lsnNo = $(this).find('td').eq(7).text();
     let user = JSON.parse(window.localStorage.getItem('todays'));
     user.lsnCd = lsnCd;
     user.lsnNm = lsnNm;
     user.empNm = empNm;
     user.lsnModCnt= lsnModCnt;
+    user.lsnNo = lsnNo;
     window.localStorage.setItem('todays', JSON.stringify(user));
 
     //goPage('member/reservation-detail');

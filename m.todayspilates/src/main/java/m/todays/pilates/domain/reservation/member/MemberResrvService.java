@@ -79,12 +79,13 @@ public class MemberResrvService extends BaseService {
 		return memberResrvMapper.getLessonSummary(parameter);
 	}
 
-	public List getDetailUseLesson(String compCd, String storCd, String lsnCd, String memberNo) {
+	public List getDetailUseLesson(String compCd, String storCd, String lsnCd, String memberNo, String lsnNo) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(ParamNames.compCd, compCd);
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.lsnCd, lsnCd);
 		parameter.put(ParamNames.memberNo, memberNo);
+		parameter.put(ParamNames.lsnNo, lsnNo);
 		return memberResrvMapper.getDetailUseLesson(parameter);
 	}
 

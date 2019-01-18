@@ -311,6 +311,9 @@
 		WHERE A.COMP_CD = #{compCd}
 		AND	A.STOR_CD = #{storCd}
 		AND A.LSN_CD = #{lsnCd}
+		<if test="lsnNo != null and lsnNo != ''">
+			AND A.LSN_NO = #{lsnNo}
+		</if>
 		AND A.MEMBER_NO = #{memberNo}
 		AND A.ATND_FG IN ('1','2','3')
 		ORDER BY LSN_SEQ
@@ -787,7 +790,7 @@
 			ISNULL(LSN_CNT, 0)-(ISNULL(LSN_USE_CNT, 0)+ISNULL(LSN_MOD_CNT, 0)) REST_CNT,
 			<![CDATA[
 				CASE
-					WHEN ISNULL(LSN_CNT, 0)-ISNULL(LSN_USE_CNT, 0)+ISNULL(LSN_MOD_CNT, 0) <= 0 THEN '2'
+					WHEN ISNULL(LSN_CNT, 0)-(ISNULL(LSN_USE_CNT, 0)+ISNULL(LSN_MOD_CNT, 0)) <= 0 THEN '2'
 					WHEN LSN_ED_DT IS NULL THEN '1'
 					WHEN LSN_ED_DT = '' THEN '1'
 					WHEN CONVERT(CHAR, GETDATE(), 112) <= LSN_ED_DT THEN '1'
@@ -880,6 +883,7 @@
 		A.LSN_CD
 	</select>
 	<select id="getGroupSchedule" parameterType="hashmap" resultType="camelmap">
+		/* 그룹레슨 등록현황 관리 */
 		SELECT
 			A.COMP_CD,
 			A.STOR_CD,
@@ -889,11 +893,13 @@
 			A.ST_TM,
 			A.LSN_TM,
 			A.SEQ,
-			C.SCH_NO,
+			C.SCH_NO SCH_NO2,
+			ROW_NUMBER() OVER (PARTITION BY A.ST_TM ORDER BY MAX(C.UPT_DATE)) SCH_NO,
 			MAX(E.CODE) AS LSN_LV,
 			MAX(E.NAME) AS LSN_LV_NM,
 			MAX(C.MEMBER_NO) AS MEMBER_NO,
-			MAX(D.MEMBER_NM) AS MEMBER_NM
+			MAX(D.MEMBER_NM) AS MEMBER_NM,
+			MAX(C.UPT_DATE) AS UPT_DATE
 		FROM
 			GRP_SCH_M AS A
 		INNER JOIN EMP_M B ON
@@ -935,7 +941,7 @@
 			A.SEQ,
 			C.SCH_NO
 		ORDER BY
-			A.ST_TM, A.SEQ
+			A.ST_TM, UPT_DATE ASC
 	</select>
 	<select id="getGroupMembers" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
 	 	SELECT
@@ -988,8 +994,18 @@
 				, #{lsnTm}, #{lsnLv}, #{empNo}, #{schWeek}, 'Y', NULL, NULL, GETDATE(), #{userCd},  GETDATE(), #{userCd})
 	</insert>
 	<insert id="insertScheduleBoard" parameterType="hashmap" statementType="PREPARED">
+		/* sch_no 는 사용되지 않고
+			mis상에서 처음 등록시 5로 등록되는걸로 생각됨(파악이 힘들다..)
+			나중에 참고만 할 것
+		*/
 		INSERT INTO GRP_SCH_BOARD (COMP_CD,STOR_CD,SCH_MONTH,SCH_WEEK,ST_TM,SEQ,SCH_NO,MEMBER_NO,INS_DATE,INS_USER,UPT_DATE,UPT_USER)
-		VALUES (#{compCd}, #{storCd}, #{lsnMonth}, #{schWeek}, #{stTm}, #{seq}, #{schNo}, #{memberNo}, GETDATE(), #{userCd}, GETDATE(), #{userCd})
+		VALUES (#{compCd}, #{storCd}, #{lsnMonth}, #{schWeek}, #{stTm}, #{seq}, (select isnull(max(sch_no)+1, 5) 
+																				from GRP_SCH_BOARD
+																				where comp_cd = #{compCd}
+																					and stor_cd = #{storCd}
+																					and sch_month = #{lsnMonth}
+																					and sch_week = #{schWeek}
+																					and st_tm = #{stTm}), #{memberNo}, GETDATE(), #{userCd}, GETDATE(), #{userCd})
 	</insert>
 	<delete id="deleteScheduleBoard" parameterType="hashmap" statementType="PREPARED">
 		DELETE GRP_SCH_BOARD

@@ -167,7 +167,7 @@
                             <thead>
                             <tr style="text-align: center">
                                 <%--<th width="12%">#순번</th>--%>
-                                <th width="15%">회원명</th>
+                                <th width="15%">등록일</th>
                                 <th>수업</th>
 								<th>종류</th>
                                 <th>등록</th>
@@ -182,7 +182,7 @@
                             {{#list}}
                             <tr data-id="{{lsnData}}" style="text-align: center; {{cssText1}}">
                                 <%--<td style="height:40px;">{{idx}}</td>--%>
-                                <td style="height:40px;">{{memberNm}}</td>
+                                <td style="height:40px;">{{regDtNm}}</td>
                                 <td>{{lsnNm}}</td>
 								<td>{{lsnFgNm}}</td>
 								<td>{{lsnCnt}}</td>

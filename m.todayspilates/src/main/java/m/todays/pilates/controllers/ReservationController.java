@@ -83,9 +83,10 @@ public class ReservationController extends BaseController {
 	public List getDetailUseLesson(
 			@RequestParam String storCd,
 			@RequestParam String lsnCd,
-			@RequestParam String memberNo) {
+			@RequestParam String memberNo,
+			@RequestParam String lsnNo) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getDetailUseLesson(compCd, storCd, lsnCd, memberNo);
+		return memberResrvService.getDetailUseLesson(compCd, storCd, lsnCd, memberNo, lsnNo);
 	}
 	/**
 	 * 회원 - 총 운동횟수

@@ -80,6 +80,7 @@
                                 <th>회차</th>
                                 <th>종료일</th>
 								<th style="display:none;">조정</th>
+								<th style="display:none;">LSN_NO</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -92,6 +93,7 @@
                                 <td>{{lsnTotalUseCnt}}/{{lsnCnt}}</td>
                                 <td>{{lsnEdDt}}</td>
 								<td style="display:none;">{{lsnModCnt}}</td>
+								<td style="display:none;">{{lsnNo}}</td>
                             </tr>
                             {{/list}}
                             {{^list}}

@@ -92,7 +92,7 @@ fnObj.fn = {
             option += ' <option value="' + formattedMon + '">' + i + '월' + '</option> ';
         }
         $('#report-month').html(option);
-        $('#report-month').val(m);
+        $('#report-month').val(("00" +m).slice(-2));
     },
 
     // 조회조건

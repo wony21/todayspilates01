@@ -567,6 +567,9 @@ fnObj.fn = {
                         n.lsnEdDt = ax5.util.date(n.lsnEdDt,
                             {return: 'yyyy-MM-dd'});
                     }
+                    if (isValidDate(n.regDt)) {
+                        n.regDtNm = n.regDt.substr(2, 2) + '-' + n.regDt.substr(4, 2) + '-' + n.regDt.substr(6, 2);
+                    }
                     n['lsnData'] = JSON.stringify(n);
                     if (n.clsFg == '2') {
                     	n['cssText1'] = 'text-decoration:line-through;';
