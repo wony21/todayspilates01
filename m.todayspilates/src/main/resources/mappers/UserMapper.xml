@@ -10,6 +10,7 @@
         FROM USER_M
         WHERE USER_CD = #{userCd}
         	AND USER_PS = #{userPs}
+        	AND USE_YN = 'Y'
     </select>
     <select id="existUserInStor" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
     	/* 매장의 사용자 */
