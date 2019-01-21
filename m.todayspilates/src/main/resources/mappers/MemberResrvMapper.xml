@@ -1015,6 +1015,6 @@
 			AND SCH_WEEK = #{schWeek}
 			AND ST_TM = #{stTm}
 			AND SEQ = #{seq}
-			AND SCH_NO = #{schNo}
+			AND MEMBER_NO = #{memberNo}
 	</delete>
 </mapper>

@@ -103,6 +103,10 @@ fnObj.initEvent = function(user) {
         if(schNo){
         	lsnData.schNo = schNo;
         }
+        let memberNo = $(this).data('no');
+        if(memberNo) {
+        	lsnData.memberNo = memberNo;
+        }
         let schWeek = $('#datepicker tbody tr .selected').data('id');
         if(schWeek){
         	lsnData.schWeek = schWeek;

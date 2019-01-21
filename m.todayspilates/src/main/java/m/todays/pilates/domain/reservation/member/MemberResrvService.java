@@ -298,7 +298,8 @@ public class MemberResrvService extends BaseService {
 			parameter.put(ParamNames.schWeek, schWeek);
 			parameter.put(ParamNames.stTm, stTm);
 			parameter.put(ParamNames.seq, seq);
-			parameter.put(ParamNames.schNo, schNo);
+			//parameter.put(ParamNames.schNo, schNo);
+			parameter.put(ParamNames.memberNo, memberNo);
 			
 			memberResrvMapper.deleteScheduleBoard(parameter);
 		}
