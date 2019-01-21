@@ -36,6 +36,7 @@
         FROM USER_M
         WHERE USER_CD = #{userCd}
         	AND USER_PS = #{userPs}
+        	AND USE_YN = 'Y'
     </select>
     <update id="updateUserInfo" parameterType="hashmap" statementType="PREPARED">
     	/* 사용자 정보수정 */
