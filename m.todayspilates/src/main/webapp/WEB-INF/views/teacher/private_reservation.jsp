@@ -122,7 +122,7 @@
 								<td>{{lsnTm}}</td>
                                 <td>{{memberNm}}</td>
                                 <td>{{empNm}}</td>
-                                <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnNum2}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                                 <td>{{lsnEdDt}}</td>
                             </tr>
                             {{/list}}
@@ -263,7 +263,7 @@
                                             <tr data-id="{{lsnData}}" style="text-align: center;">
                                                 <td>{{lsnNm}}</td>
                                                 <td>{{lsnFgNm}}</td>
-                                                <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
+                                                <td>{{lsnNum2}}/{{lsnCnt}}</td>
                                                 <td>{{lsnStDt2}}</td>
                                                 <td>{{lsnEdDt2}}</td>
                                             </tr>

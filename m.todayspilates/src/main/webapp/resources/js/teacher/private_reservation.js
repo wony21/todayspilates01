@@ -184,6 +184,16 @@ fnObj.fn = {
                             n.lsnEdDt.substr(6, 7));	// yy-mm-dd
                     n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
+                    var lsnUseCnt = 0;
+                    var lsnModCnt = 0;
+                    if(n.lsnUseCnt) {
+                    	lsnUseCnt = n.lsnUseCnt;
+                    }
+                    if(n.lsnModCnt) {
+                    	lsnModCnt = n.lsnModCnt;
+                    }
+                    n.lsnUseCnt = Number(lsnUseCnt) + Number(lsnModCnt);
+                    //n.lsnUseCnt = Number(n.lsnUseCnt).toFixed(1);
                 });
                 if ( opt1 == OPT_NO_RSVDT) {
                 	let html = Mustache.render(reservation, {list: res});

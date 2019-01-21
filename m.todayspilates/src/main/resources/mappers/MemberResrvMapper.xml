@@ -334,7 +334,7 @@
 			COMP_CD = #{compCd}
 		AND STOR_CD = #{storCd}
 		AND MEMBER_NO = #{memberNo}
-		AND ATND_FG IN ('0','1','2','4')
+		AND ATND_FG IN ('1','2','4')
 		GROUP BY COMP_CD, STOR_CD, LSN_CD) B
 		ON
 		A.COMP_CD = B.COMP_CD
