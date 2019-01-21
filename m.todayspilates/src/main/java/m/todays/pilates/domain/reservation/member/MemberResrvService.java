@@ -466,6 +466,7 @@ public class MemberResrvService extends BaseService {
 			
 			//System.out.println("updateAttend mybatis called!");
 			memberResrvMapper.updateReservation(parameter);
+			memberResrvMapper.recalculatorLessonNum(parameter);
 		}
 		return ApiResponse.success("ok");
 	}
