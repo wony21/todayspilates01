@@ -201,9 +201,10 @@ public class ReservationController extends BaseController {
 	@ResponseBody
 	public List getMemberLesson(
 			@RequestParam String storCd,
-			@RequestParam String memberNo) {
+			@RequestParam String memberNo,
+			@RequestParam String lsnNo) {
 		String compCd = SessionUtils.getCurrentUser().getCompCd();
-		return memberResrvService.getMemberLesson(compCd, storCd, memberNo);
+		return memberResrvService.getMemberLesson(compCd, storCd, memberNo, lsnNo);
 	}
 	/**
 	 * 선생님 - 예약가능한 그룹레슨목록

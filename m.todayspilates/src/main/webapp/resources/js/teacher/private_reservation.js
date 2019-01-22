@@ -52,6 +52,7 @@ fnObj.initEvent = function(user) {
         var r = {};
         r.storCd = lsnData.storCd;
         r.memberNo = lsnData.memberNo;
+        r.lsnNo = lsnData.lsnNo;
         $.ajax({
             type: 'GET',
             url: '/api/teacher/reservation/lesson',
@@ -63,7 +64,7 @@ fnObj.initEvent = function(user) {
 // return false;
 // }
                 res.forEach(function(n) {
-                    n.lsnData = JSON.stringify(n);
+                    
                     n.lsnStDt = (n.lsnStDt == null || n.lsnStDt == '') ?
                         '' :
                         ('`' + n.lsnStDt.substr(2, 2) + '.' +
@@ -76,6 +77,22 @@ fnObj.initEvent = function(user) {
                             n.lsnEdDt.substr(6, 7));	// yy-mm-dd
                     // n.lsnTm = Number(n.lsnTm).toFixed(1);
                     n.dy = (n.dy == null) ? '' : '(' + n.dy + ')';
+                    
+                    // lsnUseCnt
+                    var lsnNum = 0;
+                    var lsnModCnt = 0;
+                    if(n.lsnNum) {
+                    	lsnNum = n.lsnNum;
+                    }
+                    console.log(lsnNum);
+                    if(n.lsnModCnt) {
+                    	lsnModCnt = n.lsnModCnt;
+                    }
+                    console.log(lsnModCnt);
+                    lsnData.lsnUseCnt = Number(lsnNum) + Number(lsnModCnt);
+                    console.log(lsnData.lsnUseCnt);
+                    n.lsnData = JSON.stringify(n);
+                    console.log(n.lsnData);
                 });
                 lsnData.lsnStDt2 = (lsnData.lsnStDt == null || lsnData.lsnStDt == '') ?
 	                        '' :
@@ -87,11 +104,14 @@ fnObj.initEvent = function(user) {
 		                    ('`' + lsnData.lsnEdDt.substr(2, 2) + '.' +
 		                    		lsnData.lsnEdDt.substr(4, 2) + '.' +
 		                    		lsnData.lsnEdDt.substr(6, 7));	// yy-mm-dd
+                
+                
+                
                 $('#up-userInfo').text(lsnData.memberNm);
                 $('#update-data').val(JSON.stringify(lsnData));
                 //$('#update-lsnTm').attr('disabled', true);
                 //$('#update-lsnTm').attr('disabled', true);
-
+                console.log(lsnData);
                 let html = Mustache.render(updateReservation, {list: lsnData});
                 $('#update-reservation-container').html(html);
 
@@ -193,6 +213,7 @@ fnObj.fn = {
                     	lsnModCnt = n.lsnModCnt;
                     }
                     n.lsnUseCnt = Number(lsnNum) + Number(lsnModCnt);
+                    //console.log(n.lsnUseCnt);
                     //n.lsnUseCnt = Number(n.lsnUseCnt).toFixed(1);
                 });
                 if ( opt1 == OPT_NO_RSVDT) {

@@ -478,6 +478,7 @@
 		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD,
 		B.LSN_NM, 
 		ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_USE_CNT,
+		ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_NUM,
 		D.MEMBER_NM,
 		A.LSN_FG, C.NAME LSN_FG_NM,
 		A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
@@ -497,8 +498,7 @@
 		AND
 		A.STOR_CD = D.STOR_CD
 		AND A.MEMBER_NO = D.MEMBER_NO
-		WHERE A.COMP_CD =
-		#{compCd}
+		WHERE A.COMP_CD = #{compCd}
 		AND A.STOR_CD = #{storCd}
 		<if test="memberNo != null and memberNo != ''">
 			AND A.MEMBER_NO = #{memberNo}
@@ -508,6 +508,9 @@
 		</if>
 		<if test="lsnFg != null and lsnFg != ''">
 			AND B.LSN_FG = #{lsnFg}
+		</if>
+		<if test="lsnNo != null and lsnNo != ''">
+			AND A.LSN_NO = #{lsnNo}
 		</if>
 		AND A.CLS_FG = '1'
 		ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
@@ -834,6 +837,7 @@
 		G.NAME AS LSN_FG_NM ,
 		A.LSN_CNT,
 		ISNULL(A.LSN_USE_CNT, 0) AS LSN_USE_CNT ,
+		ISNULL(A.LSN_USE_CNT, 0) AS LSN_NUM ,
 		A.LSN_MOD_CNT,
 		A.LSN_ST_DT,
 		CASE
