@@ -34,12 +34,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
 		String user_id = (String) authentication.getPrincipal();		
-		if ( user_id.length() < 4) {
-			throw new InternalAuthenticationServiceException("아이디는 4자리 이상이어야 합니다.");
+//		if ( user_id.length() < 4) {
+//			throw new InternalAuthenticationServiceException("아이디는 4자리 이상이어야 합니다.");
+//		}
+		if (user_id.length() <= 0) {
+			throw new InternalAuthenticationServiceException("아이디가 존재하지 않습니다.");
 		}
-		String user_pw = user_id.substring(user_id.length() - 4, user_id.length());
+		//String user_pw = user_id.substring(user_id.length() - 4, user_id.length());
+		String user_pw = user_id;
 		User userInfo = userService.getUserInfo(user_id, user_pw);
 		if (userInfo != null) {
 			List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();

@@ -58,12 +58,14 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text"> <ion-icon
 												name="phone-portrait"></ion-icon>
-										</span> <select id="phone" class="custom-select">
+										</span> 
+										<select id="phone" class="custom-select">
 											<option value="010" selected>010</option>
 											<option value="011">011</option>
 											<option value="017">017</option>
 											<option value="018">018</option>
 											<option value="019">019</option>
+											<option value="">미입력</option>
 										</select>
 									</div>
 
