@@ -933,7 +933,6 @@
 			A.COMP_CD = #{compCd}
 			AND A.STOR_CD = #{storCd}
 			AND A.SCH_DT like #{schMonth} + '%'
-			AND A.SCH_DT BETWEEN replace(convert(varchar(10), getdate(), 23), '-', '') AND replace(convert(varchar(10), dateadd(month, 1, #{schMonth} + '01')-day(#{schMonth} + '01'), 23), '-', '') 
 			AND A.SCH_WEEK = #{schWeek}
 			AND A.USE_YN = 'Y'
 		GROUP BY
