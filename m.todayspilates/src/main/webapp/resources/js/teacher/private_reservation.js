@@ -497,10 +497,15 @@ fnObj.fn = {
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                alert('예약수정이 완료되었습니다.');
-                // location.reload();
-                fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
-                $('#updateModalCenter').modal('hide');
+            	console.log(res);
+            	if(res.error) {
+            		alert(res.error);
+            	} else {
+            		alert('예약수정이 완료되었습니다.');
+                    // location.reload();
+                    fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
+                    $('#updateModalCenter').modal('hide');
+            	}
             },
             error: function(error) {
                 alert(error);

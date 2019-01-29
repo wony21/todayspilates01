@@ -47,7 +47,7 @@ public class ApiResponse {
 	}
 
 	public static ApiResponse error(String message) {
-		return new ApiResponse(500, message, null, null);
+		return new ApiResponse(500, null, message, null);
 	}
 
 }

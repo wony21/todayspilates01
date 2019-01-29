@@ -1021,4 +1021,26 @@
 			AND SEQ = #{seq}
 			AND MEMBER_NO = #{memberNo}
 	</delete>
+	<select id="getMemberlsnMaster" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		SELECT * 
+		FROM MEMBER_LSN_M
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			<if test="lsnNo != null and lsnNo != ''">
+		    	AND LSN_NO = #{lsnNo}
+		  	</if>
+		  	<if test="memberNo != null and memberNo != ''">
+		  		AND MEMBER_NO = #{memberNo}
+		  	</if> 
+	</select>
+	<select id="getAttendMaster" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		SELECT *
+		FROM ATND_T
+		WHERE COMP_CD = #{compCd}
+			AND STOR_CD = #{storCd}
+			AND MEMBER_NO = #{memberNo}
+			AND LSN_NO = #{lsnNo}
+			AND LSN_CD = #{lsnCd}
+			AND LSN_SEQ = ${lsnSeq}
+	</select>
 </mapper>

@@ -263,7 +263,7 @@
                                             <tr data-id="{{lsnData}}" style="text-align: center;">
                                                 <td>{{lsnNm}}</td>
                                                 <td>{{lsnFgNm}}</td>
-                                                <td>{{lsnUseCnt}}/{{lsnCnt}}</td>
+                                                <td>{{lsnNum2}}/{{lsnCnt}}</td>
                                                 <td>{{lsnStDt2}}</td>
                                                 <td>{{lsnEdDt2}}</td>
                                             </tr>

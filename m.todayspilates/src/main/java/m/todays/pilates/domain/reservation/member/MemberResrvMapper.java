@@ -21,6 +21,8 @@ public interface MemberResrvMapper {
 	List getPersonalLesson(Map<String, Object> parameter);
 	List getGroupSchedule(Map<String, Object> parameter);
 	List getGroupMembers(Map<String, Object> parameter);
+	List getMemberlsnMaster(Map<String, Object> parameter);
+	List getAttendMaster(Map<String, Object> parameter);
 	void insertAttend(Map<String, Object> parameter);
 	void updateAttend(Map<String, Object> parameter);
 	void updateLessonUseCount(Map<String, Object> parameter);

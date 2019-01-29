@@ -1,5 +1,6 @@
 package m.todays.pilates.common;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,12 @@ public class CamelCaseMap extends HashMap<Object, Object> {
 			return defaultValue;
 		}
 		return strObj;
+	}
+	
+	public BigDecimal getDecimal(String key) {
+		Object obj = this.getOrDefault(key, "");
+		BigDecimal decimalObj = (BigDecimal)obj;
+		return decimalObj;
 	}
 
 }
