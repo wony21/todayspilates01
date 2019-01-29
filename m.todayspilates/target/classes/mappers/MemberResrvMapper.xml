@@ -602,7 +602,7 @@
 						<![CDATA[
 						AND LSN_SEQ < A.LSN_SEQ
 						]]>
-		AND ATND_FG IN ('0','1','2')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
+		AND ATND_FG IN ('0','1','2', '4')) AS LSN_NUM, A.LSN_TM, A.ATND_FG
 		FROM
 		ATND_T A
 		WHERE COMP_CD = #{compCd}
