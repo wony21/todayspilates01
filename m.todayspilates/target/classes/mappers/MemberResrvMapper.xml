@@ -476,30 +476,58 @@
 	<select id="getMemberLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
 		/* 회원 레슨 조회. */
 		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD,
-		B.LSN_NM, 
-		ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_USE_CNT,
-		ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_NUM,
-		D.MEMBER_NM,
-		A.LSN_FG, C.NAME LSN_FG_NM,
-		A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
+			B.LSN_NM, 
+			A.LSN_MOD_CNT,
+			H.LSN_NUM2 LSN_NUM,
+			ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_USE_CNT,
+			/* ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_NUM, */
+			D.MEMBER_NM,
+			A.LSN_FG, C.NAME LSN_FG_NM,
+			A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
 		FROM MEMBER_LSN_M A
-		INNER
-		JOIN LSN_M B
-		ON A.COMP_CD = B.COMP_CD
-		AND A.STOR_CD = B.STOR_CD
-		AND
-		A.LSN_CD = B.LSN_CD
-		INNER JOIN COMMON_CODE_M C
-		ON C.GROUP_CD = '003'
-		AND
-		A.LSN_FG = C.CODE
+		INNER JOIN LSN_M B
+			ON A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND A.LSN_CD = B.LSN_CD
+		INNER JOIN COMMON_CODE_M C 
+			ON C.GROUP_CD = '003'
+			AND A.LSN_FG = C.CODE
 		INNER JOIN MEMBER_M D
-		ON A.COMP_CD = D.COMP_CD
-		AND
-		A.STOR_CD = D.STOR_CD
-		AND A.MEMBER_NO = D.MEMBER_NO
+			ON A.COMP_CD = D.COMP_CD
+			AND A.STOR_CD = D.STOR_CD
+			AND A.MEMBER_NO = D.MEMBER_NO
+		LEFT OUTER JOIN (
+			SELECT
+				T.COMP_CD, T.STOR_CD ,
+				T.MEMBER_NO , T.LSN_NO , T.LSN_NUM, T.LSN_TM ,
+				(
+				SELECT
+					SUM(LSN_TM)
+				FROM
+					ATND_T
+				WHERE
+					COMP_CD = T.COMP_CD
+					AND STOR_CD = T.STOR_CD
+					AND MEMBER_NO = T.MEMBER_NO
+					AND LSN_CD = T.LSN_CD
+					AND LSN_NO = T.LSN_NO
+					AND ATND_FG IN ('0', '1', '2')
+<![CDATA[					
+					AND LSN_SEQ <= T.LSN_SEQ) AS LSN_NUM2,
+]]>
+				T.LSN_SEQ ,
+				T.ATND_FG ,
+				T.RSV_DT ,
+				T.RSV_TM
+			FROM
+				ATND_T T) H ON
+			A.COMP_CD = H.COMP_CD
+			AND A.STOR_CD = H.STOR_CD
+			AND A.MEMBER_NO = H.MEMBER_NO
+			AND A.LSN_NO = H.LSN_NO
+			AND H.RSV_DT BETWEEN CONVERT(CHAR, GETDATE(), 112) AND '99991231'
 		WHERE A.COMP_CD = #{compCd}
-		AND A.STOR_CD = #{storCd}
+			AND A.STOR_CD = #{storCd}
 		<if test="memberNo != null and memberNo != ''">
 			AND A.MEMBER_NO = #{memberNo}
 		</if>
@@ -513,6 +541,7 @@
 			AND A.LSN_NO = #{lsnNo}
 		</if>
 		AND A.CLS_FG = '1'
+		AND H.RSV_DT IS NOT NULL
 		ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
 	</select>
 	<insert id="insertAttend" parameterType="hashmap">

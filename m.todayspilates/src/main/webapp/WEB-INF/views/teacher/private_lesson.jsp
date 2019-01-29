@@ -141,7 +141,7 @@
                                 <td>{{lsnTm}}</td>
                                 <td>{{memberNm}}</td>
                                 <td>{{empNm}}</td>
-                                <td>{{lsnNum}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
+                                <td>{{lsnTotalUseCnt}}/{{lsnCnt}}</td> <!--횟차의분자 = 사용횟수 + 수업값 + 신규예약의 수업시-->
                                 <td>{{lsnEdDt}}</td>
                                 <td class="select"><select id="sel-attend" class="custom-select attend-process"
                                                            style="width: 70px;">

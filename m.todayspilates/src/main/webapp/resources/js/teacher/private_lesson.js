@@ -192,6 +192,14 @@ fnObj.fn = {
                     } else if (n.atndFg == '3') {
                         n.sel3 = 'selected';
                     }
+                    
+                    if (!n.lsnModCnt) {
+                    	n.lsnModCnt = '0';
+                    }
+                    if (!n.lsnUseCnt) {
+                    	n.lsnUseCnt = '0';
+                    }
+                    n.lsnTotalUseCnt = Number(n.lsnNum) + Number(n.lsnModCnt);
                 });
                 var html = Mustache.render(reservationTmpl, {list: res});
                 $('#reservation-container').html(html);

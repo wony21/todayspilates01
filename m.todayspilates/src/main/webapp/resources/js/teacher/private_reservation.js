@@ -88,11 +88,11 @@ fnObj.initEvent = function(user) {
                     if(n.lsnModCnt) {
                     	lsnModCnt = n.lsnModCnt;
                     }
-                    console.log(lsnModCnt);
+                    //console.log(lsnModCnt);
                     lsnData.lsnUseCnt = Number(lsnNum) + Number(lsnModCnt);
-                    console.log(lsnData.lsnUseCnt);
+                    //console.log(lsnData.lsnUseCnt);
                     n.lsnData = JSON.stringify(n);
-                    console.log(n.lsnData);
+                    //console.log(n.lsnData);
                 });
                 lsnData.lsnStDt2 = (lsnData.lsnStDt == null || lsnData.lsnStDt == '') ?
 	                        '' :
@@ -111,7 +111,10 @@ fnObj.initEvent = function(user) {
                 $('#update-data').val(JSON.stringify(lsnData));
                 //$('#update-lsnTm').attr('disabled', true);
                 //$('#update-lsnTm').attr('disabled', true);
+                console.log('-----------');
                 console.log(lsnData);
+                // 최종적으로 lsnUseCnt를 계산
+                lsnData.lsnUseCnt = lsnData.lsnNum + lsnData.lsnModCnt;
                 let html = Mustache.render(updateReservation, {list: lsnData});
                 $('#update-reservation-container').html(html);
 
