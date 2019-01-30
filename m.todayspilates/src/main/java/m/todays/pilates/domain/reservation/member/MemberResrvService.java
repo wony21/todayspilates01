@@ -162,7 +162,7 @@ public class MemberResrvService extends BaseService {
 		parameter.put(ParamNames.storCd, storCd);
 		parameter.put(ParamNames.memberNm, memberNm);
 		parameter.put(ParamNames.lsnFg, CommonData.LSN_FG.GROUP);
-		return memberResrvMapper.getMemberLesson(parameter);
+		return memberResrvMapper.getMemberGroupLesson(parameter);
 	}
 
 	public List getGroupLesson(String compCd, String storCd, String schDate) {

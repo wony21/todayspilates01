@@ -544,6 +544,43 @@
 		AND H.RSV_DT IS NOT NULL
 		ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
 	</select>
+	<select id="getMemberGroupLesson" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+		/* 회원 그룹 레슨 조회. */
+		SELECT A.COMP_CD, A.STOR_CD, A.MEMBER_NO, A.LSN_NO, A.LSN_CD, B.LSN_NM, 
+				ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_USE_CNT,
+				ISNULL(A.LSN_USE_CNT, 0)+ISNULL(A.LSN_MOD_CNT, 0) LSN_NUM,
+				D.MEMBER_NM,
+				A.LSN_FG, C.NAME LSN_FG_NM,
+				A.LSN_CNT, A.LSN_ST_DT, A.LSN_ED_DT, A.EMP_NO
+		FROM MEMBER_LSN_M A
+		INNER JOIN LSN_M B
+			ON A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND	A.LSN_CD = B.LSN_CD
+		INNER JOIN COMMON_CODE_M C
+			ON C.GROUP_CD = '003'
+			AND	A.LSN_FG = C.CODE
+		INNER JOIN MEMBER_M D
+			ON A.COMP_CD = D.COMP_CD
+			AND	A.STOR_CD = D.STOR_CD
+			AND A.MEMBER_NO = D.MEMBER_NO
+		WHERE A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+		<if test="memberNo != null and memberNo != ''">
+			AND A.MEMBER_NO = #{memberNo}
+		</if>
+		<if test="memberNm != null and memberNm != ''">
+			AND D.MEMBER_NM = #{memberNm}
+		</if>
+		<if test="lsnFg != null and lsnFg != ''">
+			AND B.LSN_FG = #{lsnFg}
+		</if>
+		<if test="lsnNo != null and lsnNo != ''">
+			AND A.LSN_NO = #{lsnNo}
+		</if>
+			AND A.CLS_FG = '1'
+		ORDER BY COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_CD
+	</select>
 	<insert id="insertAttend" parameterType="hashmap">
 		INSERT INTO ATND_T
 		(COMP_CD, STOR_CD, MEMBER_NO, LSN_NO, LSN_SEQ, LSN_NUM, EMP_NO, LSN_CD, LSN_TM, RSV_DT, RSV_TM, ATND_FG, GRP_SEQ, INS_USER, UPT_USER)
