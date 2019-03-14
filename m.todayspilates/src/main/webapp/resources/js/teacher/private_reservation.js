@@ -442,9 +442,14 @@ fnObj.fn = {
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             success: function(res) {
-                alert('예약이 완료되었습니다.');
-                fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
-                $('#exampleModalCenter').modal('hide');
+            	let status = res.status;
+            	if ( status === 500) {
+            		alert(res.error);
+            	} else {
+            		alert('예약이 완료되었습니다.');
+                    fnObj.fn.getPrivateLesson(user, OPT_NO_RSVDT);
+                    $('#exampleModalCenter').modal('hide');
+            	}
             },
             error: function(error) {
                 alert(error);

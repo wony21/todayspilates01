@@ -1,6 +1,7 @@
 package m.todays.pilates.domain.reservation.member;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -367,8 +369,17 @@ public class MemberResrvService extends BaseService {
 //			if ( !tf.equals("T")) {
 //				return ApiResponse.error("종료일자가 지난 등록정보입니다. 예약이 불가합니다");
 //			}
+			// 잔여횟수 비교
 			if(!lessonAvailableCount(parameter)) {
 				return ApiResponse.error("예약 횟수를 초과합니다.");
+			}
+			// 종료일 비교 
+			try {
+				if(!lessonExpireDate(parameter)) {
+					return ApiResponse.error("종료일을 초과합니다.");
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 
 			memberResrvMapper.insertAttend(parameter);
@@ -385,6 +396,24 @@ public class MemberResrvService extends BaseService {
 			BigDecimal lsnTm = item.getDecimal(ParamNames.lsnTm);
 			double lsnAvailableCount = lsnCnt.doubleValue() - lsnTm.doubleValue();
 			if ( lsnAvailableCount <= 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean lessonExpireDate(Map<String, Object> parameter) throws ParseException {
+		List<CamelCaseMap> lessons = memberResrvMapper.getMemberlsnMaster(parameter);
+		for(CamelCaseMap lesson : lessons) {
+			String endDt = lesson.getString("lsnEdDt");
+			if (StringUtils.isEmpty(endDt)) {
+				endDt = "99991231";
+			}
+			String rsvDt = (String)parameter.get(ParamNames.rsvDt);
+			Date endDate = DateUtils.parseDate(endDt, "yyyyMMdd");
+			Date rsvDate = DateUtils.parseDate(rsvDt, "yyyyMMdd");
+			int diffDate = endDate.compareTo(rsvDate);
+			if(diffDate < 0) {
 				return false;
 			}
 		}

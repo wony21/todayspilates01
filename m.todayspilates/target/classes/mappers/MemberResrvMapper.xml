@@ -1169,6 +1169,6 @@
 		WHERE A.COMP_CD = #{compCd}
 			AND A.STOR_CD = #{storCd}
 			AND A.MEMBER_NO = #{memberNo}
-			AND A.LSN_CD = #{lsnCd}
+			AND A.LSN_NO = #{lsnNo}
 	</select>
 </mapper>
