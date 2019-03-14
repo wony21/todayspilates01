@@ -35,5 +35,6 @@ public interface MemberResrvMapper {
 	void insertGroupSchedule(Map<String, Object> parameter);
 	void insertScheduleBoard(Map<String, Object> parameter);
 	void deleteScheduleBoard(Map<String, Object> parameter);
+	List getLessonAvailableCount(Map<String, Object> parameter);
 	
 }

@@ -367,12 +367,28 @@ public class MemberResrvService extends BaseService {
 //			if ( !tf.equals("T")) {
 //				return ApiResponse.error("종료일자가 지난 등록정보입니다. 예약이 불가합니다");
 //			}
+			if(!lessonAvailableCount(parameter)) {
+				return ApiResponse.error("예약 횟수를 초과합니다.");
+			}
 
 			memberResrvMapper.insertAttend(parameter);
 			memberResrvMapper.recalculatorLessonNum(parameter);
 			memberResrvMapper.updateLessonUseCount(parameter);
 		}
 		return ApiResponse.success("ok");
+	}
+	
+	public boolean lessonAvailableCount(Map<String, Object> parameter) {
+		List<CamelCaseMap> results = memberResrvMapper.getLessonAvailableCount(parameter);
+		for(CamelCaseMap item : results) {
+			BigDecimal lsnCnt = item.getDecimal(ParamNames.lsnCnt);
+			BigDecimal lsnTm = item.getDecimal(ParamNames.lsnTm);
+			double lsnAvailableCount = lsnCnt.doubleValue() - lsnTm.doubleValue();
+			if ( lsnAvailableCount <= 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Transactional
@@ -539,5 +555,7 @@ public class MemberResrvService extends BaseService {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		memberResrvMapper.updateEndDate(parameter);
 	}
+	
+	 
 
 }

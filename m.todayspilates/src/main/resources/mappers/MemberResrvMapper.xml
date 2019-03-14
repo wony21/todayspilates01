@@ -1139,4 +1139,36 @@
 			AND LSN_CD = #{lsnCd}
 			AND LSN_SEQ = ${lsnSeq}
 	</select>
+	<select id="getLessonAvailableCount" parameterType="hashmap" resultType="camelmap" statementType="PREPARED">
+	SELECT A.COMP_CD,
+			A.STOR_CD,
+			A.MEMBER_NO,
+			A.LSN_NO,
+			A.LSN_CNT,
+			B.LSN_TM
+		FROM MEMBER_LSN_M A
+		INNER JOIN (
+			SELECT COMP_CD,
+				STOR_CD,
+				MEMBER_NO,
+				LSN_NO,
+				SUM(LSN_TM) LSN_TM
+			FROM ATND_T
+			WHERE COMP_CD = #{compCd}
+				AND STOR_CD = #{storCd}
+				AND MEMBER_NO = #{memberNo}
+				AND ATND_FG IN ('0','1','2','4')
+			GROUP BY COMP_CD,
+				STOR_CD,
+				MEMBER_NO,
+				LSN_NO
+			) B ON A.COMP_CD = B.COMP_CD
+			AND A.STOR_CD = B.STOR_CD
+			AND A.MEMBER_NO = B.MEMBER_NO
+			AND A.LSN_NO = B.LSN_NO
+		WHERE A.COMP_CD = #{compCd}
+			AND A.STOR_CD = #{storCd}
+			AND A.MEMBER_NO = #{memberNo}
+			AND A.LSN_CD = #{lsnCd}
+	</select>
 </mapper>
